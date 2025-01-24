@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>바라미 - 환수 뽑기</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<!-- <link rel="manifest" href="assets/img/site.webmanifest"> -->
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/baram.css" rel="stylesheet">
+
+<style>
+  
+</style>
+
+</head>
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/android-chrome-192x192.png" alt="">
+      <span class="d-none d-lg-block">바라미</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar" data-include-path="common/sidebar.html">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-card-list"></i>
+          <span>환수 정보</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence.html">
+          <i class="bi bi-trophy-fill"></i>
+          <span>결속 추천</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence-rank.html">
+          <i class="bi bi-award-fill"></i>
+          <span>결속 랭킹</span>
+          <span class="badge bg-warning ms-2">New</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="summon.html">
+          <i class="ri-heart-3-fill"></i>
+          <span>환수 소환</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="enhance.html">
+          <i class="bi bi-hammer"></i>
+          <span>장비 강화</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="option.html">
+          <i class="ri-magic-fill"></i>
+          <span>성능 추가</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="skilltree.html?job=1">
+          <i class="bi bi-ui-checks-grid"></i>
+          <span>스킬 트리</span>
+        </a>
+      </li> -->
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>환수 뽑기</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <!-- <li class="breadcrumb-item"><a href="index.html">Home</a></li> -->
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <div class="alert alert-danger alert-dismissible alert-full" role="alert" style="display: none;">
+      환수 가방이 가득 찼습니다.
+      <button type="button" class="btn-close full-alert-close"></button>
+    </div>
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div id="mob-select-card" class="card-body" style="padding: 0 20px 0px 20px;">
+              <h5 class="card-title">환수 뽑기</h5>
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="type-tab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="t-tab" data-bs-toggle="tab" data-bs-target="#type-justified-t" type="button" role="tab" aria-selected="true">소환</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="s-tab" data-bs-toggle="tab" data-bs-target="#type-justified-s" type="button" role="tab" aria-selected="false">합성</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-4" id="type-tab-contents">
+                <div class="tab-pane fade show active" id="type-justified-t" role="tabpanel">
+                  <ul class="summon-list">
+                  </ul>
+
+                  <button type="button" class="btn bystyle-btn-red btn-summon w-100 mb-3" style="padding-right: 20px;"><img src="assets/img/ui/icon_jewel_red.png" style="width: 20px; margin-right: 8px;"/>소환</button>
+                </div>
+                <div class="tab-pane fade" id="type-justified-s" role="tabpanel">
+                  <div class="nav nav-pills mb-3 d-flex" id="v-pills-tab" role="tablist">
+                    <button class="nav-link flex-fill active bystyle-tab bystyle-tab-on" id="synthesis-tab-a" data-bs-toggle="tab" data-bs-target="#synthesis-a" type="button" role="tab" tabindex="-1" data-type="0">탑승/수호 합성</button>
+                    <button class="nav-link flex-fill bystyle-tab bystyle-tab-off" id="synthesis-tab-b" data-bs-toggle="tab" data-bs-target="#synthesis-b" type="button" role="tab" tabindex="-1" data-type="1">변신 합성</button>
+                    <button class="nav-link flex-fill bystyle-tab bystyle-tab-off" id="synthesis-tab-c" data-bs-toggle="tab" data-bs-target="#synthesis-c" type="button" role="tab" data-type="2">확정 대기</button>
+                  </div>
+
+                  <div class="d-flex align-items-start">
+                    <div class="tab-content" id="synthesis-a-panel" style="width: 100vw;">
+                      <div class="tab-pane fade active show" id="synthesis-a" role="tabpanel">
+                        <div class="row">
+                          <div class="col-sm-12 col-md-6">
+                            <ul class="synthesis-slot-list synthesisResultA">
+                            </ul>
+    
+                            <div class="row mb-3" style="display: inline;">
+                              <select class="form-select mb-3" id="synthesis-count-a">
+                                <option value="4" selected>4마리</option>
+                                <option value="5">5마리</option>
+                                <option value="6">6마리</option>
+                              </select>
+
+                              <div class="row m-0 synthesis-btn-view">
+                                <div class="col-6">
+                                  <button type="button" class="btn form-control btn-synthesis-one bystyle-btn-orange">1회 합성</button>
+                                </div>
+                                <div class="col-6">
+                                  <button type="button" class="btn form-control btn-synthesis-all bystyle-btn-red">전체 합성</button>
+                                </div>
+                              </div>
+
+                              <div class="row m-0 synthesis-open-view" style="display: none;">
+                                <button type="button" class="btn form-control btn-synthesis-open bystyle-btn-orange">모두 열기</button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12 col-md-6">
+                            <div class="btn-group btn-synthesis-grade mb-3" role="group" style="width: 100%;">
+                              <button type="button" class="btn bystyle-tab bystyle-tab-on" data-id="0">일반</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="1">고급</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="2">희귀</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="3">보물</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="4">전설</button>
+                            </div>
+                            <ul class="synthesis-list synthesisA">
+                            </ul>
+
+                          </div>
+                        </div>
+                        
+                      </div>
+
+                      <div class="tab-pane fade" id="synthesis-b" role="tabpanel">
+                        <div class="row">
+                          <div class="col-sm-12 col-md-6">
+                            <ul class="synthesis-slot-list synthesisResultB">
+                            </ul>
+    
+                            <div class="row mb-3" style="display: inline;">
+                              <select class="form-select mb-3" id="synthesis-count-b">
+                                <option value="4" selected>4마리</option>
+                                <option value="5">5마리</option>
+                                <option value="6">6마리</option>
+                              </select>
+
+                              <div class="row m-0 synthesis-btn-view">
+                                <div class="col-6">
+                                  <button type="button" class="btn form-control btn-synthesis-one bystyle-btn-orange">1회 합성</button>
+                                </div>
+                                <div class="col-6">
+                                  <button type="button" class="btn form-control btn-synthesis-all bystyle-btn-red">전체 합성</button>
+                                </div>
+                              </div>
+
+                              <div class="row m-0 synthesis-open-view" style="display: none;">
+                                <button type="button" class="btn form-control btn-synthesis-open bystyle-btn-orange">모두 열기</button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12 col-md-6">
+                            <div class="btn-group btn-synthesis-grade mb-3" role="group" style="width: 100%;">
+                              <button type="button" class="btn bystyle-tab bystyle-tab-on" data-id="0">일반</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="1">고급</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="2">희귀</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="3">보물</button>
+                              <button type="button" class="btn bystyle-tab bystyle-tab-off" data-id="4">전설</button>
+                            </div>
+    
+                            <ul class="synthesis-list synthesisB">
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="tab-pane fade" id="synthesis-c" role="tabpanel">
+                        <ul class="synthesis-slot-list synthesisResultC">
+                        </ul>
+
+                        <div class="row mb-3">
+                          <div class="col-12">
+                            <button type="button" class="btn btn-outline-dark form-control btn-wait-confirm-all bystyle-btn-red">전체 확정</button>
+                          </div>
+                        </div>
+
+                        <ul class="synthesis-list synthesisC">
+                        </ul>
+
+                        <div class="row mb-3">
+                          <div class="input-group">
+                            <select class="form-select input-mob-grade">
+                              <option value="보물">보물</option>
+                              <option value="전설">전설</option>
+                            </select>
+                            <select class="form-select input-mob-type">
+                              <option value="탑승">탑승</option>
+                              <option value="수호">수호</option>
+                              <option value="변신">변신</option>
+                            </select>
+                            <input type="number" class="form-control input-mob-count" value="0" min="0" max="100" style="text-align: center;">
+                            <button type="button" class="btn btn-primary input-mob-btn" style="float: right;">추가</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <ins class="kakao_ad_area" style="display:none;"
+              data-ad-unit = "DAN-lOqeBgJ4uYAgcjX8"
+              data-ad-width = "320"
+              data-ad-height = "100"></ins>
+            </div>
+
+            <div class="card-footer" style="padding: 15px 20px 15px 20px;">
+              <div class="row">
+                <div class="col-xm-12 col-md-6">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="autoWait" checked>
+                    <label class="form-check-label" for="autoWait">확정 대기</label>
+                  </div>
+    
+                  <div class="form-check form-switch mt-3">
+                    <input class="form-check-input" type="checkbox" id="autoSummon">
+                    <label class="form-check-label" for="autoSummon">자동 소환</label>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 colmd-3 total-coast-container mt-3 mb-3">
+                  <img src="assets/img/ui/icon_jewel_red.png" style="width: 20px; margin-right: 8px;"/>
+                  <span class="sp-total-coast">0</span>
+                </div>
+
+                <div class="col-sm-6 colmd-3">
+                  <button type="button" class="btn bystyle-btn-orange btn-clear mt-3 mb-3" style="float: right;">초기화</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4" style="text-align: right;">
+        <a href="https://www.buymeacoffee.com/baramy"><img src="https://img.buymeacoffee.com/button-api/?text=커피 한잔 사주기&emoji=&slug=baramy&button_colour=FFDD00&font_colour=000000&font_family=Arial&outline_colour=000000&coffee_colour=ffffff" /></a>
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" data-include-path="common/footer.html">
+    <div class="copyright">
+      &copy; Copyright <strong><span>DEV</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/jquery.iframetracker.js"></script>
+  <script src="assets/js/sheet.min.js?ver=20241128"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBi20Vfz4FIEprruKEdWB2c_paicWCl6jI",
+      authDomain: "baramy-9cb08.firebaseapp.com",
+      projectId: "baramy-9cb08",
+      storageBucket: "baramy-9cb08.appspot.com",
+      messagingSenderId: "912929312520",
+      appId: "1:912929312520:web:732acdc9a4f70b8e6866bd",
+      measurementId: "G-RG02W3NYLF"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    $(function() {
+      $.getJSON("https://api64.ipify.org?format=jsonp&callback=?", function(json) {
+        userIp = json.ip;
+
+        setTimeout(function() {
+          document.querySelectorAll('.kakao_ad_area').forEach((ad) => { 
+            let adUnit = $(ad).attr('data-ad-unit');
+            ad.querySelectorAll('iframe').forEach((iframe) => {
+              $('#' + iframe.id).iframeTracker({
+                blurCallback: e => {
+                  ipLog("DAN-lOqeBgJ4uYAgcjX8", (new Date()).toLocaleString(), navigator.userAgent, window.location.href, userIp);
+                }
+              });
+            });
+          });
+        }, 1000);
+      });
+    });
+
+    function ipLog(adUnit, date, userAgent, url, ip) {
+      try {
+        const docRef = addDoc(collection(db, "ADLog"), {
+          adUnit: adUnit,
+          date: date,
+          userAgent: userAgent,
+          ip: ip,
+          url: url
+        });
+      } catch (e) {
+      }
+    }
+  </script>
+
+  <script>
+    var userIp;
+    
+    const summonColor = {'일반': 'normal', '고급': 'advanced', '희귀': 'rare', '보물': 'treasure'};
+    const gradeId = {0: '일반', 1: '고급', 2: '희귀', 3: '보물', 4: '전설'};
+    var coast = 0;
+    var totalRate = 0;
+    var mobArray = [];
+    var summonableMobArray = [];
+    var summonCounter = 0;
+    var currentSummonCount = 0;
+    const maxSummonCount = 5000;
+    var running = false;
+    var summonBag = {};
+    var currentSynthesisBag = [];
+    var synthesisResultBag = {};
+    var waitForConfirmBag = [];
+    var synthesisType = 0; // 0: 탑승/수호, 1: 변신
+    var allSynthesisBag = [];
+
+    $(document).ready(function() {
+      mobArray = (new GlobalData().getSummonMobs())();
+      for (var m of mobArray) {
+        if (m.grade != '전설') {
+          summonableMobArray.push(m);
+          totalRate = +(totalRate + m.rate).toFixed(5);
+        }
+      }
+    });
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function rand(min, max) {
+      return (Math.random() * (max + totalRate));
+    }
+
+    $('.btn-summon').on('click', function() {
+      if (running) return;
+
+      summonCounter = 0;
+      running = true;
+      $('.summon-list').empty();
+
+      mobSummon();
+    });
+
+    $('.full-alert-close').on('click', function() {
+      $('.alert-full').hide();
+    });
+
+    function mobSummon() {
+      if (summonableMobArray.length == 0) {
+        running = false;
+        return;
+      }
+
+      if (currentSummonCount >= maxSummonCount) {
+        running = false;
+        $('.alert-full').show();
+        return;
+      }
+
+      coast += 120;
+      $('.sp-total-coast').text(addComma(coast));
+
+      const shuffled = shuffle(summonableMobArray);
+      var random = Math.random() * totalRate;
+      var pick = {};
+      var index = 0;
+      while (random > 0) {
+        pick = shuffled[index];
+        random -= pick.rate;
+        index++;
+      }
+      summonCounter++;
+      currentSummonCount++;
+      $('#s-tab').text('합성(' + currentSummonCount + ')');
+
+      var li = '<li class="summon-item' + (['희귀', '보물', '전설'].indexOf(pick.grade) > -1 ? ' red-ora' : '') + '">';
+      li += '<div class="summon-item-inner">';
+      li += '<div class="summon-item-front"></div>';
+      li += '<div class="summon-item-back">';
+      if (pick.ic == 'NULL') {
+        li += '<img class="mob-img" src="assets/img/opt/ic_opt_001.jpg"/>';
+      } else {
+        li += '<img class="mob-img" src="assets/img/mob/ic_' + pick.ic + '.jpg"/>';
+      }
+      li += '</div></div>';
+      li += '</li>';
+      $('.summon-list').append(li);
+
+      if (pick.grade != '보물' || !$('#autoWait').prop('checked')) {
+        if (summonBag[pick.name]) summonBag[pick.name].count += 1;
+        else summonBag[pick.name] = {'count': 1, 'info': pick};
+      } else {
+        waitForConfirmBag.push(pick);
+        $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+      }
+
+      if (summonCounter < 10) {
+        setTimeout(function() {
+          mobSummon();
+        }, 50);
+      } else {
+        if ($('#autoSummon').prop('checked')) {
+          setTimeout(function() {
+            $('.summon-item').addClass('flipped');
+
+            setTimeout(function() {
+              summonCounter = 0;
+              running = true;
+              $('.summon-list').empty();
+
+              mobSummon();
+            }, 1000);
+          }, 300);
+        } else {
+          setTimeout(function() {
+            $('.summon-item').addClass('flipped');
+
+            setTimeout(function() {
+              running = false;
+            }, 300);
+          }, 500);
+        }
+      }
+    }
+
+    $('#v-pills-tab').on('click', function() {
+        $('.synthesisA').empty();
+        $('.synthesisResultA').empty();
+        $('.synthesisB').empty();
+        $('.synthesisResultB').empty();
+        const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+        if (type == 0) {
+          $('.synthesisA').html(getSynthesisArrayHTML());
+        } else if (type == 1) {
+          $('.synthesisB').html(getSynthesisArrayHTML());
+        } else {
+          $('.synthesisResultC').html('');
+          $('.synthesisC').html(getWaitForConfirmBag());
+        }
+    });
+
+    $('#v-pills-tab > .bystyle-tab').on('click', function() {
+      if (!$(this).hasClass('bystyle-tab-on')) {
+        for(var i=0; i<$('#v-pills-tab > .bystyle-tab').length; i++) {
+          if ($('#v-pills-tab > .bystyle-tab').eq(i).attr('data-type') == $(this).attr('data-type')) {
+            $('#v-pills-tab > .bystyle-tab').eq(i).addClass('bystyle-tab-on');
+            $('#v-pills-tab > .bystyle-tab').eq(i).removeClass('bystyle-tab-off');
+          } else {
+            $('#v-pills-tab > .bystyle-tab').eq(i).addClass('bystyle-tab-off');
+            $('#v-pills-tab > .bystyle-tab').eq(i).removeClass('bystyle-tab-on');
+          }
+        }
+      }
+    });
+
+    $('.btn-synthesis-grade > .btn').on('click', function() {
+      if (!$(this).hasClass('bystyle-tab-on')) {
+        for(var i=0; i<$('.btn-synthesis-grade > .btn').length; i++) {
+          if ($('.btn-synthesis-grade > .btn').eq(i).attr('data-id') == $(this).attr('data-id')) {
+            $('.btn-synthesis-grade > .btn').eq(i).addClass('bystyle-tab-on');
+            $('.btn-synthesis-grade > .btn').eq(i).removeClass('bystyle-tab-off');
+          } else {
+            $('.btn-synthesis-grade > .btn').eq(i).addClass('bystyle-tab-off');
+            $('.btn-synthesis-grade > .btn').eq(i).removeClass('bystyle-tab-on');
+          }
+        }
+
+        $('.synthesisA').empty();
+        $('.synthesisResultA').empty();
+        $('.synthesisB').empty();
+        $('.synthesisResultB').empty();
+        $('.synthesisC').empty();
+        const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+        if (type == 0) {
+          $('.synthesisA').html(getSynthesisArrayHTML());
+        } else {
+          $('.synthesisB').html(getSynthesisArrayHTML());
+        }
+      }
+    });
+
+    function getSynthesisArrayHTML() {
+      const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+      const grade = parseInt($('.btn-synthesis-grade > .bystyle-tab-on').eq(0).attr('data-id'));
+
+      var array = [];
+      currentSynthesisBag = [];
+      for (var s of Object.keys(summonBag)) {
+        if (((type == 0 && (summonBag[s].info.type == '수호' || summonBag[s].info.type == '탑승')) || (type == 1 && summonBag[s].info.type == '변신')) && summonBag[s].info.grade == gradeId[grade]) {
+          array.push(summonBag[s]);
+          currentSynthesisBag.push(summonBag[s]);
+        }
+      }
+
+      array = array.map(function(e) {
+        var li = '<li class="synthesis-item ' + summonColor[e.info.grade] + '">';
+        if (e.info.ic == 'NULL') {
+          li += '<img class="mob-img" src="assets/img/opt/ic_opt_001.jpg"/>';
+        } else {
+          li += '<img class="mob-img" src="assets/img/mob/ic_' + e.info.ic + '.jpg"/>';
+        }
+        li += '<span class="synthesis-item-span">x' + e.count + '</span>';
+        li += '</li>';
+        return li;
+      });
+      
+      return array.join('');
+    }
+
+    function getWaitForConfirmBag() {
+      const html = waitForConfirmBag.map(function(e, i) {
+        var li = '<li class="wait-item ' + summonColor[e.grade] + '">';
+        li += '<div class="wait-item-container">'
+        if (e.ic == 'NULL') {
+          li += '<img class="mob-img" src="assets/img/opt/ic_opt_001.jpg"/>';
+        } else {
+          li += '<img class="mob-img" src="assets/img/mob/ic_' + e.ic + '.jpg"/>';
+        }
+        li += '<div class="wait-item-grid"><span class="badge bg-success btn-wait-confirm" data-id="' + i + '">확정</span><span class="badge bg-warning text-dark btn-wait-change" data-id="' + i + '">변경</span></div></div>';
+        li += '</li>';
+        return li;
+      });
+      return html;
+    }
+
+    $('#s-tab').on('click', function() {
+      running = false;
+      $('#autoSummon').prop('checked', false);
+      $('.synthesis-list').empty();
+      $('.synthesis-slot-list').empty();
+      
+      const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+      if (type == 0) {
+        $('.synthesisA').html(getSynthesisArrayHTML());
+      } else {
+        $('.synthesisB').html(getSynthesisArrayHTML());
+      }
+    });
+
+    $('.btn-synthesis-one').on('click', function() {
+      const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+      var count = [parseInt($('#synthesis-count-a :selected').attr('value')), parseInt($('#synthesis-count-b :selected').attr('value'))][type];
+      const grade = parseInt($('.btn-synthesis-grade > .bystyle-tab-on').eq(0).attr('data-id'));
+      if (grade == '전설') count = 4;
+      
+      const totalCount = currentSynthesisBag.reduce(function(acc, current) {
+        if (current.info.grade == gradeId[grade] && (type == 1 && current.info.type == '변신') || (type == 0 && (current.info.type == '탑승' || current.info.type == '수호'))) {
+          return acc + current.count;
+        } else {
+          return acc;
+        }
+      }, 0);
+      
+      if (totalCount >= count) {
+        $('.synthesis-btn-view').hide();
+        $('.synthesis-open-view').show();
+        synthesisResultBag = {};
+        runSynthesis(count, totalCount, false);
+      }
+    });
+
+    $('.btn-synthesis-all').on('click', function() {
+      const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+      const count = [parseInt($('#synthesis-count-a :selected').attr('value')), parseInt($('#synthesis-count-b :selected').attr('value'))][type];
+      const grade = parseInt($('.btn-synthesis-grade > .bystyle-tab-on').eq(0).attr('data-id'));
+      const totalCount = currentSynthesisBag.reduce(function(acc, current) {
+        if (current.info.grade == gradeId[grade] && (type == 1 && current.info.type == '변신') || (type == 0 && (current.info.type == '탑승' || current.info.type == '수호'))) {
+          return acc + current.count;
+        } else {
+          return acc;
+        }
+      }, 0);
+      if (totalCount >= count) {
+        synthesisResultBag = {};
+        $('.synthesis-btn-view').hide();
+        $('.synthesis-open-view').show();
+        runSynthesis(count, totalCount, true);
+      }
+    });
+
+    function runSynthesis(max, length, isAll) {
+      const runCount = isAll ? parseInt(length / max) : 1;
+      if (runCount < 1) return;
+
+      const grade = parseInt($('.btn-synthesis-grade > .bystyle-tab-on').eq(0).attr('data-id'));
+      const type = parseInt($('#v-pills-tab > .active').eq(0).attr('data-type'));
+
+      popSummonBag(currentSynthesisBag.slice(0, runCount * max));
+
+      if (gradeId[grade] == '전설') {
+        for (var i=0; i<runCount; i++) {
+          const chance = Math.floor(Math.random() * 100);
+          var kind = '변신';
+          if (type == 0) {
+            if (chance - 5 <= 0) {
+              kind = '변신';
+            } else if (chance - 17 <= 0) {
+              kind = '수호';
+            } else {
+              kind = '탑승';
+            }
+          }
+
+          var upgradeMobArray = [];
+          var upgradeTotalRate = 0;
+          for (var e of mobArray) {
+            if (e.grade == gradeId[grade] && e.type == kind) {
+              upgradeMobArray.push(e);
+              upgradeTotalRate += e.rate2;
+            }
+          }
+          upgradeMobArray = shuffle(upgradeMobArray);
+
+          var random = parseFloat((Math.random() * upgradeTotalRate).toFixed(5));
+          var pick = {};
+          var index = 0;
+          while (random > 0) {
+            pick = upgradeMobArray[index];
+            random -= pick.rate2;
+            index++;
+          }
+          if (synthesisResultBag[pick.name]) synthesisResultBag[pick.name].count += 1;
+          else synthesisResultBag[pick.name] = {'count': 1, 'info': pick};
+
+          if (!$('#autoWait').prop('checked')) {
+            if (summonBag[pick.name]) summonBag[pick.name].count += 1;
+            else summonBag[pick.name] = {'count': 1, 'info': pick};
+          } else {
+            waitForConfirmBag.push(pick);
+            $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+          }
+
+        }
+      } else {
+        const rate = {'일반': [40,45,50], '고급': [20,25,30], '희귀': [10,15,20], '보물': [6,11,16]}[gradeId[grade]][max - 4];
+        const secondRate = {'탑승': [83.333, 75], '수호': [16.667, 15], '변신': [0, 10]};
+
+        for (var i=0; i<runCount; i++) {
+          const chance = Math.floor(Math.random() * 100);
+          const secondChance = parseFloat((Math.random() * 100).toFixed(3));
+          const isSuccess = rate >= chance;
+          const upgrade = gradeId[isSuccess ? grade + 1 : grade];
+
+          var kind = '변신';
+          if (type == 0) {
+            if (isSuccess) {
+              if (secondChance <= 16.667) kind = '수호';
+              else kind = '탑승';
+            } else {
+              if (secondChance <= 10) kind = '변신';
+              else if (secondChance <= 25) kind = '수호';
+              else kind = '탑승';
+            }
+          }
+          
+          var upgradeMobArray = [];
+          var upgradeTotalRate = 0;
+          for (var e of mobArray) {
+            if (e.grade == upgrade && e.type == kind) {
+              upgradeMobArray.push(e);
+              upgradeTotalRate += e.rate2;
+            }
+          }
+          upgradeMobArray = shuffle(upgradeMobArray);
+          var random = parseFloat((Math.random() * upgradeTotalRate).toFixed(5));
+          var pick = {};
+          var index = 0;
+          while (random > 0) {
+            pick = upgradeMobArray[index];
+            random -= pick.rate2;
+            index++;
+          }
+          if (synthesisResultBag[pick.name]) synthesisResultBag[pick.name].count += 1;
+          else synthesisResultBag[pick.name] = {'count': 1, 'info': pick};
+
+          if ((pick.grade != '보물' && pick.grade != '전설') || !$('#autoWait').prop('checked')) {
+            if (summonBag[pick.name]) summonBag[pick.name].count += 1;
+            else summonBag[pick.name] = {'count': 1, 'info': pick};
+          } else {
+            waitForConfirmBag.push(pick);
+            $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+          }
+        }
+      }
+
+      if (type == 0) {
+        $('.synthesisResultA').html(getSynthesisResultHTML());
+        $('.synthesisA').html(getSynthesisArrayHTML());
+      } else if (type == 1) {
+        $('.synthesisResultB').html(getSynthesisResultHTML());
+        $('.synthesisB').html(getSynthesisArrayHTML());
+      }
+    }
+
+    function getSynthesisResultHTML() {
+      const type = parseInt($('#v-pills-tab > .bystyle-tab-on').eq(0).attr('data-type'));
+      const grade = parseInt($('.btn-synthesis-grade > .bystyle-tab-on').eq(0).attr('data-id'));
+
+      var array = [];
+      for (var s of Object.keys(synthesisResultBag)) {
+        array.push(synthesisResultBag[s]);
+      }
+
+      array = array.map(function(e) {
+        var li = '<li class="synthesis-item' + (['희귀', '보물', '전설'].indexOf(e.info.grade) > -1 ? ' red-ora' : '') + '">';
+        li += '<div class="synthesis-item-inner">';
+        li += '<div class="synthesis-item-front"></div>';
+        li += '<div class="synthesis-item-back">';
+        if (e.info.ic == 'NULL') {
+          li += '<img class="mob-img" src="assets/img/opt/ic_opt_001.jpg"/>';
+        } else {
+          li += '<img class="mob-img" src="assets/img/mob/ic_' + e.info.ic + '.jpg"/>';
+        }
+        li += '<span class="synthesis-item-span">x' + e.count + '</span>';
+        li += '</div></div>';
+        li += '</li>';
+        return li;
+      });
+      
+      return array.join('');
+    }
+
+    function popSummonBag(mob) {
+      for (var i=0; i<mob.length; i++) {
+        summonBag[mob[i].info.name].count -= mob[i].count;
+
+        if (summonBag[mob[i].info.name].count <= 0) {
+          delete summonBag[mob[i].info.name];
+        }
+      }
+
+      currentSummonCount = 0;
+      for (var m of Object.keys(summonBag)) {
+        currentSummonCount += summonBag[m].count;
+      }
+      $('#s-tab').text('합성(' + currentSummonCount + ')');
+    }
+
+    $('.btn-wait-confirm-all').on('click', function() {
+      if (waitForConfirmBag.length == 0) return;
+
+      for (var i=0; i<waitForConfirmBag.length; i++) {
+        if (summonBag[waitForConfirmBag[i].name]) summonBag[waitForConfirmBag[i].name].count += 1;
+        else summonBag[waitForConfirmBag[i].name] = {'count': 1, 'info': waitForConfirmBag[i]};
+      }
+
+      currentSummonCount = 0;
+      for (var m of Object.keys(summonBag)) {
+        currentSummonCount += summonBag[m].count;
+      }
+      $('#s-tab').text('합성(' + currentSummonCount + ')');
+
+      waitForConfirmBag = [];
+      $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+      $('.synthesisC').empty();
+    });
+
+    $(document).on("click", ".btn-wait-confirm", function() {
+      const i = parseInt($(this).attr('data-id'));
+
+      if (summonBag[waitForConfirmBag[i].name]) summonBag[waitForConfirmBag[i].name].count += 1;
+      else summonBag[waitForConfirmBag[i].name] = {'count': 1, 'info': waitForConfirmBag[i]};
+
+      var newWaitForConfirmBag = [];
+      for (var j=0; j<waitForConfirmBag.length; j++) {
+        if (j != i) {
+          newWaitForConfirmBag.push(waitForConfirmBag[j]);
+        }
+      }
+      waitForConfirmBag = newWaitForConfirmBag;
+
+      currentSummonCount = 0;
+      for (var m of Object.keys(summonBag)) {
+        currentSummonCount += summonBag[m].count;
+      }
+      $('#s-tab').text('합성(' + currentSummonCount + ')');
+
+      $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+      $('.synthesisC').html(getWaitForConfirmBag());
+    });
+
+    $(document).on("click", ".btn-wait-change", function() {
+      const idx = parseInt($(this).attr('data-id'));
+
+      const mob = waitForConfirmBag[idx];
+      waitForConfirmBag.splice(idx, 1);
+
+      var filterd = [];
+      var changeTotalRate = 0;
+      for (var i=0; i<mobArray.length; i++) {
+        if (mobArray[i].grade == mob.grade && mobArray[i].type == mob.type && mobArray[i].ic != mob.ic) {
+          filterd.push(mobArray[i]);
+          changeTotalRate += mobArray[i].rate3;
+        }
+      }
+      filterd = shuffle(filterd);
+
+      var random = parseFloat((Math.random() * changeTotalRate).toFixed(5));
+      var pick = {};
+      var index = 0;
+      while (random > 0) {
+        pick = filterd[index];
+        random -= pick.rate3;
+        index++;
+      }
+
+      var li = '<li class="synthesis-item' + (['희귀', '보물', '전설'].indexOf(pick.grade) > -1 ? ' red-ora' : '') + '">';
+      li += '<div class="synthesis-item-inner">';
+      li += '<div class="synthesis-item-front"></div>';
+      li += '<div class="synthesis-item-back">';
+      if (pick.ic == 'NULL') {
+        li += '<img class="mob-img" src="assets/img/opt/ic_opt_001.jpg"/>';
+      } else {
+        li += '<img class="mob-img" src="assets/img/mob/ic_' + pick.ic + '.jpg"/>';
+      }
+      li += '</div></div>';
+      li += '</li>';
+      $('.synthesisResultC').html(li);
+
+      waitForConfirmBag.push(pick);
+      $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+      $('.synthesisC').html(getWaitForConfirmBag());
+
+    });
+
+    $('.input-mob-btn').on('click', function() {
+      var count = parseInt($('.input-mob-count').val());
+      if (count > 100) count = 100;
+      if (count > 0) {
+        const grade = $('.input-mob-grade :selected').attr('value');
+        const type = $('.input-mob-type :selected').attr('value');
+
+        var filterd = []
+        for (var i=0; i<mobArray.length; i++) {
+          if (mobArray[i].grade == grade && mobArray[i].type == type) {
+            filterd.push(mobArray[i]);
+          }
+        }
+
+        for (var i=0; i<count; i++) {
+          var random = Math.floor(Math.random() * filterd.length);
+          waitForConfirmBag.push(filterd[random]);
+        }
+
+        $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+        $('.synthesisC').html(getWaitForConfirmBag());
+      }
+    });
+
+    $(document).on('click', '.synthesis-slot-list > .synthesis-item', function() {
+      if (!$(this).hasClass('flipped')) {
+        $(this).addClass('flipped');
+
+        var isAllOpend = true;
+        for (var i=0; i<$('.synthesis-item').length; i++) {
+          if (!$('.synthesis-item').eq(i).hasClass('flipped')) {
+            isAllOpend = false;
+            break;
+          }
+        }
+
+        if (isAllOpend) {
+          $('.synthesis-btn-view').show();
+          $('.synthesis-open-view').hide();
+        }
+      }
+    });
+
+    $('.btn-synthesis-open').on('click', function() {
+      $('.synthesis-slot-list > .synthesis-item').addClass('flipped');
+      $('.synthesis-btn-view').show();
+      $('.synthesis-open-view').hide();
+    });
+
+    $('.btn-clear').on('click', function() {
+      coast = 0;
+      currentSummonCount = 0;
+      running = false;
+      summonBag = {};
+      currentSynthesisBag = [];
+      synthesisResultBag = {};
+      waitForConfirmBag = [];
+      allSynthesisBag = [];
+
+      $('.sp-total-coast').text(addComma(coast));
+      $('.synthesisA').empty();
+      $('.synthesisResultA').empty();
+      $('.synthesisB').empty();
+      $('.synthesisResultB').empty();
+      $('.synthesisC').empty();
+      $('#synthesis-tab-c').text('확정 대기(' + waitForConfirmBag.length + ')');
+      $('#s-tab').text('합성(' + currentSummonCount + ')');
+    });
+
+  </script>
+</body>
+</html>

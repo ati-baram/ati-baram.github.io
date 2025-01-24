@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<!-- End Google Tag Manager -->
+<title>바라미 - 결속 랭킹</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<!-- <link rel="manifest" href="assets/img/site.webmanifest"> -->
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/baram.css?ver=20230328" rel="stylesheet">
+
+</head>
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/android-chrome-192x192.png" alt="">
+      <span class="d-none d-lg-block">바라미</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar" data-include-path="common/sidebar.html">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-card-list"></i>
+          <span>환수 정보</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence.html">
+          <i class="bi bi-trophy-fill"></i>
+          <span>결속 추천</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="influence-rank.html">
+          <i class="bi bi-award-fill"></i>
+          <span>결속 랭킹</span>
+          <span class="badge bg-warning ms-2">New</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="summon.html">
+          <i class="ri-heart-3-fill"></i>
+          <span>환수 소환</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="enhance.html">
+          <i class="bi bi-hammer"></i>
+          <span>장비 강화</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="option.html">
+          <i class="ri-magic-fill"></i>
+          <span>성능 추가</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="skilltree.html?job=1">
+          <i class="bi bi-ui-checks-grid"></i>
+          <span>스킬 트리</span>
+        </a>
+      </li> -->
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>결속 랭킹</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <!-- <li class="breadcrumb-item"><a href="index.html">Home</a></li> -->
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <div class="row">
+      <ins class="kakao_ad_area" style="display:none;"
+      data-ad-unit = "DAN-lOqeBgJ4uYAgcjX8"
+      data-ad-width = "320"
+      data-ad-height = "100"></ins>
+    </div>
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div id="mob-select-card" class="card-body" style="padding: 0 20px 0px 20px;">
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="type-tab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="s-tab" data-bs-toggle="tab" data-bs-target="#type-justified-s" type="button" role="tab" aria-selected="false">수호</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="b-tab" data-bs-toggle="tab" data-bs-target="#type-justified-b" type="button" role="tab" aria-selected="false">변신</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-4" id="type-tab-contents">
+                <div class="tab-pane fade show active" id="type-justified-s" role="tabpanel">
+                  <ul class="mob-list" id="mob-table-s">
+                  </ul>
+                </div>
+                <div class="tab-pane fade" id="type-justified-b" role="tabpanel">
+                  <ul class="mob-list" id="mob-table-b">
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div id="mob-result-card" class="card-body" style="padding: 0 20px 0px 20px; display: none;">
+              <div class="tab-content pt-4" id="result-tab-contents">
+                <div class="tab-pane fade show active" id="result-justified" role="tabpanel">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <figure>
+            <blockquote class="blockquote">
+              <p>필독</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+              <ul>
+                <li>환수 레벨은 최대치로 계산됩니다.</li>
+                <li>피해저항관통과 피해저항을 합한 값을 순위로 매겨집니다.</li>
+                <li>대인피해%, 대인방어%는 1당 10점으로 합산됩니다.</li>
+                <li>신규 환수가 출시될 때 마다 갱신됩니다.</li>
+              </ul>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" data-include-path="common/footer.html">
+    <div class="copyright">
+      &copy; Copyright <strong><span>DEV</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/jquery.iframetracker.js"></script>
+  <script src="assets/js/unite.min.js?ver=20240101"></script>
+  <script src="assets/js/recommend.min.js?ver=20241128"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBi20Vfz4FIEprruKEdWB2c_paicWCl6jI",
+      authDomain: "baramy-9cb08.firebaseapp.com",
+      projectId: "baramy-9cb08",
+      storageBucket: "baramy-9cb08.appspot.com",
+      messagingSenderId: "912929312520",
+      appId: "1:912929312520:web:732acdc9a4f70b8e6866bd",
+      measurementId: "G-RG02W3NYLF"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    $(function() {
+      $.getJSON("https://api64.ipify.org?format=jsonp&callback=?", function(json) {
+        userIp = json.ip;
+
+        setTimeout(function() {
+          document.querySelectorAll('.kakao_ad_area').forEach((ad) => { 
+            let adUnit = $(ad).attr('data-ad-unit');
+            ad.querySelectorAll('iframe').forEach((iframe) => {
+              $('#' + iframe.id).iframeTracker({
+                blurCallback: e => {
+                  ipLog("DAN-lOqeBgJ4uYAgcjX8", (new Date()).toLocaleString(), navigator.userAgent, window.location.href, userIp);
+                }
+              });
+            });
+          });
+        }, 1000);
+      });
+    });
+
+    function ipLog(adUnit, date, userAgent, url, ip) {
+      try {
+        const docRef = addDoc(collection(db, "ADLog"), {
+          adUnit: adUnit,
+          date: date,
+          userAgent: userAgent,
+          ip: ip,
+          url: url
+        });
+      } catch (e) {
+      }
+    }
+  </script>
+
+  <script>
+    var userIp;
+
+    $(document).ready(function() {
+      const mobS = new RecommendData().getMobS();
+      var mobSHtml = '<table class="table table-striped table-hover">';
+      mobSHtml += '<thead><tr><th>#</th><th style="white-space: nowrap;">환수</th><th style="white-space: nowrap;">세력</th><th style="white-space: nowrap;">합산</th></thead>';
+      mobSHtml += '<tbody>';
+      
+      for (var i = 0; i < mobS.length; i++) {
+        mobSHtml += '<tr class="mob-row" style="cursor: pointer;" data-id="S" data-num="' + i + '">';
+        mobSHtml += '<th class="align-middle">' + (i + 1) + '</th>';
+        mobSHtml += '<td>';
+
+        var sum = 0;
+        for (var j = 0; j < mobS[i].arr.length; j++) {
+          mobSHtml += '<img class="mob-img m-2 ms-0" src="assets/img/mob/ic_' + mobS[i].arr[j].ic + '.jpg"/>';
+        }
+        mobSHtml += '</td>';
+        mobSHtml += '<td class="align-middle">';
+
+        var unitBadge = '';
+        for (var k of Object.keys(mobS[i].count.unit)) {
+            if (mobS[i].count.unit[k] > 0) {
+                var colorSet = getUniteColor(k);
+                unitBadge += '<span class="badge me-1" style="background-color: ' + colorSet.background + '; color: ' + colorSet.font + ';">' + k +' X ' + mobS[i].count.unit[k] + '</span>';
+            }
+        }
+        mobSHtml += unitBadge + '</td>';
+        mobSHtml += '<td class="align-middle">' + addComma(mobS[i].pvp) + '</td>';
+      }
+      mobSHtml += '</tbody>';
+      $('#mob-table-s').html(mobSHtml);
+
+      const mobB = new RecommendData().getMobB();
+      var mobBHtml = '<table class="table table-striped table-hover">';
+      mobBHtml += '<thead><tr><th>#</th><th style="white-space: nowrap;">환수</th><th style="white-space: nowrap;">세력</th><th style="white-space: nowrap;">합산</th></thead>';
+      mobBHtml += '<tbody>';
+      for (var i = 0; i < mobB.length; i++) {
+        mobBHtml += '<tr class="mob-row" style="cursor: pointer;" data-id="B" data-num="' + i + '">';
+        mobBHtml += '<th class="align-middle">' + (i + 1) + '</th>';
+        mobBHtml += '<td>';
+
+        var sum = 0;
+        for (var j = 0; j < mobB[i].arr.length; j++) {
+          mobBHtml += '<img class="mob-img m-2 ms-0" src="assets/img/mob/ic_' + mobB[i].arr[j].ic + '.jpg"/>';
+          
+        }
+        mobBHtml += '</td>';
+        mobBHtml += '<td class="align-middle">';
+
+        var unitBadge = '';
+        for (var k of Object.keys(mobB[i].count.unit)) {
+            if (mobB[i].count.unit[k] > 0) {
+                var colorSet = getUniteColor(k);
+                unitBadge += '<span class="badge me-1" style="background-color: ' + colorSet.background + '; color: ' + colorSet.font + ';">' + k +' X ' + mobB[i].count.unit[k] + '</span>';
+            }
+        }
+        mobBHtml += unitBadge + '</td>';
+        mobBHtml += '<td class="align-middle">' + addComma(mobB[i].pvp) + '</td>';
+      }
+      mobBHtml += '</tbody>';
+      $('#mob-table-b').html(mobBHtml);
+
+      $(document).on('click', 'tr', function() {
+        var data = {};
+        if ($(this).attr('data-id') == 'S') {
+          data = mobS[parseInt($(this).attr('data-num'))];
+        } else {
+          data = mobB[parseInt($(this).attr('data-num'))];
+        }
+        $('#mob-result-card').show();
+        $('#result-justified').html(getHTML(data));
+
+        var scrollDiv = $('#mob-result-card').offset().top;
+        window.scrollTo({ top: scrollDiv - 80, behavior: 'smooth'});
+      });
+
+      $(document).on('click', '.btn-simple', function() {
+        $('.btn-simple').addClass('active');
+        $('.result-simple-tables').show();
+        $('.btn-detail').removeClass('active');
+        $('.result-detail-tables').hide();
+      });
+
+      $(document).on('click', '.btn-detail', function() {
+        $('.btn-detail').addClass('active');
+        $('.result-simple-tables').hide();
+        $('.btn-simple').removeClass('active');
+        $('.result-detail-tables').show();
+      });
+
+      function getHTML(obj) {
+        var gradeObj = {};
+        var influenceObj = {};
+        var equipObj = {};
+        var totalObj = {};
+        var mobTable = '<div class="mob-table-grid">';
+        var gTable = '<div class="col-md-4"><h5 class="card-title under-line-highlight-pink">등급 세트 효과</h5><table class="table table-borderless"><tbody>';
+        var iTable = '<div class="col-md-4"><h5 class="card-title under-line-highlight-sky">세력 세트 효과</h5><table class="table table-borderless"><tbody>';
+        var eTable = '<div class="col-md-4"><h5 class="card-title under-line-highlight-yellow">장착 효과</h5><table class="table table-borderless"><tbody>';
+        var tTable = '<div class="col-md-12"><table class="table table-borderless"><tbody>';
+        const key = 'sum';
+        var result = {'sum': '', 'score': '', 'priority': ''};
+
+        for (var i=0; i<obj.arr.length; i++) {
+            mobTable += '<div class="by-card"><div class="by-card-level">Level ' + obj.arr[i].level + '</div>';
+            mobTable += '<div class="by-card-name">' + obj.arr[i].name + '</div>';
+            mobTable += '<img class="by-card-img" src="assets/img/mob/ic_' + obj.arr[i].ic + '.jpg"/>';
+            mobTable += '<div class="by-card-influence"><div class="by-card-influence-container"><div class="by-card-influence-name">';
+            mobTable += '<img class="inf-img me-1 ' + getUniteBorder(obj.arr[i].influence) + '" src="assets/img/influence/ic_inf_' + getInfluenceImg(obj.arr[i].influence) + '.jpg"/>' + obj.arr[i].influence + '</div></div></div></div>';
+
+            for (var option of Object.keys(obj.arr[i].equip_option)) {
+                if (equipObj[option]) equipObj[option] += obj.arr[i].equip_option[option];
+                else equipObj[option] = obj.arr[i].equip_option[option];
+
+                if (totalObj[option]) totalObj[option] += obj.arr[i].equip_option[option];
+                else totalObj[option] = obj.arr[i].equip_option[option];
+            }
+        }
+
+        for (var grade of Object.keys(obj.grade)) {
+            for (var option of Object.keys(obj.grade[grade])) {
+                if (gradeObj[option]) gradeObj[option] += obj.grade[grade][option];
+                else gradeObj[option] = obj.grade[grade][option];
+
+                if (totalObj[option]) totalObj[option] += obj.grade[grade][option];
+                else totalObj[option] = obj.grade[grade][option];
+            }
+        }
+
+        for (var unit of Object.keys(obj.unit)) {
+            for (var option of Object.keys(obj.unit[unit])) {
+                if (influenceObj[option]) influenceObj[option] += obj.unit[unit][option];
+                else influenceObj[option] = obj.unit[unit][option];
+
+                if (totalObj[option]) totalObj[option] += obj.unit[unit][option];
+                else totalObj[option] = obj.unit[unit][option];
+            }
+        }
+
+        var gradeBadge = '';
+        for (var k of Object.keys(obj.count.grade)) {
+            if (obj.count.grade[k] > 0) {
+                var colorSet = getGradeColor(k);
+                gradeBadge += '<span class="badge me-1" style="background-color: ' + colorSet.background + '; color: ' + colorSet.font + ';">' + k +' X ' + obj.count.grade[k] + '</span>';
+            }
+        }
+        if (gradeBadge != '') gTable += '<tr><td colspan="2">' + gradeBadge + '</td></tr>';
+        for (var k of Object.keys(gradeObj)) {
+            gTable += '<tr class="tr-left"><th class="' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active">' : '">') + k + '</th><td class="text-align-right' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active' : '') + '">' + addComma(gradeObj[k]) + '</td></tr>';
+        }
+
+        var unitBadge = '';
+        for (var k of Object.keys(obj.count.unit)) {
+            if (obj.count.unit[k] > 0) {
+                var colorSet = getUniteColor(k);
+                unitBadge += '<span class="badge me-1" style="background-color: ' + colorSet.background + '; color: ' + colorSet.font + ';">' + k +' X ' + obj.count.unit[k] + '</span>';
+            }
+        }
+        if (unitBadge != '') iTable += '<tr><td colspan="2">' + unitBadge + '</td></tr>';
+
+        for (var k of Object.keys(influenceObj)) {
+            iTable += '<tr class="tr-left"><th class="' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active">' : '">') + k + '</th><td class="text-align-right' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active' : '') + '">' + addComma(influenceObj[k]) + '</td></tr>';
+        }
+
+        for (var k of Object.keys(equipObj)) {
+            if (equipObj[k] > 0) {
+                eTable += '<tr class="tr-left"><th class="' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active">' : '">') + k + '</th><td class="text-align-right'  + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active' : '') +  '">' + addComma(equipObj[k]) + '</td></tr>';
+            }
+        }
+
+        var importantValue = 0;
+        var pvpValue = 0;
+        for (var k of Object.keys(totalObj)) {
+            if (totalObj[k] > 0) {
+                tTable += '<tr class="tr-left"><th class="' + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active">' : '">') + k + '</th><td class="text-align-right'  + (['피해저항', '피해저항관통'].indexOf(k) > -1 ? ' table-active' : '') +  '">' + addComma(totalObj[k]) + '</td></tr>';
+            }
+
+            if (k == '피해저항' || k == '피해저항관통') importantValue += totalObj[k];
+            if (k == '대인피해%' || k == '대인방어%') pvpValue += totalObj[k];
+        }
+
+        mobTable += '</div>';
+        mobTable += '<div class="mt-3 mb-3"><div class="btn-group" role="group"><button type="button" class="btn btn-outline-primary active btn-simple">간단히 보기</button><button type="button" class="btn btn-outline-primary btn-detail">자세히 보기</button></div><button type="button" class="btn btn-outline-danger ms-3" disabled><i class="bx bxs-meteor"></i>' + addComma(importantValue) + ' (' + addComma(pvpValue) + '%)</button></div>';
+        gTable += '</tbody></table></div>';
+        iTable += '</tbody></table></div>';
+        eTable += '</tbody></table></div>';
+        tTable += '</tbody></table></div>';
+
+        result[key] = mobTable;
+        result[key] += '<div class="row result-simple-tables">' + tTable + '</div>';
+        result[key] += '<div class="row result-detail-tables" style="display: none;">' + gTable + iTable + eTable + '</div>';
+
+        return result[key];
+      }
+    });
+  </script>
+</body>
+</html>

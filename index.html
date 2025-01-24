@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>바라미 - 환수정보</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<!-- <link rel="manifest" href="assets/img/site.webmanifest"> -->
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+<link href="assets/css/chartist.css" rel="stylesheet">
+<link href="assets/css/nouislider.min.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/baram.css?ver=20240328" rel="stylesheet">
+
+</head>
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/android-chrome-192x192.png" alt="">
+      <span class="d-none d-lg-block">바라미</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar" data-include-path="common/sidebar.html">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">
+          <i class="bi bi-card-list"></i>
+          <span>환수 정보</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence.html">
+          <i class="bi bi-trophy-fill"></i>
+          <span>결속 추천</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence-rank.html">
+          <i class="bi bi-award-fill"></i>
+          <span>결속 랭킹</span>
+          <span class="badge bg-warning ms-2">New</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="summon.html">
+          <i class="ri-heart-3-fill"></i>
+          <span>환수 소환</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="enhance.html">
+          <i class="bi bi-hammer"></i>
+          <span>장비 강화</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="option.html">
+          <i class="ri-magic-fill"></i>
+          <span>성능 추가</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="skilltree.html?job=1">
+          <i class="bi bi-ui-checks-grid"></i>
+          <span>스킬 트리</span>
+        </a>
+      </li> -->
+    </ul>
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>환수 정보</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <!-- <li class="breadcrumb-item"><a href="index.html">환수 정보</a></li> -->
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card" id="mob-select-card">
+            <div class="card-body" style="padding: 20px 20px 0px 20px;">
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="type-tab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active type-tab" id="t-tab" data-bs-toggle="tab" data-bs-target="#type-justified-t" type="button" role="tab" aria-selected="true">탑승</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 type-tab" id="s-tab" data-bs-toggle="tab" data-bs-target="#type-justified-s" type="button" role="tab" aria-selected="false">수호</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 type-tab" id="b-tab" data-bs-toggle="tab" data-bs-target="#type-justified-b" type="button" role="tab" aria-selected="false">변신</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-4" id="type-tab-contents">
+                <div class="input-group mb-3">
+                  <input id="mobSearch" type="text" class="form-control" placeholder="환수명">
+                </div>
+
+                <div class="tab-pane fade show active" id="type-justified-t" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-t">
+                  </ul>
+                </div>
+                <div class="tab-pane fade" id="type-justified-s" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-s">
+                  </ul>
+                </div>
+                <div class="tab-pane fade" id="type-justified-b" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-b">
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button id="btn-report" type="button" class="btn btn-success ms-3" style="width: 150px;" onclick="report();"><i class="ri-mail-line" style="margin-right: 8px;"></i>제보하기</button>
+            </div>
+          </div>
+
+          <div class="card" id="mob-option-card" style="display: none;">
+            <div class="card-header">
+                <img class="opt-img" />
+                <span class="opt-span"></span>
+                <span class="opt-isempty badge bg-warning text-dark" style="display: none;"> ? </span>
+                <button id="btn-close" type="button" class="btn btn-primary" style="float: right;"><i class="bi bi-x-lg"></i></button>
+            </div>
+
+            <div class="card-body" style="padding: 0 20px 0px 20px;">
+              <div class="row">
+                <div class="col-lg-6 col-md-12" id="option-view">
+                </div>
+
+                <div class="col-lg-6 col-md-12" id="equip-option-view">
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer d-flex">
+              <div class="input-group">
+                <button id="btn-minus" type="button" class="btn btn-primary" style="float: right;"><i class="bi bi-dash-lg"></i></button>
+                <input id="option-level" type="number" class="form-control" value="0" min="0" max="20" style="text-align: center;">
+                <button id="btn-plus" type="button" class="btn btn-primary" style="float: right;"><i class="bi bi-plus-lg"></i></button>
+              </div>
+              <button id="btn-share" type="button" class="btn btn-warning ms-3" style="color: #39252a; width: 150px;" onclick="share();"><i class="ri-kakao-talk-fill" style="margin-right: 8px;"></i>공유</button>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <ins class="kakao_ad_area" style="display:none;"
+            data-ad-unit = "DAN-lOqeBgJ4uYAgcjX8"
+            data-ad-width = "320"
+            data-ad-height = "100"></ins>
+          </div>
+
+          <div class="card" id="mob-chart" style="display:none;">
+            <div class="card-header">
+              <span style="font-weight: 600; font-size: 15px; vertical-align: middle;">성장 그래프</span>
+            </div>
+
+            <div class="card-body mt-2 mb-2" style="padding: 0 20px 0px 20px;">
+              <div id="chartist" class="ct-chart" data-x-axis="레벨" data-y-axis="합산">
+
+              </div>
+
+              <div id="slider" class="ms-5 mb-3 me-4">
+
+              </div>
+              <p class="ms-5 mb-2 d-flex" id="chartDesc"></p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+                <span style="font-weight: 600; font-size: 15px; vertical-align: middle;">성장 경험치 표</span>
+            </div>
+
+            <div class="card-body" style="padding: 0 20px 0px 20px;">
+              <div class="row">
+                <div class="col-lg-6 col-md-12">
+                  <table class="table table-hover" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th scope="col">Lv</th>
+                        <th scope="col">Exp</th>
+                      </tr>
+                    </thead>
+                    <tbody id="exp-table-a">
+
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                  <table class="table table-hover" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th scope="col">Lv</th>
+                        <th scope="col">Exp</th>
+                      </tr>
+                    </thead>
+                    <tbody id="exp-table-b">
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" data-include-path="common/footer.html">
+    <div class="copyright">
+      &copy; Copyright <strong><span>DEV</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/js/chartist.min.js"></script>
+  <script src="assets/js/nouislider.min.js"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js" integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous"></script>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/jquery.iframetracker.js"></script>
+  <script src="assets/js/unite.min.js?ver=20240101"></script>
+  <script src="assets/js/sheet.min.js?ver=20241128"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBi20Vfz4FIEprruKEdWB2c_paicWCl6jI",
+      authDomain: "baramy-9cb08.firebaseapp.com",
+      projectId: "baramy-9cb08",
+      storageBucket: "baramy-9cb08.appspot.com",
+      messagingSenderId: "912929312520",
+      appId: "1:912929312520:web:732acdc9a4f70b8e6866bd",
+      measurementId: "G-RG02W3NYLF"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    $(function() {
+      $.getJSON("https://api64.ipify.org?format=jsonp&callback=?", function(json) {
+        userIp = json.ip;
+
+        setTimeout(function() {
+          document.querySelectorAll('.kakao_ad_area').forEach((ad) => { 
+            let adUnit = $(ad).attr('data-ad-unit');
+            ad.querySelectorAll('iframe').forEach((iframe) => {
+              $('#' + iframe.id).iframeTracker({
+                blurCallback: e => {
+                  ipLog("DAN-lOqeBgJ4uYAgcjX8", (new Date()).toLocaleString(), navigator.userAgent, window.location.href, userIp);
+                }
+              });
+            });
+          });
+        }, 1000);
+      });
+    });
+
+    function ipLog(adUnit, date, userAgent, url, ip) {
+      try {
+        const docRef = addDoc(collection(db, "ADLog"), {
+          adUnit: adUnit,
+          date: date,
+          userAgent: userAgent,
+          ip: ip,
+          url: url
+        });
+      } catch (e) {
+      }
+    }
+  </script>
+
+  <script>
+    var optionObj = {};
+    var optionRate = [];
+    var shareObj = {'type': '탑승', 'id': '0', 'grade': '보물', 'name': '', 'level': '0'};
+    const exp = [717,789,867,1302,1431,1575,1732,1905,3239,3563,3919,4312,4742,9484,10433,11476,17214,18935,28403,31243,31868,32505,33155,33818,34494];
+    var userIp;
+
+    $(document).ready(function() {
+      Kakao.init('5472dfb0e36ff14873f3613a0e9b9d50');
+
+      var datas = [];
+      const mobArray = (new GlobalData().getData())();
+      optionRate = (new GlobalData().getRateData())();
+
+      var html_s = '';
+      var html_b = '';
+      var html_t = '';
+      for (var i=0; i<mobArray.length; i++) {
+        var li = '<li class="mob-item" data-id="' + mobArray[i].ic + '" data-type="' + mobArray[i].type + '" data-grade="' + mobArray[i].grade + '" data-influence="' + mobArray[i].influence + '" data-name="' + mobArray[i].name + '">';
+        li += '<img class="mob-img" src="assets/img/mob/ic_' + mobArray[i].ic + '.jpg"/>';
+        li += '</li>';
+
+        if (mobArray[i].type === '수호') {
+          html_s += li;
+        } else if (mobArray[i].type === '변신') {
+          html_b += li;
+        } else if (mobArray[i].type === '탑승') {
+          html_t += li;
+        }
+
+        optionObj[mobArray[i].ic] = mobArray[i].option;
+      }
+      $('#mob-list-s').html(html_s);
+      $('#mob-list-b').html(html_b);
+      $('#mob-list-t').html(html_t);
+
+      const params = getQueryParams(document.location.search);
+      if (params.grade != undefined && params.id != undefined && params.level != undefined && params.name != undefined && params.type != undefined) {
+        if (params.level > 15) params.level = 15;
+        else if (params.length < 0) params.length = 0;
+
+        var request = getOption(params.grade, params.id, params.level);
+        if (request.o != {}) {
+          shareObj = params;
+          $('#mob-select-card').hide();
+          $('#mob-option-card').show();
+
+          const id = params.id;
+          const grade = params.grade;
+
+          $('.opt-img').attr('src', 'assets/img/mob/ic_' + id + '.jpg');
+          $('.opt-img').attr('data-id', id);
+          $('.opt-img').attr('data-grade', grade);
+          $('.opt-img').attr('data-type', params.type);
+          $('.opt-span').text(params.name);
+          $('#option-level').val(params.level);
+          setOption(optionObj[id], params.type, grade, parseInt(params.level));
+        }
+      }
+
+      var expHtml = '';
+      for (var i=0; i<exp.length; i++) {
+        expHtml += '<tr><td>' + (i + 1) + '</td><td>' + addComma(exp[i]) + '</td></tr>';
+        if (i == 12 || i == exp.length - 1) {
+          var table = i < 13 ? $('#exp-table-a') : $('#exp-table-b');
+          table.html(expHtml);
+          expHtml = '';
+        }
+      }
+    });
+
+    $(document).on('click', '.type-tab', function() {
+      shareObj.type = $(this).text();
+    });
+
+    $(document).on('click', '.mob-item', function() {
+      $('#mob-select-card').hide();
+      $('#mob-option-card').show();
+
+      const id = $(this).attr('data-id');
+      const grade = $(this).attr('data-grade');
+
+      $('.opt-img').attr('src', 'assets/img/mob/ic_' + id + '.jpg');
+      $('.opt-img').attr('data-id', id);
+      $('.opt-img').attr('data-grade', grade);
+      $('.opt-img').attr('data-type', $(this).attr('data-type'));
+      $('.opt-span').text($(this).attr('data-name'));
+      $('#option-level').val("0");
+      setOption(optionObj[id], $(this).attr('data-type'), grade, 0);
+
+      shareObj.id = id;
+      shareObj.grade = grade;
+      shareObj.name = $(this).attr('data-name');
+      shareObj.level = 0;
+    });
+
+    $('#btn-close').on('click', function() {
+      $('#mob-select-card').show();
+      $('#mob-option-card').hide();
+      $('#mob-chart').hide();
+    });
+
+    $('#btn-minus').on('click', function() {
+      var level = parseInt($('#option-level').val());
+      if (level > 0) {
+        level -= 1;
+        $('#option-level').val(level);
+        shareObj.level = level;
+        setOption(optionObj[$('.opt-img').attr('data-id')], $('.opt-img').attr('data-type'), $('.opt-img').attr('data-grade'), level);
+      }
+    });
+
+    $('#btn-plus').on('click', function() {
+      var level = parseInt($('#option-level').val());
+      if (($('.opt-img').attr('data-grade') == '전설' && level < 25) || ($('.opt-img').attr('data-grade') == '보물' && level < 15)) {
+        level += 1;
+        $('#option-level').val(level);
+        shareObj.level = level;
+        setOption(optionObj[$('.opt-img').attr('data-id')], $('.opt-img').attr('data-type'), $('.opt-img').attr('data-grade'), level);
+      }
+    });
+
+    $('#option-level').on('change', function() {
+      var value = $('#option-level').val();
+      var level = 0;
+      if (value != undefined && value.length > 0) {
+        level = parseInt(value);
+        if ($('.opt-img').attr('data-grade') == '전설' && level > 25) {
+          level = 25;
+          $('#option-level').val(level);
+        } else if ($('.opt-img').attr('data-grade') == '보물' && level > 15) {
+          level = 15;
+          $('#option-level').val(level);
+        } else if (level < 0) {
+          level = 0;
+          $('#option-level').val(level);
+        }
+        shareObj.level = level;
+      } else {
+        $('#option-level').val('0');
+        shareObj.level = 0;
+      }
+      setOption(optionObj[$('.opt-img').attr('data-id')], $('.opt-img').attr('data-type'), $('.opt-img').attr('data-grade'), level);
+    });
+
+    const chartLabels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+    const chartOptions = {
+      width: '100%',
+      height: '320px'
+    };
+
+    var mobDataList = [];
+    var sliderInit = false;
+
+    function setOption(option, type, grade, level) {
+      var value;
+      var chartData = [];
+      mobDataList = [];
+
+      if (grade == '전설' && type != '탑승') {
+        for (var i = 0; i < chartLabels.length; i++) {
+          const tmpValue = getOption(grade, option, i);
+
+          var sum = 0;
+          for (var key of Object.keys(tmpValue.o)) {
+            if (key == '피해저항관통' || key == '피해저항') sum += tmpValue.o[key];
+          }
+          for (var key of Object.keys(tmpValue.e)) {
+            if (key == '피해저항관통' || key == '피해저항') sum += tmpValue.e[key];
+          }
+          tmpValue.sum = sum;
+
+          mobDataList.push(tmpValue);
+          chartData.push(sum);
+          if (i == level) value = tmpValue;
+        }
+
+        var handlesSlider = document.getElementById('slider');
+
+        if ($('#mob-chart').css('display') == 'none') {
+          new Chartist.Line('.ct-chart', {
+            labels: chartLabels,
+            series: [chartData]
+          }, chartOptions, {
+            fullWidth: true
+          });
+
+          
+          if (!sliderInit) {
+            sliderInit = true;
+            noUiSlider.create(handlesSlider, {
+              start: [0, 25],
+              step: 1,
+              connect: true,
+              range: {
+                'min': 0,
+                'max': 25
+              }
+            }).on('change', function (e) {
+              const start = mobDataList[parseInt(e[0])];
+              const end = mobDataList[parseInt(e[1])];
+              $('#chartDesc').html('Lv.' + parseInt(e[0]) + ' ▶️ Lv.' + parseInt(e[1]) + ' 변경 시&nbsp;<span style="color: green; font-weight: bold;">+' + (end.sum - start.sum) + '</span>&nbsp;<span style="font-weight: bold;">(' + ((end.sum - start.sum) / start.sum * 100).toFixed(2) + '% 증가)</span>');
+            });
+          }
+
+          if ($('#mob-chart').css('display') == 'none') $('#mob-chart').show();
+        }
+
+        handlesSlider.noUiSlider.set([0, 25]);
+
+        // 초기 설정
+        $('#chartDesc').html('Lv.0 ▶️ Lv.25 변경 시&nbsp;<span style="color: green; font-weight: bold;">+' + (mobDataList[25].sum - mobDataList[0].sum) + '</span>&nbsp;<span style="font-weight: bold;">(' + ((mobDataList[25].sum - mobDataList[0].sum) / mobDataList[0].sum * 100).toFixed(2) + '% 증가)</span>');
+      } else {
+        value = getOption(grade, option, level)
+        $('#mob-chart').hide();
+      }
+      var html_o = '<h5 class="card-title">등록 효과</h5><table class="table"><tbody>';
+      var html_e = '<h5 class="card-title">결속 장착 효과</h5><table class="table"><tbody>';
+      for (var key of Object.keys(value.o)) {
+        html_o += '<tr><th>' + key + '</th><td class="text-align-right">' + addComma(value.o[key]) + '</td></tr>';
+        if (value.e[key] > 0) {
+          html_e += '<tr><th>' + key + '</th><td class="text-align-right">' + addComma(value.e[key]) + '</td></tr>';
+        }
+      }
+      html_o += '</tbody>';
+      html_e += '</tbody>';
+      $('#option-view').html(html_o);
+      $('#equip-option-view').html(html_e);
+      if (value.isEmpty && level < 15) {
+        $('.opt-isempty').show();
+      } else {
+        $('.opt-isempty').hide();
+      }
+    }
+
+    function share() {
+        Kakao.Share.sendDefault({
+        objectType: 'feed',
+        content: {
+          title: '등록 효과, 결속 장착 효과 정보 보기',
+          imageUrl: '',
+          link: {
+            mobileWebUrl: 'https://mbaramy.github.io/index.html?type=' + encodeURIComponent(shareObj.type) + '&id=' + shareObj.id + '&grade=' + encodeURIComponent(shareObj.grade) + '&name=' + encodeURIComponent(shareObj.name) + '&level=' + shareObj.level,
+            webUrl: 'https://mbaramy.github.io/index.html?type=' + encodeURIComponent(shareObj.type) + '&id=' + shareObj.id + '&grade=' + encodeURIComponent(shareObj.grade) + '&name=' + encodeURIComponent(shareObj.name) + '&level=' + shareObj.level,
+          },
+        },
+        itemContent: {
+          profileText: 'Lv.' + shareObj.level + ' ' + shareObj.name,
+          profileImageUrl: 'https://mbaramy.github.io/assets/img/mob/ic_' + shareObj.id + '.jpg',
+        },
+        buttons: [
+          {
+            title: '자세히 보기',
+            link: {
+              mobileWebUrl: 'https://mbaramy.github.io/index.html?type=' + encodeURIComponent(shareObj.type) + '&id=' + shareObj.id + '&grade=' + encodeURIComponent(shareObj.grade) + '&name=' + encodeURIComponent(shareObj.name) + '&level=' + shareObj.level,
+              webUrl: 'https://mbaramy.github.io/index.html?type=' + encodeURIComponent(shareObj.type) + '&id=' + shareObj.id + '&grade=' + encodeURIComponent(shareObj.grade) + '&name=' + encodeURIComponent(shareObj.name) + '&level=' + shareObj.level,
+            },
+          },
+        ],
+      });
+    }
+
+    function report() {
+      window.open('https://forms.gle/fFxUAgXnpVq2Loki6');
+    }
+
+    function getQueryParams(qs) {
+      qs = qs.split('+').join(' ');
+      var params = {},
+          tokens,
+          re = /[?&]?([^=]+)=([^&]*)/g;
+      while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+      }
+      return params;
+    }
+
+    $('#mobSearch').keyup(function(event) {
+      const text = $(this).val();
+      $('.mob-item').hide().filter(function() {
+        return $(this).attr('data-name').includes(text);
+      }).show();
+    });
+  </script>
+</body>
+</html>

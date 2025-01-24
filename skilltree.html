@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>바라미 - 스킬</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<!-- <link rel="manifest" href="assets/img/site.webmanifest"> -->
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/skill.css" rel="stylesheet">
+
+</head>
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/android-chrome-192x192.png" alt="">
+      <span class="d-none d-lg-block">바라미</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown">
+            <img src="assets/img/android-chrome-192x192.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2 auth-name"></span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile p-0">
+            <li>
+              <a class="dropdown-item d-flex align-items-center sign-btn">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sign-btn-label"></span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar" data-include-path="common/sidebar.html">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-card-list"></i>
+          <span>환수 정보</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence.html">
+          <i class="bi bi-trophy-fill"></i>
+          <span>결속 추천</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence-rank.html">
+          <i class="bi bi-award-fill"></i>
+          <span>결속 랭킹</span>
+          <span class="badge bg-warning ms-2">New</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="summon.html">
+          <i class="ri-heart-3-fill"></i>
+          <span>환수 소환</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="enhance.html">
+          <i class="bi bi-hammer"></i>
+          <span>장비 강화</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="option.html">
+          <i class="ri-magic-fill"></i>
+          <span>성능 추가</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="skilltree.html?job=1">
+          <i class="bi bi-ui-checks-grid"></i>
+          <span>스킬 트리</span>
+        </a>
+      </li>
+    </ul>
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>스킬</h1>
+      <nav>
+        <ol class="breadcrumb">
+        </ol>
+      </nav>
+    </div>
+
+    <section class="section">
+      <div class="job-container m-0 bg-white">
+        <div class="job-btn" data-id="0">
+          <i class="bi bi-star-fill"></i>
+          <span>즐겨찾기</span>
+        </div>
+
+        <div class="job-btn" data-id="1">
+          <img src="assets/img/icon_job_1_6.png">
+          <span>전사</span>
+        </div>
+
+        <div class="job-btn" data-id="2">
+          <img src="assets/img/icon_job_2_6.png">
+          <span>도적</span>
+        </div>
+
+        <div class="job-btn" data-id="3">
+          <img src="assets/img/icon_job_3_6.png">
+          <span>주술사</span>
+        </div>
+        
+        <div class="job-btn" data-id="4">
+          <img src="assets/img/icon_job_4_6.png">
+          <span>도사</span>
+        </div>
+
+        <div class="job-btn" data-id="5">
+          <img src="assets/img/icon_job_5_6.png">
+          <span>격투가</span>
+        </div>
+
+        <div class="job-btn" data-id="6">
+          <img src="assets/img/icon_job_6_6.png">
+          <span>궁사</span>
+        </div>
+
+        <div class="job-btn" data-id="7">
+          <img src="assets/img/icon_job_7_6.png">
+          <span>무사</span>
+        </div>
+
+        <div class="job-btn" data-id="8">
+          <img src="assets/img/icon_job_8_6.png">
+          <span>천인</span>
+        </div>
+
+        <div class="job-btn" data-id="9">
+          <img src="assets/img/icon_job_9_6.png">
+          <span>도깨비</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="position: relative;">
+      <div class="list-container bg-white">
+        <ul class="list-ul p-0">
+        </ul>
+      </div>
+
+      <div class="empty-container">
+        <div class="spinner-border text-light list-loading" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <button type="button" class="btn btn-primary rounded-pill btn-skill-add">스킬 공유 하기</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <button class="bystyle-btn-orange btn btn-expand w-100" type="button">
+        <i class="bi bi-chevron-down"></i>
+      </button>
+    </section>
+
+    <section class="section mt-1">
+      
+      <div class="row">
+        <ins class="kakao_ad_area" style="display:none;"
+        data-ad-unit = "DAN-lOqeBgJ4uYAgcjX8"
+        data-ad-width = "320"
+        data-ad-height = "100"></ins>
+      </div>
+
+      <div class="list-footer bg-white m-0" style="display: none;">
+        <div class="float-right">
+          <button type="button" class="btn btn-danger rounded-pill me-2 sort-like-btn"><i class="ri-heart-fill"></i>TOP10</button>
+          <button type="button" class="btn btn-primary rounded-pill skill-write-btn"><i class="ri-pencil-fill"></i>스킬 공유</button>
+        </div>
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" data-include-path="common/footer.html">
+    <div class="copyright">
+      &copy; Copyright <strong><span>DEV</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js" integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous"></script>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/moment.js"></script>
+  <script src="assets/js/jquery.iframetracker.js"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    import { getFirestore, collection, doc, getDocs, query, where, limit, orderBy, startAfter, getCountFromServer, Timestamp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBi20Vfz4FIEprruKEdWB2c_paicWCl6jI",
+      authDomain: "baramy-9cb08.firebaseapp.com",
+      projectId: "baramy-9cb08",
+      storageBucket: "baramy-9cb08.appspot.com",
+      messagingSenderId: "912929312520",
+      appId: "1:912929312520:web:732acdc9a4f70b8e6866bd",
+      measurementId: "G-RG02W3NYLF"
+    };
+  
+    // Initialize Firebase
+    var page = 1;
+    var isLoading = false;
+    const parameter = new URLSearchParams(window.location.search);
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    const provider = new GoogleAuthProvider();
+    const checkAuth = getAuth();
+
+    if (checkAuth.currentUser) {
+      $('.auth-name').text(checkAuth.currentUser.displayName);
+      $('.rounded-circle').attr('src', checkAuth.currentUser.photoURL);
+      $('.sign-btn-label').text('로그아웃');
+    } else {
+      $('.auth-name').text('계정');
+      $('.rounded-circle').attr('src', 'assets/img/android-chrome-192x192.png');
+      $('.sign-btn-label').text('로그인');
+    }
+
+    if (parameter.get('job') && ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(parameter.get('job'))) job = parameter.get('job');
+    
+    if (job > 4) {
+      $('.job-container').animate({scrollLeft: $('.job-btn').eq(job-1).offset().left}, 1000);
+    }
+
+    if (job != '0') {
+      $('.list-footer').show();
+    } else {
+      $('.list-footer').remove();
+    }
+
+    function handleGoogleLogin() {
+      signInWithPopup(getAuth(), provider)
+        .then((result) => {
+          const user = result.user;
+          $('.auth-name').text(user.displayName);
+          $('.rounded-circle').attr('src', user.photoURL);
+          $('.sign-btn-label').text('로그아웃');
+        }).catch((error) => {
+          $('.auth-name').text('계정');
+          $('.rounded-circle').attr('src', 'assets/img/android-chrome-192x192.png');
+          $('.sign-btn-label').text('로그인');
+        });
+    }
+
+    onAuthStateChanged(getAuth(), (user) => {
+      if (user) {
+        $('.auth-name').text(user.displayName);
+        $('.rounded-circle').attr('src', user.photoURL);
+        $('.sign-btn-label').text('로그아웃');
+      } else {
+        $('.auth-name').text('계정');
+        $('.rounded-circle').attr('src', 'assets/img/android-chrome-192x192.png');
+        $('.sign-btn-label').text('로그인');
+      }
+    });
+
+    $('.sign-btn').on('click', function() {
+      if (checkAuth.currentUser) {
+        getAuth().signOut();
+      } else {
+        handleGoogleLogin();
+      }
+    });
+
+    const skillRef = collection(db, 'skill');
+    var countQuery = query(skillRef, where('job', '==', parseInt(parameter.get('job'))));
+    if (job == 0 && checkAuth.currentUser) {
+      countQuery = query(collection(db, 'likes'), where('uid', '==', checkAuth.currentUser.uid));
+    }
+    const countSnapshot = await getCountFromServer(countQuery);
+    totalCount = countSnapshot.data().count;
+
+    var listQuery = query(skillRef, where('job', '==', parseInt(parameter.get('job'))), limit(10));
+    if (job == 0 && checkAuth.currentUser) {
+      listQuery = query(collection(db, 'likes'), orderBy('date'), where('uid', '==', checkAuth.currentUser.uid), limit(10));
+    }
+    $('.empty-container').addClass('active');
+    if (totalCount == 0) {
+      $('.sort-like-btn').remove();
+    }
+
+    isLoading = true;
+    lastDoc = null;
+
+    $('.list-loading').remove();
+    getSkillDocs(listQuery, false);
+
+    $('.btn-expand').on('click', function() {
+      if (lastDoc && !isLoading) {
+        isLoading = true;
+
+        const nextQuery = query(skillRef, orderBy('date'), startAfter(lastDoc.id), limit(10));
+
+        getSkillDocs(nextQuery, true);
+      }
+    });
+
+    function getSkillDocs(query, isMore) {
+      getDocs(query).then((result) => {
+        if (result) {
+          const data = result.docs.map((doc) => ({
+            id: (job == '0' ? doc.data().sid : doc.id),
+            title: doc.data().title,
+            like: doc.data().like,
+            date: doc.data().date,
+            job: doc.data().job
+          }));
+          
+          currentCount += data.length;
+          isLoading = false;
+
+          if (!isMore) {
+            if (data.length == 0) {
+              $('.btn-skill-add').addClass('active');
+            } else {
+              $('.empty-container').remove();
+              $('.list-ul').show();
+            }
+          }
+
+          if (job == '0') {
+            $('.btn-expand').remove();
+          } else if (totalCount >= currentCount) {
+            $('.btn-expand').remove();
+          } else {
+            if (!$('.btn-expand').hasClass('active')) {
+              $('.btn-expand').addClass('active');
+            }
+          }
+
+          appendDataList(data);
+        }
+      });
+    }
+
+    $('.btn-skill-add, .skill-write-btn').on('click', function() {
+      if (job == '0') {
+        alert('즐겨찾기 하고싶은 스킬 세팅을 추가해보세요!');
+      } else if (checkAuth.currentUser) {
+        location.href = 'skill.html?job=' + job;
+      } else {
+        alert('로그인이 필요합니다.');
+      }
+    });
+
+    $('.sort-like-btn').on('click', function() {
+      if (isLoading) {
+        return;
+      }
+
+      isLoading = true;
+      $('.btn-expand').remove();
+
+      const listQuery = query(skillRef, orderBy('like', 'desc'), where('job', '==', parseInt(parameter.get('job'))), limit(10));
+      getDocs(listQuery).then((result) => {
+        
+        if (result) {
+          const data = result.docs.map((doc) => ({
+            id: doc.id,
+            title: doc.data().title,
+            like: doc.data().like,
+            date: doc.data().date,
+            job: doc.data().job
+          }));
+          isLoading = false;
+          $('.list-li').remove();
+
+          appendDataList(data);
+        }
+      });
+    });
+
+    $(function() {
+      $.getJSON("https://api64.ipify.org?format=jsonp&callback=?", function(json) {
+        userIp = json.ip;
+
+        setTimeout(function() {
+          document.querySelectorAll('.kakao_ad_area').forEach((ad) => { 
+            let adUnit = $(ad).attr('data-ad-unit');
+            ad.querySelectorAll('iframe').forEach((iframe) => {
+              $('#' + iframe.id).iframeTracker({
+                blurCallback: e => {
+                  ipLog("DAN-lOqeBgJ4uYAgcjX8", (new Date()).toLocaleString(), navigator.userAgent, window.location.href, userIp);
+                }
+              });
+            });
+          });
+        }, 1000);
+      });
+    });
+
+    function ipLog(adUnit, date, userAgent, url, ip) {
+      try {
+        const docRef = addDoc(collection(db, "ADLog"), {
+          adUnit: adUnit,
+          date: date,
+          userAgent: userAgent,
+          ip: ip,
+          url: url
+        });
+      } catch (e) {
+      }
+    }
+  </script>
+
+  <script>
+    var userIp;
+    var job = '0';
+    var page = 0;
+    var totalCount;
+    var currentCount = 0;
+    var lastDoc;
+
+    moment.locale('ko');
+    $('.list-ul').hide();
+
+    $(document).ready(function() {
+      Kakao.init('5472dfb0e36ff14873f3613a0e9b9d50');
+
+      for (var i=0; i<$('.job-btn').length; i++) {
+        if ($('.job-btn').eq(i).attr('data-id') == job) {
+          $('.job-btn').eq(i).addClass('active');
+        }
+      }
+
+      $('.job-btn').on('click', function() {
+        window.location.href = 'skilltree.html?job=' + $(this).attr('data-id');
+      });
+    });
+
+    function setDataList(data) {
+      if (data.length == 0) {
+        $('.btn-skill-add').addClass('active');
+      } else {
+        $('.empty-container').remove();
+        $('.list-ul').show();
+        
+        appendDataList(data);
+      }
+    }
+
+    function appendDataList(data) {
+      const now = moment();
+      var html = '';
+
+      for (var i=0; i<data.length; i++) {
+        html += '<li class="list-li">';
+        html += '<a href="skill.html?job=' + data[i].job + '&id=' + data[i].id + '">';
+        html += '<h3><span>' + data[i].title + '</span>';
+        if (moment.duration(now.diff(moment.unix(data[i].date).utc().subtract(1969, 'years').add(1, 'days'))).asDays() < 3) {
+          html += '<span class="icon-new"></span>';
+        }
+        html += '</h3></a>';
+        
+        html += '<div class="list-info">';
+        html += '<span class="list-date">' + moment.unix(data[i].date).utc().subtract(1969, 'years').add(1, 'days').fromNow() + '</span>';
+        if (data[i].like) {
+          html += '<span class="list-like ri-heart-3-fill">' + data[i].like + '</span>';
+        }
+        html += '</div>';
+        html += '</li>';
+
+        if (i == data.length - 1) {
+          lastDoc = data[i];
+        }
+      }
+      $('.list-ul').append(html);
+    }
+  </script>
+</body>
+</html>

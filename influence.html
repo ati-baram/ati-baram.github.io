@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<!-- End Google Tag Manager -->
+<title>바라미 - 결속</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+<!-- <link rel="manifest" href="assets/img/site.webmanifest"> -->
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/baram.css?ver=20230223" rel="stylesheet">
+
+</head>
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+      <img src="assets/img/android-chrome-192x192.png" alt="">
+      <span class="d-none d-lg-block">바라미</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+  </header>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar" data-include-path="common/sidebar.html">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="index.html">
+          <i class="bi bi-card-list"></i>
+          <span>환수 정보</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="influence.html">
+          <i class="bi bi-trophy-fill"></i>
+          <span>결속 추천</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="influence-rank.html">
+          <i class="bi bi-award-fill"></i>
+          <span>결속 랭킹</span>
+          <span class="badge bg-warning ms-2">New</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="summon.html">
+          <i class="ri-heart-3-fill"></i>
+          <span>환수 소환</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="enhance.html">
+          <i class="bi bi-hammer"></i>
+          <span>장비 강화</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="option.html">
+          <i class="ri-magic-fill"></i>
+          <span>성능 추가</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link collapsed" href="skilltree.html?job=1">
+          <i class="bi bi-ui-checks-grid"></i>
+          <span>스킬 트리</span>
+        </a>
+      </li> -->
+    </ul>
+  </aside>
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>결속 추천</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <!-- <li class="breadcrumb-item"><a href="index.html">Home</a></li> -->
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div id="mob-select-card" class="card-body" style="padding: 0 20px 0px 20px;">
+              <h5 class="card-title">환수 선택</h5>
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="type-tab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="t-tab" data-bs-toggle="tab" data-bs-target="#type-justified-t" type="button" role="tab" aria-selected="true">탑승</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="s-tab" data-bs-toggle="tab" data-bs-target="#type-justified-s" type="button" role="tab" aria-selected="false">수호</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="b-tab" data-bs-toggle="tab" data-bs-target="#type-justified-b" type="button" role="tab" aria-selected="false">변신</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-4" id="type-tab-contents">
+                <div class="input-group mb-3">
+                  <input id="mobSearch" type="text" class="form-control" placeholder="환수명">
+                </div>
+
+                <div class="tab-pane fade show active" id="type-justified-t" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-t">
+                  </ul>
+                </div>
+                <div class="tab-pane fade" id="type-justified-s" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-s">
+                  </ul>
+                </div>
+                <div class="tab-pane fade" id="type-justified-b" role="tabpanel">
+                  <ul class="mob-list" id="mob-list-b">
+                  </ul>
+                </div>
+              </div>
+
+              <div class="row mt-3 mb-3 alert alert-dark alert-dismissible level-container" style="display: none;">
+                <label class="col-sm-2 col-form-label" style="white-space: nowrap;">레벨 일괄 적용</label>
+                <div class="col-sm-10">
+                  <select class="form-select mob-level-select">
+                    <option selected="">0 레벨</option>
+                    <option value="1">1 레벨</option>
+                    <option value="2">2 레벨</option>
+                    <option value="3">3 레벨</option>
+                    <option value="4">4 레벨</option>
+                    <option value="5">5 레벨</option>
+                    <option value="6">6 레벨</option>
+                    <option value="7">7 레벨</option>
+                    <option value="8">8 레벨</option>
+                    <option value="9">9 레벨</option>
+                    <option value="10">10 레벨</option>
+                    <option value="11">11 레벨</option>
+                    <option value="12">12 레벨</option>
+                    <option value="13">13 레벨</option>
+                    <option value="14">14 레벨</option>
+                    <option value="15">15 레벨</option>
+                    <option value="16">16 레벨</option>
+                    <option value="17">17 레벨</option>
+                    <option value="18">18 레벨</option>
+                    <option value="19">19 레벨</option>
+                    <option value="20">20 레벨</option>
+                    <option value="21">21 레벨</option>
+                    <option value="22">22 레벨</option>
+                    <option value="23">23 레벨</option>
+                    <option value="24">24 레벨</option>
+                    <option value="25">25 레벨</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="mob-option-card" class="card-body" style="padding: 0 20px 0px 20px; display: none;">
+              <h5 class="card-title">우선순위 설정</h5>
+              <div class="mb-3">
+                <div class="btn-group w-100 mb-3" role="group">
+                  <button type="button" class="btn btn-priority-a btn-warning active" data-id="피해저항관통"><img class="opt-img" style="width: 31px" src="assets/img/opt/ic_opt_001.jpg"/><span class="opt-span">피해저항관통</span></button>
+                  <button type="button" class="btn btn-priority-b btn-outline-secondary" data-id="피해저항"><img class="opt-img" style="width: 31px" src="assets/img/opt/ic_opt_002.jpg"/><span class="opt-span">피해저항</span></button>
+                  <button type="button" class="btn btn-priority-e btn-outline-secondary" data-id="경험치 획득증가" style="display: none;"><img class="opt-img" style="width: 31px" src="assets/img/opt/ic_opt_004.jpg"/><span class="opt-span">경험치 획득증가</span></button>
+                </div>
+
+                <div class="btn-group w-100" role="group">
+                  <button type="button" class="btn btn-priority-c btn-warning active" data-id="체력"><img class="opt-img" style="width: 31px" src="assets/img/opt/ic_opt_005.jpg"/><span class="opt-span">체력</span></button>
+                  <button type="button" class="btn btn-priority-d btn-outline-secondary" data-id="마력"><img class="opt-img" style="width: 31px" src="assets/img/opt/ic_opt_006.jpg"/><span class="opt-span">마력</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div id="mob-result-card" class="card-body" style="padding: 0 20px 0px 20px; display: none;">
+              <h5 class="card-title">결과</h5>
+
+              <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="result-tab" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="b-tab" data-bs-toggle="tab" data-bs-target="#result-justified-t" type="button" role="tab" aria-selected="true">추천</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="s-tab" data-bs-toggle="tab" data-bs-target="#result-justified-s" type="button" role="tab" aria-selected="false">합산</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="p-tab" data-bs-toggle="tab" data-bs-target="#result-justified-p" type="button" role="tab" aria-selected="false">우선순위</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-4" id="result-tab-contents">
+                <span class="justify-content-center p-3 loadingMessage" style="font-size: x-large; font-family: SD Kukde;"></span>
+                <div class="d-flex justify-content-center loadingView" style="height: 250px; display: none;">
+                  <div class="spinner-border" role="status" style="margin: auto;">
+                    <span class="sr-only"></span>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade show active" id="result-justified-t" role="tabpanel">
+
+                </div>
+                <div class="tab-pane fade" id="result-justified-s" role="tabpanel">
+                  
+                </div>
+                <div class="tab-pane fade" id="result-justified-p" role="tabpanel">
+                  
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <ins class="kakao_ad_area" style="display:none;"
+              data-ad-unit = "DAN-lOqeBgJ4uYAgcjX8"
+              data-ad-width = "320"
+              data-ad-height = "100"></ins>
+            </div>
+
+            <div class="card-footer">
+              <div class="row mt-3">
+                <div class="col-md-6 mb-3">
+                  <button type="button" class="btn bystyle-btn-orange btn-type" data-type="전설" style="margin-right: 8px;">전체 선택</button>
+                  <button type="button" class="btn btn-secondary" id="btn-type-remove" style="float: right;"><i class="bi bi-trash"></i></button>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <button id="btn-next" type="button" class="btn bystyle-btn-red" style="float: right;"><i class="bi bi-chevron-right"></i></button>
+                  <button id="btn-prev" type="button" class="btn bystyle-btn-red" style="margin-right: 8px; float: right; display: none;"><i class="bi bi-chevron-left"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" data-include-path="common/footer.html">
+    <div class="copyright">
+      &copy; Copyright <strong><span>DEV</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.min.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.min.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/jquery.iframetracker.js"></script>
+  <script src="assets/js/unite.min.js?ver=20240101"></script>
+  <script src="assets/js/sheet.min.js?ver=20241128"></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBi20Vfz4FIEprruKEdWB2c_paicWCl6jI",
+      authDomain: "baramy-9cb08.firebaseapp.com",
+      projectId: "baramy-9cb08",
+      storageBucket: "baramy-9cb08.appspot.com",
+      messagingSenderId: "912929312520",
+      appId: "1:912929312520:web:732acdc9a4f70b8e6866bd",
+      measurementId: "G-RG02W3NYLF"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    $(function() {
+      $.getJSON("https://api64.ipify.org?format=jsonp&callback=?", function(json) {
+        userIp = json.ip;
+
+        setTimeout(function() {
+          document.querySelectorAll('.kakao_ad_area').forEach((ad) => { 
+            let adUnit = $(ad).attr('data-ad-unit');
+            ad.querySelectorAll('iframe').forEach((iframe) => {
+              $('#' + iframe.id).iframeTracker({
+                blurCallback: e => {
+                  ipLog("DAN-lOqeBgJ4uYAgcjX8", (new Date()).toLocaleString(), navigator.userAgent, window.location.href, userIp);
+                }
+              });
+            });
+          });
+        }, 1000);
+      });
+    });
+
+    function ipLog(adUnit, date, userAgent, url, ip) {
+      try {
+        const docRef = addDoc(collection(db, "ADLog"), {
+          adUnit: adUnit,
+          date: date,
+          userAgent: userAgent,
+          ip: ip,
+          url: url
+        });
+      } catch (e) {
+      }
+    }
+  </script>
+
+  <script>
+    var userIp;
+
+    var currentType = '탑승';
+    var currentStep = 0;
+
+    $(document).ready(function() {
+      var datas = [];
+
+      const mobArray = (new GlobalData().getData())();
+      optionRate = (new GlobalData().getRateData())();
+
+      var html_s = '';
+      var html_b = '';
+      var html_t = '';
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null && history.length > 0) {
+        history = history.split(',');
+      } else {
+        history = [];
+      }
+      for (var i=0; i<mobArray.length; i++) {
+        var className = 'mob-item';
+        if (mobArray[i].type === '탑승' && history.includes(mobArray[i].name)) {
+          className = 'mob-item-selected';
+        }
+        var li = '<li class="' + className + '" data-id="' + mobArray[i].ic + '" data-type="' + mobArray[i].type + '" data-grade="' + mobArray[i].grade + '" data-influence="' + mobArray[i].influence + '" data-name="' + mobArray[i].name + '">';
+        li += '<img class="mob-img" src="assets/img/mob/ic_' + mobArray[i].ic + '.jpg"/>';
+        li += '<input type="number" class="form-control mob-level" placeholder="0레벨" max="20" min="0">';
+        li += '</li>';
+
+        if (mobArray[i].type === '수호') {
+          html_s += li;
+        } else if (mobArray[i].type === '변신') {
+          html_b += li;
+        } else if (mobArray[i].type === '탑승') {
+          html_t += li;
+        }
+
+        optionObj[mobArray[i].ic] = mobArray[i].option;
+      }
+      $('#mob-list-s').html(html_s);
+      $('#mob-list-b').html(html_b);
+      $('#mob-list-t').html(html_t);
+    });
+
+    $('#type-tab > li > button').on('click', function() {
+      currentType = $(this).text();
+    });
+
+    $('#t-tab').on('click', function() {
+      const selectedItem = $('.mob-item-selected');
+      for (var i=0; i<selectedItem.length; i++) {
+        selectedItem.eq(i).removeClass('mob-item-selected');
+        selectedItem.eq(i).addClass('mob-item');
+      }
+
+      const mobItem = $('.mob-item');
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null && history.length > 0) {
+        history = history.split(',');
+      } else {
+        history = [];
+      }
+
+      for (var i=0; i<mobItem.length; i++) {
+        if (mobItem.eq(i).attr('data-type') === '탑승' && history.includes(mobItem.eq(i).attr('data-name'))) {
+          mobItem.eq(i).addClass('mob-item-selected');
+          mobItem.eq(i).removeClass('mob-item');
+        }
+      }
+    });
+
+    $('#s-tab').on('click', function() {
+      const selectedItem = $('.mob-item-selected');
+      for (var i=0; i<selectedItem.length; i++) {
+        selectedItem.eq(i).removeClass('mob-item-selected');
+        selectedItem.eq(i).addClass('mob-item');
+      }
+
+      const mobItem = $('.mob-item');
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null && history.length > 0) {
+        history = history.split(',');
+      } else {
+        history = [];
+      }
+
+      for (var i=0; i<mobItem.length; i++) {
+        if (mobItem.eq(i).attr('data-type') === '수호' && history.includes(mobItem.eq(i).attr('data-name'))) {
+          mobItem.eq(i).addClass('mob-item-selected');
+          mobItem.eq(i).removeClass('mob-item');
+        } else {
+          mobItem.eq(i).removeClass('mob-item-selected');
+          mobItem.eq(i).addClass('mob-item');
+        }
+      }
+    });
+
+    $('#b-tab').on('click', function() {
+      const selectedItem = $('.mob-item-selected');
+      for (var i=0; i<selectedItem.length; i++) {
+        selectedItem.eq(i).removeClass('mob-item-selected');
+        selectedItem.eq(i).addClass('mob-item');
+      }
+
+      const mobItem = $('.mob-item');
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null && history.length > 0) {
+        history = history.split(',');
+      } else {
+        history = [];
+      }
+
+      for (var i=0; i<mobItem.length; i++) {
+        if (mobItem.eq(i).attr('data-type') === '변신' && history.includes(mobItem.eq(i).attr('data-name'))) {
+          mobItem.eq(i).addClass('mob-item-selected');
+          mobItem.eq(i).removeClass('mob-item');
+        } else {
+          mobItem.eq(i).removeClass('mob-item-selected');
+          mobItem.eq(i).addClass('mob-item');
+        }
+      }
+    });
+
+    $('.btn-type').on('click', function() {
+      const list = currentType === '탑승' ? 'mob-list-t' : currentType === '수호' ? 'mob-list-s' : 'mob-list-b';
+      var li = $('#' + list + ' > li');
+      for (var i = 0; i< li.length; i++) {
+        const selectedItem = $('.mob-item-selected');
+        if (li.eq(i).attr('data-grade') == $(this).attr('data-type')) {
+          if (selectedItem.length <= 40) {
+            li.eq(i).removeClass('mob-item');
+            li.eq(i).addClass('mob-item-selected');
+            addHistory(li.eq(i).attr('data-name'));
+          } else {
+            alert("경우의 수가 너무 많습니다. 최대 40개 까지 선택 가능합니다.");
+            break;
+          }
+        }
+      }
+    });
+
+    $('#btn-type-remove').on('click', function() {
+      const list = currentType === '탑승' ? 'mob-list-t' : currentType === '수호' ? 'mob-list-s' : 'mob-list-b';
+      var li = $('#' + list + ' > li');
+      for (var i = 0; i< li.length; i++) {
+        li.eq(i).removeClass('mob-item-selected');
+        li.eq(i).addClass('mob-item');
+      }
+      window.localStorage.setItem('mobHistory', null);
+    });
+
+    $(document).on('click', '.mob-item', function() {
+      const selectedItem = $('.mob-item-selected');
+      if (selectedItem.length <= 40) {
+        $(this).removeClass('mob-item');
+        $(this).addClass('mob-item-selected');
+        addHistory($(this).attr('data-name'));
+      } else {
+        alert("경우의 수가 너무 많습니다. 최대 40개 까지 선택 가능합니다.");
+      }
+      $(this).focusout();
+    });
+
+    $(document).on('click', '.mob-item-selected', function() {
+      removeHistory($(this).attr('data-name'));
+      $(this).removeClass('mob-item-selected');
+      $(this).addClass('mob-item');
+      $(this).focusout();
+    });
+
+    function addHistory(name) {
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null) {
+        history = history.split(',');
+      } else {
+        history = [];
+      }
+      if (history.indexOf(name) == -1) {
+        history.push(name);
+        window.localStorage.setItem('mobHistory', history.join(','));
+      }
+    }
+
+    function removeHistory(name) {
+      var history = window.localStorage.getItem('mobHistory');
+      if (history != null) {
+        history = history.split(',');
+
+        let index = history.indexOf(name);
+        if (index > -1) {
+          history.splice(index, 1);
+          window.localStorage.setItem('mobHistory', history.join(','));
+        }
+      }
+    }
+    
+    $('.btn-priority-a').on('click', function() {
+      if (!$(this).hasClass('active')) {
+        $(this).removeClass('btn-outline-secondary');
+        $(this).addClass('btn-warning');
+        $(this).addClass('active');
+
+        $('.btn-priority-b').removeClass('btn-warning');
+        $('.btn-priority-b').removeClass('active');
+        $('.btn-priority-b').addClass('btn-outline-secondary');
+
+        $('.btn-priority-e').removeClass('btn-warning');
+        $('.btn-priority-e').removeClass('active');
+        $('.btn-priority-e').addClass('btn-outline-secondary');
+      }
+    });
+
+    $('.btn-priority-b').on('click', function() {
+      if (!$(this).hasClass('active')) {
+        $(this).removeClass('btn-outline-secondary');
+        $(this).addClass('btn-warning');
+        $(this).addClass('active');
+
+        $('.btn-priority-a').removeClass('btn-warning');
+        $('.btn-priority-a').removeClass('active');
+        $('.btn-priority-a').addClass('btn-outline-secondary');
+
+        $('.btn-priority-e').removeClass('btn-warning');
+        $('.btn-priority-e').removeClass('active');
+        $('.btn-priority-e').addClass('btn-outline-secondary');
+      }
+    });
+
+    $('.btn-priority-e').on('click', function() {
+      if (!$(this).hasClass('active')) {
+        $(this).removeClass('btn-outline-secondary');
+        $(this).addClass('btn-warning');
+        $(this).addClass('active');
+
+        $('.btn-priority-a').removeClass('btn-warning');
+        $('.btn-priority-a').removeClass('active');
+        $('.btn-priority-a').addClass('btn-outline-secondary');
+
+        $('.btn-priority-b').removeClass('btn-warning');
+        $('.btn-priority-b').removeClass('active');
+        $('.btn-priority-b').addClass('btn-outline-secondary');
+      }
+    });
+
+    $('.btn-priority-c').on('click', function() {
+      if (!$(this).hasClass('active')) {
+        $(this).removeClass('btn-outline-secondary');
+        $(this).addClass('btn-warning');
+        $(this).addClass('active');
+
+        $('.btn-priority-d').removeClass('btn-warning');
+        $('.btn-priority-d').removeClass('active');
+        $('.btn-priority-d').addClass('btn-outline-secondary');
+      }
+    });
+
+    $('.btn-priority-d').on('click', function() {
+      if (!$(this).hasClass('active')) {
+        $(this).removeClass('btn-outline-secondary');
+        $(this).addClass('btn-warning');
+        $(this).addClass('active');
+
+        $('.btn-priority-c').removeClass('btn-warning');
+        $('.btn-priority-c').removeClass('active');
+        $('.btn-priority-c').addClass('btn-outline-secondary');
+      }
+    });
+
+    $('#btn-next').on('click', function() {
+      if (currentStep == 0) {
+        currentStep = 1;
+        $('#btn-prev').show();
+        $('#type-tab > .nav-item > .nav-link').attr('disabled', true);
+        $('.btn-type').hide();
+        $('#btn-type-remove').hide();
+        $('.level-container').show();
+
+        var mobItem = $('.mob-item');
+        for (var i=0; i<mobItem.length; i++) {
+          mobItem.eq(i).hide();
+        }
+
+        var mobItemSelected = $('.mob-item-selected');
+        for (var i=0; i<mobItemSelected.length; i++) {
+          mobItemSelected.eq(i).removeClass('mob-item-selected');
+          mobItemSelected.eq(i).addClass('mob-item-level');
+        }
+      } else if (currentStep == 1) {
+        currentStep = 2;
+        $('#mob-select-card').hide();
+        $('.level-container').hide();
+
+        let tab = $('#type-tab > .nav-item > .active').eq(0).text();
+        if (tab == '수호') $('.btn-priority-e').eq(0).show();
+        else $('.btn-priority-e').eq(0).hide();
+
+        $('#mob-option-card').show();
+      } else if (currentStep == 2) {
+        currentStep = 3;
+        $('#btn-next').hide();
+        $('#mob-option-card').hide();
+        $('#mob-result-card').show();
+        $('.level-container').hide();
+
+        var mob = [];
+        let tab = $('#type-tab > .nav-item > .active').eq(0).text();
+        if (tab == '탑승') mob = parseSelectedItem($('#mob-list-t > .mob-item-level'));
+        else if (tab == '수호') mob = parseSelectedItem($('#mob-list-s > .mob-item-level'));
+        else if (tab == '변신') mob = parseSelectedItem($('#mob-list-b > .mob-item-level'));
+
+        var priorityA = $('.btn-priority-a').eq(0).hasClass('active') ? '피해저항관통' : $('.btn-priority-b').eq(0).hasClass('active') ? '피해저항' : '경험치 획득증가';
+        var priorityB = $('.btn-priority-c').eq(0).hasClass('active') ? '체력' : '마력';
+
+        $('.loadingMessage').addClass('d-flex');
+        $('.loadingMessage').text(addComma(getCombinationCount(mob.length, 6)) + '가지의 경우의 수 계산중...');
+        $('.loadingView').addClass('d-flex');
+        $('.loadingView').show();
+        setTimeout(function() {
+          const resolveData = getRecommendData(mob, priorityA, priorityB);
+          
+          $('.loadingMessage').removeClass('d-flex');
+          $('.loadingMessage').hide();
+          $('.loadingView').removeClass('d-flex');
+          $('.loadingView').hide();
+
+          const resultHtml = getResultHTML(resolveData);
+          $('#result-justified-s').html(resultHtml.sum);
+          $('#result-justified-t').html(resultHtml.score);
+          $('#result-justified-p').html(resultHtml.priority);
+        }, 100);
+      }
+    });
+
+    $('#btn-prev').on('click', function() {
+      if (currentStep == 1) {
+        currentStep = 0;
+        $('#btn-prev').hide();
+        $('#type-tab > .nav-item > .nav-link').attr('disabled', false);
+        $('.btn-type').show();
+        $('#btn-type-remove').show();
+        $('.level-container').hide();
+
+        var mobItem = $('.mob-item');
+        for (var i=0; i<mobItem.length; i++) {
+          mobItem.eq(i).css('display', 'inline-flex');
+        }
+
+        var mobItemSelected = $('.mob-item-level');
+        for (var i=0; i<mobItemSelected.length; i++) {
+          mobItemSelected.eq(i).removeClass('mob-item-level');
+          mobItemSelected.eq(i).addClass('mob-item-selected');
+          mobItemSelected.eq(i).css('display', 'inline-flex');
+        }
+      } else if (currentStep == 2) {
+        currentStep = 1;
+        $('#mob-select-card').show();
+        $('#mob-option-card').hide();
+        $('.level-container').show();
+      } else if (currentStep == 3) {
+        currentStep = 2;
+        $('#result-justified-s').html('');
+        $('#result-justified-t').html('');
+        $('#result-justified-p').html('');
+        $('#mob-option-card').show();
+        $('#mob-result-card').hide();
+        $('.level-container').hide();
+        $('#btn-next').show();
+      }
+    });
+
+    $(document).on('click', '.btn-simple', function() {
+      $('.btn-simple').addClass('active');
+      $('.result-simple-tables').show();
+      $('.btn-detail').removeClass('active');
+      $('.result-detail-tables').hide();
+    });
+
+    $(document).on('click', '.btn-detail', function() {
+      $('.btn-detail').addClass('active');
+      $('.result-simple-tables').hide();
+      $('.btn-simple').removeClass('active');
+      $('.result-detail-tables').show();
+    });
+
+    $('#mobSearch').keyup(function(event) {
+      const text = $(this).val();
+      $('.mob-item').hide().filter(function() {
+        return $(this).attr('data-name').includes(text);
+      }).show();
+
+      $('.mob-item-selected').hide().filter(function() {
+        return $(this).attr('data-name').includes(text);
+      }).show();
+    });
+
+    $('.mob-level-select').on('change', function() {
+      $('.mob-level').val($(this).val());
+    });
+  </script>
+</body>
+</html>
