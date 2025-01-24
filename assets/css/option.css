@@ -1,0 +1,82 @@
+@font-face {
+    font-family: 'SD Kukde';
+    font-weight: 500;
+    src: url('../font/SDKukdetopokki-aLt.otf') format('woff2');
+}
+
+#optionLabel1, #optionLabel2, #optionLabel3 {
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+
+.bystyle-btn-red {
+    font-family: SD Kukde;
+    border-image: url('../img/ui/btn_red.png') 30 fill repeat;
+    border-image-width: 19px;
+    background-color: #AB442A !important;
+    color: white;
+}
+
+.bystyle-btn-orange {
+    font-family: SD Kukde;
+    border-image: url('../img/ui/btn_orange.png') 30 fill repeat;
+    border-image-width: 19px;
+    background-color: #C47A28 !important;
+    color: white;
+}
+
+.option-desc {
+    background-color: #DFCCA1;
+    color: #674429;
+    font-size: 12px;
+}
+
+.option-card {
+    background-color: #3d2d22;
+    border: 2px solid #d28533;
+    color: white;
+}
+
+.option-rate-text {
+    min-width: 100px;
+    text-align: center;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.shuffle-text {
+    background-color: #d28533;
+}
