@@ -14,6 +14,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            padding-top: 50px; /* 탭 메뉴가 고정될 공간을 확보 */
         }
         /* 헤더 */
         header {
@@ -32,11 +33,15 @@
         }
         /* 탭 메뉴 */
         nav {
+            position: fixed; /* 탭 메뉴를 화면 상단에 고정 */
+            top: 0;
+            left: 0;
             width: 100%;
             background-color: #444;
             display: flex;
             justify-content: center;
             padding: 10px 0;
+            z-index: 1000; /* 다른 콘텐츠 위에 오도록 설정 */
         }
         nav a {
             color: white;
@@ -81,16 +86,16 @@
     <!-- 메뉴 토글 체크박스 (반응형용) -->
     <input type="checkbox" id="menu-toggle" class="menu-toggle">
     
-    <!-- 탭 메뉴 (최상단으로 이동) -->
+    <!-- 탭 메뉴 (최상단으로 고정) -->
     <nav>
-        <a href="familiar-info.html">환수 정보</a>
+        <a href="index.html">환수 정보</a>
         <a href="binding-recommendations.html">결속 추천</a>
         <a href="binding-ranking.html">결속 랭킹</a>
     </nav>
 
     <!-- 헤더 (로고 + 타이틀) -->
     <header>
-        <img src="logo.png" alt="로고"> <!-- 로고 이미지 -->
+        <img src="asset/logo.png" alt="로고"> <!-- 로고 이미지 -->
         <h1>환수바라미:REBOOT</h1>
     </header>
 
