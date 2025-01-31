@@ -6,232 +6,320 @@
     <title>환수바라미:REBOOT</title>
     <!-- CSS 파일 링크 -->
     <link rel="stylesheet" href="asset/style.css">
+    <style>
+        /* 기본 레이아웃 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        /* 헤더 */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header img {
+            height: 40px;
+        }
+        header h1 {
+            margin: 0;
+        }
+        /* 왼쪽 탭 메뉴 */
+        nav {
+            width: 200px;
+            background-color: #444;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        nav a {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            text-align: center;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        /* 본문 영역 */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        /* 반응형 디자인: 작은 화면에서 탭 숨기기 */
+        .menu-toggle {
+            display: none;
+        }
+        .menu-toggle:checked + nav {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                width: 100%;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .menu-toggle:checked + nav {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>환수 정보</h1>
-        
-        <!-- 버튼 그룹: 수호, 탑승, 변신 -->
-        <div class="button-group">
-            <button id="btn-suhou">수호</button>
-            <button id="btn-tapsung">탑승</button>
-            <button id="btn-byeonshin">변신</button>
-        </div>
 
-        <!-- 환수 이미지 영역 -->
-        <div class="familiar-images" id="familiar-images">
-            <!-- 환수 이미지들이 동적으로 여기에 삽입됩니다 -->
-        </div>
+    <!-- 메뉴 토글 체크박스 (반응형용) -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    
+    <!-- 헤더 (로고 + 타이틀) -->
+    <header>
+        <img src="logo.png" alt="로고"> <!-- 로고 이미지 -->
+        <h1>환수바라미:REBOOT</h1>
+    </header>
 
-        <div id="selected-familiar" style="display: none;">
-            <h2 id="familiar-name"></h2>
+    <!-- 왼쪽 탭 메뉴 -->
+    <nav>
+        <a href="familiar-info.html">환수 정보</a>
+        <a href="binding-recommendations.html">결속 추천</a>
+        <a href="binding-ranking.html">결속 랭킹</a>
+    </nav>
+
+    <!-- 본문 영역 -->
+    <div class="content">
+        <div class="container">
+            <h1>환수 정보</h1>
             
-            <div class="level-controls">
-                <div>
-                    <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
-                </div>
-
-                <div class="button-group">
-                    <button id="decrease-btn">레벨 내리기</button>
-                    <input type="number" id="level-input" value="0" min="0" max="25" />
-                    <button id="increase-btn">레벨 올리기</button>
-                </div>
+            <!-- 버튼 그룹: 수호, 탑승, 변신 -->
+            <div class="button-group">
+                <button id="btn-suhou">수호</button>
+                <button id="btn-tapsung">탑승</button>
+                <button id="btn-byeonshin">변신</button>
             </div>
 
-            <h3>능력치:</h3>
-            <table class="option-table" id="stats-table">
-                <thead>
-                    <tr>
-                        <th>옵션</th>
-                        <th>값</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 능력치 데이터가 여기에 동적으로 추가됩니다 -->
-                </tbody>
-            </table>
+            <!-- 환수 이미지 영역 -->
+            <div class="familiar-images" id="familiar-images">
+                <!-- 환수 이미지들이 동적으로 여기에 삽입됩니다 -->
+            </div>
+
+            <div id="selected-familiar" style="display: none;">
+                <h2 id="familiar-name"></h2>
+                
+                <div class="level-controls">
+                    <div>
+                        <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="decrease-btn">레벨 내리기</button>
+                        <input type="number" id="level-input" value="0" min="0" max="25" />
+                        <button id="increase-btn">레벨 올리기</button>
+                    </div>
+                </div>
+
+                <h3>능력치:</h3>
+                <table class="option-table" id="stats-table">
+                    <thead>
+                        <tr>
+                            <th>옵션</th>
+                            <th>값</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 능력치 데이터가 여기에 동적으로 추가됩니다 -->
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <div class="container">
+          <h1>환수 성장 경험치 표</h1>
+
+          <!-- 전설/불멸 버튼 -->
+          <div class="buttons">
+              <button id="btn-legendary">전설 환수</button>
+              <button id="btn-immortal">불멸 환수</button>
+          </div>
+
+          <!-- 성장 경험치 표 -->
+          <div id="experience-array-container">
+              <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
+          </div>
+        </div>
+
     </div>
 
     <script>
-      let familiars = [];
-      let currentFamiliar = null;
-      let currentLevel = 0;
+        // 환수 데이터 불러오기
+        let familiars = [];
+        let currentFamiliar = null;
+        let currentLevel = 0;
 
-      // JSON 파일을 불러오는 함수
-      fetch('familiar_data.json')
-          .then(response => response.json())
-          .then(data => {
-              familiars = data;
-              displayFamiliarImages("수호"); // 초기값은 '수호' 타입
-          })
-          .catch(error => {
-              console.error("Error loading JSON data:", error);
-          });
+        // JSON 파일을 불러오는 함수
+        fetch('familiar_data.json')
+            .then(response => response.json())
+            .then(data => {
+                familiars = data;
+                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
+            })
+            .catch(error => {
+                console.error("Error loading JSON data:", error);
+            });
 
-      // 환수 이미지를 화면에 표시
-      function displayFamiliarImages(type) {
-          const familiarImagesContainer = document.getElementById('familiar-images');
-          familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
+        // 환수 이미지를 화면에 표시
+        function displayFamiliarImages(type) {
+            const familiarImagesContainer = document.getElementById('familiar-images');
+            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
 
-          const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
+            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
 
-          filteredFamiliars.forEach(familiar => {
-              const imgElement = document.createElement('img');
-              imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
-              imgElement.alt = familiar.name;
-              imgElement.classList.add('familiar-image');
-              imgElement.addEventListener('click', () => selectFamiliar(familiar));
-              familiarImagesContainer.appendChild(imgElement);
-          });
-      }
+            filteredFamiliars.forEach(familiar => {
+                const imgElement = document.createElement('img');
+                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
+                imgElement.alt = familiar.name;
+                imgElement.classList.add('familiar-image');
+                imgElement.addEventListener('click', () => selectFamiliar(familiar));
+                familiarImagesContainer.appendChild(imgElement);
+            });
+        }
 
-      // 환수 선택 시 해당 데이터 표시
-      function selectFamiliar(familiar) {
-          currentFamiliar = familiar;
-          currentLevel = 0;
-          document.getElementById('familiar-name').textContent = familiar.name;
-          document.getElementById('selected-familiar').style.display = 'block';
-          updateLevelDisplay();
-          updateStats();
-      }
+        // 환수 선택 시 해당 데이터 표시
+        function selectFamiliar(familiar) {
+            currentFamiliar = familiar;
+            currentLevel = 0;
+            document.getElementById('familiar-name').textContent = familiar.name;
+            document.getElementById('selected-familiar').style.display = 'block';
+            updateLevelDisplay();
+            updateStats();
+        }
 
-      // 레벨 표시 업데이트
-      function updateLevelDisplay() {
-          document.getElementById('level-display').textContent = currentLevel;
-          document.getElementById('level-input').value = currentLevel;
-      }
+        // 레벨 표시 업데이트
+        function updateLevelDisplay() {
+            document.getElementById('level-display').textContent = currentLevel;
+            document.getElementById('level-input').value = currentLevel;
+        }
 
-      // 능력치 업데이트
-      function updateStats() {
-          const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
-          statsTableBody.innerHTML = ''; // 이전 내용 초기화
+        // 능력치 업데이트
+        function updateStats() {
+            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
+            statsTableBody.innerHTML = ''; // 이전 내용 초기화
 
-          Object.keys(currentFamiliar.option).forEach(option => {
-              let row = document.createElement('tr');
-              let optionCell = document.createElement('td');
-              let valueCell = document.createElement('td');
+            Object.keys(currentFamiliar.option).forEach(option => {
+                let row = document.createElement('tr');
+                let optionCell = document.createElement('td');
+                let valueCell = document.createElement('td');
 
-              optionCell.textContent = option;
-              valueCell.textContent = currentFamiliar.option[option][currentLevel];
+                optionCell.textContent = option;
+                valueCell.textContent = currentFamiliar.option[option][currentLevel];
 
-              row.appendChild(optionCell);
-              row.appendChild(valueCell);
-              statsTableBody.appendChild(row);
-          });
-      }
+                row.appendChild(optionCell);
+                row.appendChild(valueCell);
+                statsTableBody.appendChild(row);
+            });
+        }
 
-      // 레벨 업 / 다운 버튼
-      document.getElementById('decrease-btn').addEventListener('click', () => {
-          if (currentLevel > 0) {
-              currentLevel--;
-              updateLevelDisplay();
-              updateStats();
-          }
-      });
+        // 레벨 업 / 다운 버튼
+        document.getElementById('decrease-btn').addEventListener('click', () => {
+            if (currentLevel > 0) {
+                currentLevel--;
+                updateLevelDisplay();
+                updateStats();
+            }
+        });
 
-      document.getElementById('increase-btn').addEventListener('click', () => {
-          if (currentLevel < 25) {
-              currentLevel++;
-              updateLevelDisplay();
-              updateStats();
-          }
-      });
+        document.getElementById('increase-btn').addEventListener('click', () => {
+            if (currentLevel < 25) {
+                currentLevel++;
+                updateLevelDisplay();
+                updateStats();
+            }
+        });
 
-      // 레벨 입력 필드 이벤트
-      document.getElementById('level-input').addEventListener('input', (e) => {
-          let inputLevel = parseInt(e.target.value);
-          if (inputLevel >= 0 && inputLevel <= 25) {
-              currentLevel = inputLevel;
-              updateLevelDisplay();
-              updateStats();
-          }
-      });
+        // 레벨 입력 필드 이벤트
+        document.getElementById('level-input').addEventListener('input', (e) => {
+            let inputLevel = parseInt(e.target.value);
+            if (inputLevel >= 0 && inputLevel <= 25) {
+                currentLevel = inputLevel;
+                updateLevelDisplay();
+                updateStats();
+            }
+        });
 
-      // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
-      document.getElementById('btn-suhou').addEventListener('click', () => {
-          displayFamiliarImages("수호");
-      });
+        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
+        document.getElementById('btn-suhou').addEventListener('click', () => {
+            displayFamiliarImages("수호");
+        });
 
-      document.getElementById('btn-tapsung').addEventListener('click', () => {
-          displayFamiliarImages("탑승");
-      });
+        document.getElementById('btn-tapsung').addEventListener('click', () => {
+            displayFamiliarImages("탑승");
+        });
 
-      document.getElementById('btn-byeonshin').addEventListener('click', () => {
-          displayFamiliarImages("변신");
-      });
-  </script>
+        document.getElementById('btn-byeonshin').addEventListener('click', () => {
+            displayFamiliarImages("변신");
+        });
 
-    <div class="container">
-      <h1>환수 성장 경험치 표</h1>
+        // 전설/불멸 환수 데이터 로드
+        let legendaryData = [];
+        let immortalData = [];
 
-      <!-- 전설/불멸 버튼 -->
-      <div class="buttons">
-          <button id="btn-legendary">전설 환수</button>
-          <button id="btn-immortal">불멸 환수</button>
-      </div>
+        // JSON 파일을 fetch로 가져오기
+        async function loadData() {
+            const response = await fetch('data.json');
+            const data = await response.json();
 
-      <!-- 성장 경험치 표 -->
-      <div id="experience-array-container">
-          <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
-      </div>
-    </div>
+            legendaryData = data.legendary;
+            immortalData = data.immortal;
 
-    <script>
-      let legendaryData = [];
-      let immortalData = [];
+            // 기본적으로 전설 환수 데이터를 배열로 표시
+            updateExperienceTable(legendaryData);
+        }
 
-      // JSON 파일을 fetch로 가져오기
-      async function loadData() {
-          const response = await fetch('data.json');
-          const data = await response.json();
+        // 버튼 클릭 이벤트 핸들러
+        document.getElementById('btn-legendary').addEventListener('click', () => {
+            updateExperienceTable(legendaryData);
+        });
 
-          legendaryData = data.legendary;
-          immortalData = data.immortal;
+        document.getElementById('btn-immortal').addEventListener('click', () => {
+            updateExperienceTable(immortalData);
+        });
 
-          // 기본적으로 전설 환수 데이터를 배열로 표시
-          updateExperienceTable(legendaryData);
-      }
+        // 경험치 배열 업데이트 함수
+        function updateExperienceTable(experienceData) {
+            const experienceArrayContainer = document.getElementById('experience-array-container');
+            experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
 
-      // 버튼 클릭 이벤트 핸들러
-      document.getElementById('btn-legendary').addEventListener('click', () => {
-          updateExperienceTable(legendaryData);
-      });
+            // 데이터를 1-13 레벨과 14-25 레벨로 나누기
+            const firstHalf = experienceData.slice(0, 13);  // 1~13 레벨
+            const secondHalf = experienceData.slice(13, 25); // 14~25 레벨
 
-      document.getElementById('btn-immortal').addEventListener('click', () => {
-          updateExperienceTable(immortalData);
-      });
+            let tableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
 
-      // 경험치 배열 업데이트 함수
-      function updateExperienceTable(experienceData) {
-          const experienceArrayContainer = document.getElementById('experience-array-container');
-          experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
+            // 1~13 레벨과 14~25 레벨을 각 행에 채우기
+            for (let i = 0; i < 13; i++) {
+                tableHtml += `<tr>
+                                <td>${firstHalf[i].level}</td>
+                                <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
+                                <td>${secondHalf[i]?.level || ''}</td>
+                                <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
+                            </tr>`;
+            }
 
-          // 데이터를 1-13 레벨과 14-25 레벨로 나누기
-          const firstHalf = experienceData.slice(0, 13);  // 1~13 레벨
-          const secondHalf = experienceData.slice(13, 25); // 14~25 레벨
+            tableHtml += '</tbody></table>';
 
-          let tableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
+            // 테이블을 표시
+            experienceArrayContainer.innerHTML = tableHtml;
+        }
 
-          // 1~13 레벨과 14~25 레벨을 각 행에 채우기
-          for (let i = 0; i < 13; i++) {
-              tableHtml += `<tr>
-                              <td>${firstHalf[i].level}</td>
-                              <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
-                              <td>${secondHalf[i]?.level || ''}</td>
-                              <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
-                          </tr>`;
-          }
-
-          tableHtml += '</tbody></table>';
-
-          // 테이블을 표시
-          experienceArrayContainer.innerHTML = tableHtml;
-      }
-
-      // 초기 데이터 로드
-      loadData();
+        // 초기 데이터 로드
+        loadData();
     </script>
 
 </body>
