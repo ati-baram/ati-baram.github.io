@@ -1,4 +1,10 @@
 /* 전체적인 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
 .container {
     background-color: #fff;
     padding: 20px;
@@ -109,95 +115,4 @@ button:disabled {
 }
 .logo{
     color: white;
-}
-
-/* 기존 스타일에 버튼 클릭 시 색상 변경 스타일 추가 */
-.active-button {
-    background-color: #555;
-    color: #fff;
-}
-
-/* 기본 레이아웃 스타일 */
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    padding-top: 50px; /* 탭 메뉴가 고정될 공간을 확보 */
-}
-/* 네비게이션 바 */
-nav {
-    position: fixed; /* 네비게이션 바를 화면 상단에 고정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #444;
-    display: flex;
-    align-items: center; /* 로고와 탭 메뉴 세로 가운데 정렬 */
-    justify-content: space-between; /* 로고와 탭 메뉴 사이의 간격 조정 */
-    padding: 10px 20px;
-    z-index: 1000;
-}
-
-/* 로고 */
-.logo {
-    flex: 0 0 auto; /* 로고를 왼쪽에 고정 */
-    display: flex;
-    align-items: center;
-}
-
-.logo img {
-    height: 40px; /* 로고 이미지 크기 */
-}
-
-/* 탭 메뉴 */
-.tabs {
-    display: flex;
-    justify-content: center; /* 탭을 가운데 정렬 */
-    flex-grow: 1; /* 가운데에 고정되도록 설정 */
-}
-
-.tabs a {
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin: 0 10px;
-    text-align: center;
-}
-
-.tabs a:hover {
-    background-color: #555;
-}
-
-/* 본문 영역 */
-.content {
-    padding: 20px;
-    flex-grow: 1;
-}
-
-/* 반응형 디자인: 작은 화면에서 탭 숨기기 */
-.menu-toggle {
-    display: none;
-}
-
-.menu-toggle:checked + nav {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    nav {
-        display: none;
-        width: 100%;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .menu-toggle:checked + nav {
-        display: flex;
-        flex-direction: column;
-    }
 }
