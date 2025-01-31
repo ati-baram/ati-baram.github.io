@@ -249,10 +249,11 @@
       .experience-table-container {
           display: flex;
           justify-content: space-between;
+          gap: 20px; /* 테이블 간 간격 추가 */
       }
 
       .experience-table {
-          width: 45%;
+          width: 48%; /* 테이블 크기를 48%로 설정하여 두 테이블이 서로 붙어서 보이도록 */
           border-collapse: collapse;
       }
 
@@ -266,7 +267,7 @@
           background-color: #f1f1f1;
       }
     </style>
-
+      
     <script>
       // JSON 데이터를 불러올 변수
       let legendaryData = [];
@@ -316,7 +317,7 @@
           });
           secondTableHtml += '</tbody></table>';
 
-          // 테이블을 좌우로 나누어 표시
+          // 테이블을 좌우로 나누어 붙여서 표시
           experienceArrayContainer.innerHTML = `
               <div class="experience-table-container">
                   <div>${firstTableHtml}</div>
@@ -327,9 +328,6 @@
 
       // 초기 데이터 로드
       loadData();
-
     </script>
-    
-
   </body>
 </html>
