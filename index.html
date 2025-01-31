@@ -163,20 +163,74 @@
 
         <div class="container">
           <h1>환수 성장 경험치 표</h1>
-
+    
           <!-- 전설/불멸 버튼 -->
           <div class="buttons">
               <button id="btn-legendary">전설 환수</button>
               <button id="btn-immortal">불멸 환수</button>
           </div>
-
+    
           <!-- 성장 경험치 표 -->
           <div id="experience-array-container">
               <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
           </div>
         </div>
-
-    </div>
+    
+        <script>
+          let legendaryData = [];
+          let immortalData = [];
+    
+          // JSON 파일을 fetch로 가져오기
+          async function loadData() {
+              const response = await fetch('data.json');
+              const data = await response.json();
+    
+              legendaryData = data.legendary;
+              immortalData = data.immortal;
+    
+              // 기본적으로 전설 환수 데이터를 배열로 표시
+              updateExperienceTable(legendaryData);
+          }
+    
+          // 버튼 클릭 이벤트 핸들러
+          document.getElementById('btn-legendary').addEventListener('click', () => {
+              updateExperienceTable(legendaryData);
+          });
+    
+          document.getElementById('btn-immortal').addEventListener('click', () => {
+              updateExperienceTable(immortalData);
+          });
+    
+          // 경험치 배열 업데이트 함수
+          function updateExperienceTable(experienceData) {
+              const experienceArrayContainer = document.getElementById('experience-array-container');
+              experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
+    
+              // 데이터를 1-13 레벨과 14-25 레벨로 나누기
+              const firstHalf = experienceData.slice(0, 13);  // 1~13 레벨
+              const secondHalf = experienceData.slice(13, 25); // 14~25 레벨
+    
+              let tableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
+    
+              // 1~13 레벨과 14~25 레벨을 각 행에 채우기
+              for (let i = 0; i < 13; i++) {
+                  tableHtml += `<tr>
+                                  <td>${firstHalf[i].level}</td>
+                                  <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
+                                  <td>${secondHalf[i]?.level || ''}</td>
+                                  <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
+                              </tr>`;
+              }
+    
+              tableHtml += '</tbody></table>';
+    
+              // 테이블을 표시
+              experienceArrayContainer.innerHTML = tableHtml;
+          }
+    
+          // 초기 데이터 로드
+          loadData();
+        </script>
 
     <script>
         // 환수 데이터 불러오기
