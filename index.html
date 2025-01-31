@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST중</title>
+    <title>환수 선택</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,6 +36,22 @@
         .familiar-image:hover {
             transform: scale(1.1);
         }
+        .button-group {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
         .level-controls {
             margin-top: 20px;
         }
@@ -56,27 +72,6 @@
         .option-table th {
             background-color: #f1f1f1;
         }
-        .button-group {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:disabled {
-            background-color: #ccc;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 60px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -84,6 +79,14 @@
     <div class="container">
         <h1>환수 선택</h1>
         
+        <!-- 버튼 그룹: 수호, 탑승, 변신 -->
+        <div class="button-group">
+            <button id="btn-suhou">수호</button>
+            <button id="btn-tapsung">탑승</button>
+            <button id="btn-byeonshin">변신</button>
+        </div>
+
+        <!-- 환수 이미지 영역 -->
         <div class="familiar-images" id="familiar-images">
             <!-- 환수 이미지들이 동적으로 여기에 삽입됩니다 -->
         </div>
@@ -128,16 +131,20 @@
             .then(response => response.json())
             .then(data => {
                 familiars = data;
-                displayFamiliarImages();
+                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
             })
             .catch(error => {
                 console.error("Error loading JSON data:", error);
             });
 
         // 환수 이미지를 화면에 표시
-        function displayFamiliarImages() {
+        function displayFamiliarImages(type) {
             const familiarImagesContainer = document.getElementById('familiar-images');
-            familiars.forEach(familiar => {
+            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
+
+            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
+
+            filteredFamiliars.forEach(familiar => {
                 const imgElement = document.createElement('img');
                 imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
                 imgElement.alt = familiar.name;
@@ -207,6 +214,19 @@
                 updateLevelDisplay();
                 updateStats();
             }
+        });
+
+        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
+        document.getElementById('btn-suhou').addEventListener('click', () => {
+            displayFamiliarImages("수호");
+        });
+
+        document.getElementById('btn-tapsung').addEventListener('click', () => {
+            displayFamiliarImages("탑승");
+        });
+
+        document.getElementById('btn-byeonshin').addEventListener('click', () => {
+            displayFamiliarImages("변신");
         });
     </script>
 </body>
