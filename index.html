@@ -136,20 +136,7 @@
 
             <div id="selected-familiar" style="display: none;">
                 <h2 id="familiar-name"></h2>
-                
-                <div class="level-controls">
-                    <div>
-                        <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
-                    </div>
-
-                    <div class="button-group">
-                        <button id="decrease-btn">레벨 내리기</button>
-                        <input type="number" id="level-input" value="0" min="0" max="25" />
-                        <button id="increase-btn">레벨 올리기</button>
-                    </div>
-                </div>
-
-                <h3>능력치:</h3>
+                <h3>등록효과:</h3>
                 <table class="option-table" id="stats-table">
                     <thead>
                         <tr>
@@ -161,6 +148,18 @@
                         <!-- 능력치 데이터가 여기에 동적으로 추가됩니다 -->
                     </tbody>
                 </table>
+
+                <div class="level-controls">
+                    <div>
+                        <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="decrease-btn">레벨 내리기</button>
+                        <input type="number" id="level-input" value="0" min="0" max="25" />
+                        <button id="increase-btn">레벨 올리기</button>
+                    </div>
+                </div>
             </div>
         </div>
 
