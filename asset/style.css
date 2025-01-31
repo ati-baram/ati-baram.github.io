@@ -106,3 +106,8 @@ button:disabled {
 .experience-table td {
     vertical-align: middle;
 }
+
+/*credits*/
+.copyright{
+    text-align: center;
+}
