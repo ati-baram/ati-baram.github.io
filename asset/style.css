@@ -111,8 +111,6 @@ button:disabled {
 .copyright{
     text-align: center;
 }
-
-.logo .h1{
-    text-decoration-color: white;
-    margin-left: 10px;
+.logo{
+    color: white;
 }
