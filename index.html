@@ -246,14 +246,8 @@
     </div>
 
     <style>
-      .experience-table-container {
-          display: flex;
-          justify-content: space-between;
-          gap: 20px; /* 테이블 간 간격 추가 */
-      }
-
       .experience-table {
-          width: 48%; /* 테이블 크기를 48%로 설정하여 두 테이블이 서로 붙어서 보이도록 */
+          width: 100%;
           border-collapse: collapse;
       }
 
@@ -266,8 +260,12 @@
       .experience-table th {
           background-color: #f1f1f1;
       }
+
+      .experience-table td {
+          vertical-align: middle;
+      }
     </style>
-      
+
     <script>
       // JSON 데이터를 불러올 변수
       let legendaryData = [];
@@ -299,35 +297,32 @@
           const experienceArrayContainer = document.getElementById('experience-array-container');
           experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
 
-          // 데이터를 1-14 레벨과 15-25 레벨로 나누기
-          const firstHalf = experienceData.slice(0, 14); // 1~14 레벨
-          const secondHalf = experienceData.slice(14, 25); // 15~25 레벨
+          // 데이터를 1-13 레벨과 14-25 레벨로 나누기
+          const firstHalf = experienceData.slice(0, 13);  // 1~13 레벨
+          const secondHalf = experienceData.slice(13, 25); // 14~25 레벨
 
-          // 첫 번째 테이블 (1~14 레벨)
-          let firstTableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
-          firstHalf.forEach(data => {
-              firstTableHtml += `<tr><td>${data.level}</td><td>${data.experienceRequired.toLocaleString()}</td></tr>`;
-          });
-          firstTableHtml += '</tbody></table>';
+          let tableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
 
-          // 두 번째 테이블 (15~25 레벨)
-          let secondTableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
-          secondHalf.forEach(data => {
-              secondTableHtml += `<tr><td>${data.level}</td><td>${data.experienceRequired.toLocaleString()}</td></tr>`;
-          });
-          secondTableHtml += '</tbody></table>';
+          // 1~13 레벨과 14~25 레벨을 각 행에 채우기
+          for (let i = 0; i < 13; i++) {
+              tableHtml += `<tr>
+                              <td>${firstHalf[i].level}</td>
+                              <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
+                              <td>${secondHalf[i]?.level || ''}</td>
+                              <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
+                          </tr>`;
+          }
 
-          // 테이블을 좌우로 나누어 붙여서 표시
-          experienceArrayContainer.innerHTML = `
-              <div class="experience-table-container">
-                  <div>${firstTableHtml}</div>
-                  <div>${secondTableHtml}</div>
-              </div>
-          `;
+          tableHtml += '</tbody></table>';
+
+          // 테이블을 표시
+          experienceArrayContainer.innerHTML = tableHtml;
       }
 
       // 초기 데이터 로드
       loadData();
+
     </script>
+
   </body>
 </html>
