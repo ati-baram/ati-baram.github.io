@@ -111,3 +111,8 @@ button:disabled {
 .copyright{
     text-align: center;
 }
+
+.b{
+    text-decoration-color: white;
+    margin-left: 10px;
+}
