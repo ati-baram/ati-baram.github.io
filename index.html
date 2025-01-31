@@ -240,18 +240,32 @@
       </div>
 
       <!-- 성장 경험치 표 -->
-      <table class="experience-table">
-          <thead>
-              <tr>
-                  <th>레벨</th>
-                  <th>필요 경험치</th>
-              </tr>
-          </thead>
-          <tbody id="experience-table-body">
-              <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
-          </tbody>
-      </table>
+      <div id="experience-array-container">
+          <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
+      </div>
     </div>
+
+    <style>
+      .experience-table-container {
+          display: flex;
+          justify-content: space-between;
+      }
+
+      .experience-table {
+          width: 45%;
+          border-collapse: collapse;
+      }
+
+      .experience-table th, .experience-table td {
+          padding: 8px;
+          border: 1px solid #ddd;
+          text-align: center;
+      }
+
+      .experience-table th {
+          background-color: #f1f1f1;
+      }
+    </style>
 
     <script>
       // JSON 데이터를 불러올 변수
@@ -267,35 +281,55 @@
           immortalData = data.immortal;
 
           // 기본적으로 전설 환수 데이터를 배열로 표시
-          updateExperienceArray(legendaryData);
+          updateExperienceTable(legendaryData);
       }
 
       // 버튼 클릭 이벤트 핸들러
       document.getElementById('btn-legendary').addEventListener('click', () => {
-          updateExperienceArray(legendaryData);
+          updateExperienceTable(legendaryData);
       });
 
       document.getElementById('btn-immortal').addEventListener('click', () => {
-          updateExperienceArray(immortalData);
+          updateExperienceTable(immortalData);
       });
 
       // 경험치 배열 업데이트 함수
-      function updateExperienceArray(experienceData) {
+      function updateExperienceTable(experienceData) {
           const experienceArrayContainer = document.getElementById('experience-array-container');
           experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
 
-          // 배열로 데이터를 표시
-          let experienceArrayHtml = '<ul>';
-          experienceData.forEach(data => {
-              experienceArrayHtml += `<li>레벨: ${data.level}, 필요 경험치: ${data.experienceRequired.toLocaleString()}</li>`;
-          });
-          experienceArrayHtml += '</ul>';
+          // 데이터를 1-14 레벨과 15-25 레벨로 나누기
+          const firstHalf = experienceData.slice(0, 14); // 1~14 레벨
+          const secondHalf = experienceData.slice(14, 25); // 15~25 레벨
 
-          experienceArrayContainer.innerHTML = experienceArrayHtml;
+          // 첫 번째 테이블 (1~14 레벨)
+          let firstTableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
+          firstHalf.forEach(data => {
+              firstTableHtml += `<tr><td>${data.level}</td><td>${data.experienceRequired.toLocaleString()}</td></tr>`;
+          });
+          firstTableHtml += '</tbody></table>';
+
+          // 두 번째 테이블 (15~25 레벨)
+          let secondTableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
+          secondHalf.forEach(data => {
+              secondTableHtml += `<tr><td>${data.level}</td><td>${data.experienceRequired.toLocaleString()}</td></tr>`;
+          });
+          secondTableHtml += '</tbody></table>';
+
+          // 테이블을 좌우로 나누어 표시
+          experienceArrayContainer.innerHTML = `
+              <div class="experience-table-container">
+                  <div>${firstTableHtml}</div>
+                  <div>${secondTableHtml}</div>
+              </div>
+          `;
       }
 
       // 초기 데이터 로드
       loadData();
+
     </script>
+    
+
   </body>
 </html>
