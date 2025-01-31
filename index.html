@@ -230,77 +230,72 @@
         });
     </script>
 
-<div class="container">
-  <h1>환수 성장 경험치 표</h1>
+    <div class="container">
+      <h1>환수 성장 경험치 표</h1>
 
-  <!-- 전설/불멸 버튼 -->
-  <div class="buttons">
-      <button id="btn-legendary">전설 환수</button>
-      <button id="btn-immortal">불멸 환수</button>
-  </div>
+      <!-- 전설/불멸 버튼 -->
+      <div class="buttons">
+          <button id="btn-legendary">전설 환수</button>
+          <button id="btn-immortal">불멸 환수</button>
+      </div>
 
-  <!-- 성장 경험치 표 -->
-  <table class="experience-table">
-      <thead>
-          <tr>
-              <th>레벨</th>
-              <th>필요 경험치</th>
-          </tr>
-      </thead>
-      <tbody id="experience-table-body">
-          <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
-      </tbody>
-  </table>
-</div>
+      <!-- 성장 경험치 표 -->
+      <table class="experience-table">
+          <thead>
+              <tr>
+                  <th>레벨</th>
+                  <th>필요 경험치</th>
+              </tr>
+          </thead>
+          <tbody id="experience-table-body">
+              <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
+          </tbody>
+      </table>
+    </div>
 
-<script>
-  // JSON 데이터를 불러올 변수
-  let legendaryData = [];
-  let immortalData = [];
+    <script>
+      // JSON 데이터를 불러올 변수
+      let legendaryData = [];
+      let immortalData = [];
 
-  // JSON 파일을 fetch로 가져오기
-  async function loadData() {
-      const response = await fetch('data.json');
-      const data = await response.json();
+      // JSON 파일을 fetch로 가져오기
+      async function loadData() {
+          const response = await fetch('data.json');
+          const data = await response.json();
 
-      legendaryData = data.legendary;
-      immortalData = data.immortal;
+          legendaryData = data.legendary;
+          immortalData = data.immortal;
 
-      // 기본적으로 전설 환수 데이터를 보여줌
-      updateExperienceTable(legendaryData);
-  }
+          // 기본적으로 전설 환수 데이터를 배열로 표시
+          updateExperienceArray(legendaryData);
+      }
 
-  // 버튼 클릭 이벤트 핸들러
-  document.getElementById('btn-legendary').addEventListener('click', () => {
-      updateExperienceTable(legendaryData);
-  });
-
-  document.getElementById('btn-immortal').addEventListener('click', () => {
-      updateExperienceTable(immortalData);
-  });
-
-  // 경험치 표 업데이트 함수
-  function updateExperienceTable(experienceData) {
-      const experienceTableBody = document.getElementById('experience-table-body');
-      experienceTableBody.innerHTML = '';  // 기존 표 내용 초기화
-
-      // JSON 데이터로 표 작성
-      experienceData.forEach(data => {
-          let row = document.createElement('tr');
-          let levelCell = document.createElement('td');
-          let experienceCell = document.createElement('td');
-
-          levelCell.textContent = data.level;
-          experienceCell.textContent = data.experienceRequired.toLocaleString();  // 천 단위 구분자 추가
-
-          row.appendChild(levelCell);
-          row.appendChild(experienceCell);
-          experienceTableBody.appendChild(row);
+      // 버튼 클릭 이벤트 핸들러
+      document.getElementById('btn-legendary').addEventListener('click', () => {
+          updateExperienceArray(legendaryData);
       });
-  }
 
-  // 초기 데이터 로드
-  loadData();
-</script>
-</body>
+      document.getElementById('btn-immortal').addEventListener('click', () => {
+          updateExperienceArray(immortalData);
+      });
+
+      // 경험치 배열 업데이트 함수
+      function updateExperienceArray(experienceData) {
+          const experienceArrayContainer = document.getElementById('experience-array-container');
+          experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
+
+          // 배열로 데이터를 표시
+          let experienceArrayHtml = '<ul>';
+          experienceData.forEach(data => {
+              experienceArrayHtml += `<li>레벨: ${data.level}, 필요 경험치: ${data.experienceRequired.toLocaleString()}</li>`;
+          });
+          experienceArrayHtml += '</ul>';
+
+          experienceArrayContainer.innerHTML = experienceArrayHtml;
+      }
+
+      // 초기 데이터 로드
+      loadData();
+    </script>
+  </body>
 </html>
