@@ -4,75 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>테스트중, 많은응원부탁드립니다 ㅠ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-        .familiar-images {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .familiar-image {
-            width: 55px;
-            height: 55px;
-            object-fit: cover;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: transform 0.3s;
-        }
-        .familiar-image:hover {
-            transform: scale(1.1);
-        }
-        .button-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:disabled {
-            background-color: #ccc;
-        }
-        .level-controls {
-            margin-top: 20px;
-        }
-        .level-display {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .option-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .option-table th, .option-table td {
-            padding: 8px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        .option-table th {
-            background-color: #f1f1f1;
-        }
-    </style>
+    <!-- CSS 파일 링크 -->
+    <link rel="stylesheet" href="asset/styles.css">
 </head>
 <body>
 
@@ -121,115 +54,6 @@
         </div>
     </div>
 
-    <script>
-        let familiars = [];
-        let currentFamiliar = null;
-        let currentLevel = 0;
-
-        // JSON 파일을 불러오는 함수
-        fetch('familiar_data.json')
-            .then(response => response.json())
-            .then(data => {
-                familiars = data;
-                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
-            })
-            .catch(error => {
-                console.error("Error loading JSON data:", error);
-            });
-
-        // 환수 이미지를 화면에 표시
-        function displayFamiliarImages(type) {
-            const familiarImagesContainer = document.getElementById('familiar-images');
-            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
-
-            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
-
-            filteredFamiliars.forEach(familiar => {
-                const imgElement = document.createElement('img');
-                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
-                imgElement.alt = familiar.name;
-                imgElement.classList.add('familiar-image');
-                imgElement.addEventListener('click', () => selectFamiliar(familiar));
-                familiarImagesContainer.appendChild(imgElement);
-            });
-        }
-
-        // 환수 선택 시 해당 데이터 표시
-        function selectFamiliar(familiar) {
-            currentFamiliar = familiar;
-            currentLevel = 0;
-            document.getElementById('familiar-name').textContent = familiar.name;
-            document.getElementById('selected-familiar').style.display = 'block';
-            updateLevelDisplay();
-            updateStats();
-        }
-
-        // 레벨 표시 업데이트
-        function updateLevelDisplay() {
-            document.getElementById('level-display').textContent = currentLevel;
-            document.getElementById('level-input').value = currentLevel;
-        }
-
-        // 능력치 업데이트
-        function updateStats() {
-            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
-            statsTableBody.innerHTML = ''; // 이전 내용 초기화
-
-            Object.keys(currentFamiliar.option).forEach(option => {
-                let row = document.createElement('tr');
-                let optionCell = document.createElement('td');
-                let valueCell = document.createElement('td');
-
-                optionCell.textContent = option;
-                valueCell.textContent = currentFamiliar.option[option][currentLevel];
-
-                row.appendChild(optionCell);
-                row.appendChild(valueCell);
-                statsTableBody.appendChild(row);
-            });
-        }
-
-        // 레벨 업 / 다운 버튼
-        document.getElementById('decrease-btn').addEventListener('click', () => {
-            if (currentLevel > 0) {
-                currentLevel--;
-                updateLevelDisplay();
-                updateStats();
-            }
-        });
-
-        document.getElementById('increase-btn').addEventListener('click', () => {
-            if (currentLevel < 25) {
-                currentLevel++;
-                updateLevelDisplay();
-                updateStats();
-            }
-        });
-
-        // 레벨 입력 필드 이벤트
-        document.getElementById('level-input').addEventListener('input', (e) => {
-            let inputLevel = parseInt(e.target.value);
-            if (inputLevel >= 0 && inputLevel <= 25) {
-                currentLevel = inputLevel;
-                updateLevelDisplay();
-                updateStats();
-            }
-        });
-
-        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
-        document.getElementById('btn-suhou').addEventListener('click', () => {
-            displayFamiliarImages("수호");
-        });
-
-        document.getElementById('btn-tapsung').addEventListener('click', () => {
-            displayFamiliarImages("탑승");
-        });
-
-        document.getElementById('btn-byeonshin').addEventListener('click', () => {
-            displayFamiliarImages("변신");
-        });
-    </script>
-
     <div class="container">
       <h1>환수 성장 경험치 표</h1>
 
@@ -245,29 +69,7 @@
       </div>
     </div>
 
-    <style>
-      .experience-table {
-          width: 100%;
-          border-collapse: collapse;
-      }
-
-      .experience-table th, .experience-table td {
-          padding: 8px;
-          border: 1px solid #ddd;
-          text-align: center;
-      }
-
-      .experience-table th {
-          background-color: #f1f1f1;
-      }
-
-      .experience-table td {
-          vertical-align: middle;
-      }
-    </style>
-
     <script>
-      // JSON 데이터를 불러올 변수
       let legendaryData = [];
       let immortalData = [];
 
@@ -321,8 +123,7 @@
 
       // 초기 데이터 로드
       loadData();
-
     </script>
 
-  </body>
+</body>
 </html>

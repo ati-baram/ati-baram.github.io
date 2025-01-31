@@ -1,0 +1,105 @@
+/* 전체적인 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+/* 환수 이미지 스타일 */
+.familiar-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.familiar-image {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.3s;
+}
+
+.familiar-image:hover {
+    transform: scale(1.1);
+}
+
+/* 버튼 그룹 */
+.button-group {
+    margin-top: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:disabled {
+    background-color: #ccc;
+}
+
+/* 레벨 조정 */
+.level-controls {
+    margin-top: 20px;
+}
+
+.level-display {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* 능력치 테이블 */
+.option-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.option-table th, .option-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.option-table th {
+    background-color: #f1f1f1;
+}
+
+/* 경험치 표 */
+.experience-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.experience-table th, .experience-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.experience-table th {
+    background-color: #f1f1f1;
+}
+
+.experience-table td {
+    vertical-align: middle;
+}
