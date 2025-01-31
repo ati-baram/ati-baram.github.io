@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>환수 선택</title>
+    <title>TEST중</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,7 +139,7 @@
             const familiarImagesContainer = document.getElementById('familiar-images');
             familiars.forEach(familiar => {
                 const imgElement = document.createElement('img');
-                imgElement.src = `images/ic_${familiar.ic}.png`;  // ic 값을 사용하여 이미지 경로 설정
+                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
                 imgElement.alt = familiar.name;
                 imgElement.classList.add('familiar-image');
                 imgElement.addEventListener('click', () => selectFamiliar(familiar));
