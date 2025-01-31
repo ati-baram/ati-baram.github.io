@@ -40,6 +40,7 @@ h1 {
 /* 버튼 그룹 */
 .button-group {
     margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
@@ -52,7 +53,9 @@ button {
     cursor: pointer;
     border-radius: 5px;
 }
-
+button {
+    margin-bottom: 20px;
+}
 button:disabled {
     background-color: #ccc;
 }
