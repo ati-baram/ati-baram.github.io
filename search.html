@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바람의나라: 연 캐릭터 조회</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { padding: 5px; }
+        button { padding: 5px 10px; cursor: pointer; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>바람의나라: 연 캐릭터 정보 조회</h1>
+    <input type="text" id="characterName" placeholder="캐릭터 이름 입력">
+    <button onclick="fetchCharacterInfo()">조회</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function fetchCharacterInfo() {
+            const characterName = document.getElementById("characterName").value;
+            const API_KEY = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d"; // 여기에 API 키 입력
+
+            if (!characterName) {
+                alert("캐릭터 이름을 입력해주세요!");
+                return;
+            }
+
+            const url = `https://open.api.nexon.com/bn/v1/user/basic?character_name=${encodeURIComponent(characterName)}`;
+            
+            try {
+                const response = await fetch(url, {
+                    headers: { "x-nxopen-api-key": API_KEY }
+                });
+
+                if (!response.ok) {
+                    throw new Error("API 요청 실패");
+                }
+
+                const data = await response.json();
+                displayCharacterInfo(data);
+            } catch (error) {
+                document.getElementById("result").innerHTML = `<p>조회 실패: ${error.message}</p>`;
+            }
+        }
+
+        function displayCharacterInfo(data) {
+            if (!data || !data.character_name) {
+                document.getElementById("result").innerHTML = "<p>캐릭터 정보를 찾을 수 없습니다.</p>";
+                return;
+            }
+
+            document.getElementById("result").innerHTML = `
+                <h2>${data.character_name}</h2>
+                <p><strong>레벨:</strong> ${data.character_level}</p>
+                <p><strong>직업:</strong> ${data.character_class}</p>
+                <p><strong>서버:</strong> ${data.world_name}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
