@@ -27,12 +27,15 @@
                 alert("캐릭터 이름을 입력해주세요!");
                 return;
             }
+            const encodeName = encodeURIComponent(characterName);
 
-            const url = `https://open.api.nexon.com/bn/v1/user/basic?character_name=${encodeURIComponent(characterName)}`;
+            const url = `https://open.api.nexon.com/bn/v1/user/basic?character_name=${encodeName}`;
             
             try {
                 const response = await fetch(url, {
-                    headers: { "x-nxopen-api-key": API_KEY }
+                    headers: { 
+                        "x-nxopen-api-key": API_KEY 
+                    }
                 });
 
                 if (!response.ok) {
