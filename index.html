@@ -235,167 +235,171 @@
           loadData();
         </script>
 
-    <script>
-        // 환수 데이터 불러오기
-        let familiars = [];
-        let currentFamiliar = null;
-        let currentLevel = 0;
+<script>
+    // 환수 데이터 불러오기
+    let familiars = [];
+    let currentFamiliar = null;
+    let currentLevel = 0;
 
-        // JSON 파일을 불러오는 함수
-        fetch('familiar_data.json')
-            .then(response => response.json())
-            .then(data => {
-                familiars = data;
-                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
-            })
-            .catch(error => {
-                console.error("Error loading JSON data:", error);
-            });
+    // JSON 파일을 불러오는 함수
+    fetch('familiar_data.json')
+        .then(response => response.json())
+        .then(data => {
+            familiars = data;
+            displayFamiliarImages("수호"); // 초기값은 '수호' 타입
+        })
+        .catch(error => {
+            console.error("Error loading JSON data:", error);
+        });
 
-        // 결속 효과 계산 공식 (레벨별 비율 적용,내림)
-        function calculateBoundEffect(value, level) {
-            let percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
-            return Math.floor(value * percentage); // 내림 처리
-        }
+    // 결속 효과 계산 공식 (레벨별 비율 적용)
+    function calculateBoundEffect(value, level) {
+        let percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
+        return Math.round(value * percentage); // 반올림 처리
+    }
 
-        // 환수 이미지를 화면에 표시
-        function displayFamiliarImages(type) {
-            const familiarImagesContainer = document.getElementById('familiar-images');
-            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
+    // 환수 이미지를 화면에 표시
+    function displayFamiliarImages(type) {
+        const familiarImagesContainer = document.getElementById('familiar-images');
+        familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
 
-            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
+        const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
 
-            filteredFamiliars.forEach(familiar => {
-                const imgElement = document.createElement('img');
-                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
-                imgElement.alt = familiar.name;
-                imgElement.classList.add('familiar-image');
-                imgElement.addEventListener('click', () => selectFamiliar(familiar));
-                familiarImagesContainer.appendChild(imgElement);
-            });
-        }
+        filteredFamiliars.forEach(familiar => {
+            const imgElement = document.createElement('img');
+            imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
+            imgElement.alt = familiar.name;
+            imgElement.classList.add('familiar-image');
+            imgElement.addEventListener('click', () => selectFamiliar(familiar));
+            familiarImagesContainer.appendChild(imgElement);
+        });
+    }
 
-        // 환수 선택 시 해당 데이터 표시
-        function selectFamiliar(familiar) {
-            currentFamiliar = familiar;
-            currentLevel = 0;
-            document.getElementById('familiar-name').textContent = familiar.name;
-            document.getElementById('selected-familiar').style.display = 'block';
+    // 환수 선택 시 해당 데이터 표시
+    function selectFamiliar(familiar) {
+        currentFamiliar = familiar;
+        currentLevel = 0;
+        document.getElementById('familiar-name').textContent = familiar.name;
+        document.getElementById('selected-familiar').style.display = 'block';
+        updateLevelDisplay();
+        updateStats();
+    }
+
+    // 레벨 표시 업데이트
+    function updateLevelDisplay() {
+        document.getElementById('level-display').textContent = currentLevel;
+        document.getElementById('level-input').value = currentLevel;
+    }
+
+    // 능력치 업데이트
+    function updateStats() {
+        const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
+        statsTableBody.innerHTML = ''; // 이전 내용 초기화
+
+        Object.keys(currentFamiliar.option).forEach(option => {
+            let row = document.createElement('tr');
+            let optionCell = document.createElement('td');
+            let valueCell = document.createElement('td');
+            let boundValueCell = document.createElement('td'); // 결속 효과 셀 추가
+
+            // 등록 효과 값
+            let baseValue = currentFamiliar.option[option][currentLevel];
+
+            // 결속 효과 값 계산
+            let boundValue = calculateBoundEffect(baseValue, currentLevel);
+
+            optionCell.textContent = option;
+            valueCell.textContent = currentFamiliar.option[option][currentLevel];
+            valueCell.textContent = baseValue;
+            boundValueCell.textContent = boundValue;  // 결속 효과 값 표시
+
+            row.appendChild(optionCell);
+            row.appendChild(valueCell);
+            row.appendChild(boundValueCell);  // 결속 효과 셀 추가
+            statsTableBody.appendChild(row);
+        });
+    }
+
+
+    // 레벨 업 / 다운 버튼
+    document.getElementById('decrease-btn').addEventListener('click', () => {
+        if (currentLevel > 0) {
+            currentLevel--;
             updateLevelDisplay();
             updateStats();
+            updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
         }
+    });
 
-        // 레벨 표시 업데이트
-        function updateLevelDisplay() {
-            document.getElementById('level-display').textContent = currentLevel;
-            document.getElementById('level-input').value = currentLevel;
+    document.getElementById('increase-btn').addEventListener('click', () => {
+        if (currentLevel < 25) {
+            currentLevel++;
+            updateLevelDisplay();
+            updateStats();
+            updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
         }
+    });
 
-        // 능력치 업데이트
-        function updateStats() {
-            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
-            statsTableBody.innerHTML = ''; // 이전 내용 초기화
-
-            Object.keys(currentFamiliar.option).forEach(option => {
-                let row = document.createElement('tr');
-                let optionCell = document.createElement('td');
-                let valueCell = document.createElement('td');
-                let boundValueCell = document.createElement('td'); // 결속 효과 셀 추가
-
-                // 등록 효과 값
-                let baseValue = currentFamiliar.option[option][currentLevel];
-
-                // 결속 효과 값 계산
-                let boundValue = calculateBoundEffect(baseValue, currentLevel);
-
-                optionCell.textContent = option;
-                valueCell.textContent = baseValue;
-                boundValueCell.textContent = boundValue;  // 결속 효과 값 표시
-
-                row.appendChild(optionCell);
-                row.appendChild(valueCell);
-                row.appendChild(boundValueCell);  // 결속 효과 셀 추가
-                statsTableBody.appendChild(row);
-            });
+    // 레벨 입력 필드 이벤트
+    document.getElementById('level-input').addEventListener('input', (e) => {
+        let inputLevel = parseInt(e.target.value);
+        if (inputLevel >= 0 && inputLevel <= 25) {
+            currentLevel = inputLevel;
+            updateLevelDisplay();
+            updateStats();
+            updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
         }
+    });
 
 
-        // 레벨 업 / 다운 버튼
-        document.getElementById('decrease-btn').addEventListener('click', () => {
-            if (currentLevel > 0) {
-                currentLevel--;
-                updateLevelDisplay();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
-            }
+    // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
+    document.getElementById('btn-suhou').addEventListener('click', () => {
+        displayFamiliarImages("수호");
+    });
+
+    document.getElementById('btn-tapsung').addEventListener('click', () => {
+        displayFamiliarImages("탑승");
+    });
+
+    document.getElementById('btn-byeonshin').addEventListener('click', () => {
+        displayFamiliarImages("변신");
+    });
+</script>
+
+<script>
+    // 버튼 클릭 시 색상을 변경하는 함수
+    function setActiveButton(buttonId) {
+        // 모든 버튼에서 active-button 클래스를 제거
+        const buttons = document.querySelectorAll('.button-group button');
+        buttons.forEach(button => {
+            button.classList.remove('active-button');
         });
 
-        document.getElementById('increase-btn').addEventListener('click', () => {
-            if (currentLevel < 25) {
-                currentLevel++;
-                updateLevelDisplay();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
-            }
-        });
+        // 클릭한 버튼에 active-button 클래스를 추가
+        const button = document.getElementById(buttonId);
+        button.classList.add('active-button');
+    }
 
-        // 레벨 입력 필드 이벤트
-        document.getElementById('level-input').addEventListener('input', (e) => {
-            let inputLevel = parseInt(e.target.value);
-            if (inputLevel >= 0 && inputLevel <= 25) {
-                currentLevel = inputLevel;
-                updateLevelDisplay();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
-            }
-        });
+    // 버튼 클릭 이벤트 리스너 추가
+    document.getElementById('btn-suhou').addEventListener('click', () => {
+        setActiveButton('btn-suhou');
+        displayFamiliarImages("수호");
+    });
 
+    document.getElementById('btn-tapsung').addEventListener('click', () => {
+        setActiveButton('btn-tapsung');
+        displayFamiliarImages("탑승");
+    });
 
-        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
-        document.getElementById('btn-suhou').addEventListener('click', () => {
-            displayFamiliarImages("수호");
-        });
+    document.getElementById('btn-byeonshin').addEventListener('click', () => {
+        setActiveButton('btn-byeonshin');
+        displayFamiliarImages("변신");
+    });
+</script>
 
-        document.getElementById('btn-tapsung').addEventListener('click', () => {
-            displayFamiliarImages("탑승");
-        });
-
-        document.getElementById('btn-byeonshin').addEventListener('click', () => {
-            displayFamiliarImages("변신");
-        });
-    </script>
-
-    <script>
-        // 버튼 클릭 시 색상을 변경하는 함수
-        function setActiveButton(buttonId) {
-            // 모든 버튼에서 active-button 클래스를 제거
-            const buttons = document.querySelectorAll('.button-group button');
-            buttons.forEach(button => {
-                button.classList.remove('active-button');
-            });
-
-            // 클릭한 버튼에 active-button 클래스를 추가
-            const button = document.getElementById(buttonId);
-            button.classList.add('active-button');
-        }
-
-        // 버튼 클릭 이벤트 리스너 추가
-        document.getElementById('btn-suhou').addEventListener('click', () => {
-            setActiveButton('btn-suhou');
-            displayFamiliarImages("수호");
-        });
-
-        document.getElementById('btn-tapsung').addEventListener('click', () => {
-            setActiveButton('btn-tapsung');
-            displayFamiliarImages("탑승");
-        });
-
-        document.getElementById('btn-byeonshin').addEventListener('click', () => {
-            setActiveButton('btn-byeonshin');
-            displayFamiliarImages("변신");
-        });
-    </script>
-
-    <div class="copyright">
-      &copy; Copyright <strong><span>ATI</span></strong>. All Rights Reserved<br>
-      Thanks to 꼬력, 쭈사야, 어부, 잉카
-    </div>
+<div class="copyright">
+  &copy; Copyright <strong><span>ATI</span></strong>. All Rights Reserved<br>
+  Thanks to 꼬력, 쭈사야, 어부
+</div>
 </body>
 </html>
