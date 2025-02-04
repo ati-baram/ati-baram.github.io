@@ -141,7 +141,8 @@
                     <thead>
                         <tr>
                             <th>옵션</th>
-                            <th>값</th>
+                            <th>등록 효과</th>
+                            <th>결속 효과</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -251,6 +252,12 @@
                 console.error("Error loading JSON data:", error);
             });
 
+        // 결속 효과 계산 공식 (레벨별 비율 적용)
+        function calculateBoundEffect(value, level) {
+            let percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
+            return Math.round(value * percentage); // 반올림 처리
+        }
+
         // 환수 이미지를 화면에 표시
         function displayFamiliarImages(type) {
             const familiarImagesContainer = document.getElementById('familiar-images');
@@ -285,6 +292,7 @@
         }
 
         // 능력치 업데이트
+        // 능력치 업데이트
         function updateStats() {
             const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
             statsTableBody.innerHTML = ''; // 이전 내용 초기화
@@ -293,22 +301,32 @@
                 let row = document.createElement('tr');
                 let optionCell = document.createElement('td');
                 let valueCell = document.createElement('td');
+                let boundValueCell = document.createElement('td'); // 결속 효과 셀 추가
+
+                // 등록 효과 값
+                let baseValue = currentFamiliar.option[option][currentLevel];
+
+                // 결속 효과 값 계산
+                let boundValue = calculateBoundEffect(baseValue, currentLevel);
 
                 optionCell.textContent = option;
-                valueCell.textContent = currentFamiliar.option[option][currentLevel];
+                valueCell.textContent = baseValue;
+                boundValueCell.textContent = boundValue;  // 결속 효과 값 표시
 
                 row.appendChild(optionCell);
                 row.appendChild(valueCell);
+                row.appendChild(boundValueCell);  // 결속 효과 셀 추가
                 statsTableBody.appendChild(row);
             });
         }
+
 
         // 레벨 업 / 다운 버튼
         document.getElementById('decrease-btn').addEventListener('click', () => {
             if (currentLevel > 0) {
                 currentLevel--;
                 updateLevelDisplay();
-                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
             }
         });
 
@@ -316,7 +334,7 @@
             if (currentLevel < 25) {
                 currentLevel++;
                 updateLevelDisplay();
-                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
             }
         });
 
@@ -326,9 +344,10 @@
             if (inputLevel >= 0 && inputLevel <= 25) {
                 currentLevel = inputLevel;
                 updateLevelDisplay();
-                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
             }
         });
+
 
         // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
         document.getElementById('btn-suhou').addEventListener('click', () => {
