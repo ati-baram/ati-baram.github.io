@@ -252,10 +252,10 @@
                 console.error("Error loading JSON data:", error);
             });
 
-        // 결속 효과 계산 공식 (레벨별 비율 적용)
+        // 결속 효과 계산 공식 (레벨별 비율 적용,내림)
         function calculateBoundEffect(value, level) {
             let percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
-            return Math.round(value * percentage); // 반올림 처리
+            return Math.floor(value * percentage); // 내림 처리
         }
 
         // 환수 이미지를 화면에 표시
