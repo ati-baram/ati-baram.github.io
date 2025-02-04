@@ -308,11 +308,6 @@
                 // 결속 효과 값 계산
                 let boundValue = calculateBoundEffect(baseValue, currentLevel);
 
-                // 결속 효과가 0인 경우, 해당 항목은 테이블에 표시하지 않음
-                if (boundValue === 0) {
-                    return; // 0이면 해당 행을 추가하지 않고 계속 진행
-                } 
-
                 optionCell.textContent = option;
                 valueCell.textContent = baseValue;
                 boundValueCell.textContent = boundValue;  // 결속 효과 값 표시
