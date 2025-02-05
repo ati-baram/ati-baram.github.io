@@ -292,11 +292,13 @@
             // 환수 이름, 이미지, 등급, 영향력 이미지, 영향력 텍스트
             const familiarNameElement = document.getElementById('familiar-name');
             familiarNameElement.innerHTML = `
-                <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
-                <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
-                <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
-                <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
-                <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
+                <div style="display: flex; align-items: center;"
+                    <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
+                    <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
+                    <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
+                    <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
+                    <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
+                </div>
             `;
 
             document.getElementById('selected-familiar').style.display = 'block';
