@@ -276,7 +276,7 @@
                 percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.20;
             } else if (option === "이동속도") {
                 // 이동속도
-                percentage = level < 9 ? 0.05 : level < 14 ? 0.05 : 0.20;
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.05 : 0.10;
             } else if (["체력증가%", "마력증가%"].includes(option)) {
                 // 체력증가%, 마력증가%
                 percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
