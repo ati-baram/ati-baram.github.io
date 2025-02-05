@@ -464,17 +464,6 @@
                 familiarImagesContainer.appendChild(imgElement);
             });
         }
-        // 환수 정보 선택 시, 닫기 버튼을 눌러 환수 정보를 숨기고 환수 이미지 화면으로 돌아가기
-        document.getElementById('close-btn').addEventListener('click', () => {
-            // 환수 정보 숨기기
-            document.getElementById('selected-familiar').style.display = 'none';
-
-            // 환수 이미지 영역 다시 표시
-            document.getElementById('familiar-images').style.display = 'block';
-        });
-
-
-
 
         // 환수 선택 시 해당 데이터 표시
         function selectFamiliar(familiar) {
@@ -482,35 +471,46 @@
             currentLevel = 0;
 
             // 환수 정보 업데이트 (기존 코드 그대로 유지)
-        const influenceImageSrc = `asset/ic_${familiar.influence}.jpg`;
-        const gradeStyle = familiar.grade === "불멸" 
-            ? 'color: white; background: #fb8802; padding: 2px 5px; border-radius: 3px;' 
-            : familiar.grade === "전설" 
-            ? 'color: white; background: #b62b20; padding: 2px 5px; border-radius: 3px;' 
-            : 'color: black;';
+            const influenceImageSrc = `asset/ic_${familiar.influence}.jpg`;
+            const gradeStyle = familiar.grade === "불멸" 
+                ? 'color: white; background: #fb8802; padding: 2px 5px; border-radius: 3px;' 
+                : familiar.grade === "전설" 
+                ? 'color: white; background: #b62b20; padding: 2px 5px; border-radius: 3px;' 
+                : 'color: black;';
 
-        const familiarNameElement = document.getElementById('familiar-name');
-        familiarNameElement.innerHTML = `
-            <div style="display: flex; align-items: center;">
-                <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
-                <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
-                <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
-                <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
-                <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
-                <button id="close-btn" style="margin-left: auto; background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer;">닫기</button>
-            </div>
-        `;
+            const familiarNameElement = document.getElementById('familiar-name');
+            familiarNameElement.innerHTML = `
+                <div style="display: flex; align-items: center;">
+                    <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
+                    <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
+                    <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
+                    <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
+                    <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
+                    <button id="close-btn" style="margin-left: auto; background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer;">닫기</button>
+                </div>
+            `;
 
-        // 환수 정보 영역 표시
-        document.getElementById('selected-familiar').style.display = 'block';
+            // 환수 정보 영역 표시
+            document.getElementById('selected-familiar').style.display = 'block';
 
-        // 환수 이미지 영역 숨기기
-        document.getElementById('familiar-images').style.display = 'none';
+            // 환수 이미지 영역 숨기기
+            document.getElementById('familiar-images').style.display = 'none';
 
-        // 능력치 및 결속 효과 업데이트
-        updateLevelDisplay();
-        updateStats();
-    }
+            // 능력치 및 결속 효과 업데이트
+            updateLevelDisplay();
+            updateStats();
+
+            // 닫기 버튼에 이벤트 리스너 추가
+            document.getElementById('close-btn').addEventListener('click', () => {
+                // 환수 정보 숨기기
+                document.getElementById('selected-familiar').style.display = 'none';
+
+                // 환수 이미지 영역 다시 표시
+                document.getElementById('familiar-images').style.display = 'block';
+            });
+    
+        }
+
 
         // 레벨 표시 업데이트
         function updateLevelDisplay() {
