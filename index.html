@@ -253,34 +253,72 @@
                     <p>* 캐시 상점 / 성장 지원 / 환수 지원 / 환수의 혼 상자 1개 19,000원</p>
                 </div>
             </div>
+        </div>
         
-            <!-- Copyright -->
-            <div class="copyright">
-                &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
-                Thanks to 꼬력, 쭈사야, 어부, 아리샨
-            </div>
+        <!-- Copyright -->
+        <div class="copyright">
+            &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
+            Thanks to 꼬력, 쭈사야, 어부, 아리샨
         </div>
         
         <style>
+            /* 전체 레이아웃을 flex로 설정 */
             .flex-container {
                 display: flex;
-                flex-direction: column;
-                min-height: 100vh;
+                flex-direction: row; /* 가로로 배치 */
+                justify-content: space-between; /* 공간을 분배 */
+                gap: 20px; /* 두 영역 사이에 간격 */
+                flex-wrap: wrap; /* 화면 크기 조정 시 자동으로 줄 바꿈 */
             }
         
             .experience-section, .calculator-section {
-                flex: 1; /* flex-grow to allow content to fill space */
+                flex: 1; /* 각 섹션이 나머지 공간을 차지 */
+                min-width: 300px; /* 최소 너비 설정 */
+            }
+        
+            .experience-section {
+                max-width: 50%; /* 최대 너비 설정 */
+            }
+        
+            .calculator-section {
+                max-width: 50%; /* 최대 너비 설정 */
             }
         
             .copyright {
-                margin-top: auto; /* Pushes the copyright to the bottom */
+                margin-top: auto; /* 맨 아래로 고정 */
                 text-align: center;
                 padding: 10px;
                 background-color: #f1f1f1;
             }
-        </style>
         
-              
+            .flex-row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+        
+            .flex-row label {
+                min-width: 120px;
+                font-weight: bold;
+            }
+        
+            .input-group {
+                display: flex;
+                align-items: center;
+                margin-right: 15px;
+            }
+        
+            .input-group img {
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+            }
+        
+            .input-group input {
+                width: 80px;
+                padding: 5px;
+            }
+        </style>
 
     <!-- 환수 경험치 계산 -->
     <script>
