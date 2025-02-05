@@ -316,10 +316,17 @@
         document.getElementById('mid-grade-packages').textContent = additionalPackages.toLocaleString();
         document.getElementById('mid-grade-price').textContent = additionalCost.toLocaleString();
 
-        // 하계 2층 사냥 시간 추가 표시
-        const huntingTimeElement = document.createElement('p');
-        huntingTimeElement.innerHTML = `하계 2층 사냥 시간: <span id="hunting-time">${neededHuntingTime.toLocaleString()}</span> 시간`;
-        document.getElementById('result').appendChild(huntingTimeElement);
+        // 하계 2층 사냥 시간 추가 (중복 방지)
+        let huntingTimeElement = document.getElementById('hunting-time-element');
+        if (!huntingTimeElement) {
+            huntingTimeElement = document.createElement('p');
+            huntingTimeElement.id = 'hunting-time-element';
+            huntingTimeElement.innerHTML = `하계 2층 사냥 시간: <span id="hunting-time">${neededHuntingTime.toLocaleString()}</span> 시간`;
+            document.getElementById('result').appendChild(huntingTimeElement);
+        } else {
+            document.getElementById('hunting-time').textContent = neededHuntingTime.toLocaleString();
+        }
+
     });
     </script>
 
