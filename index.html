@@ -267,11 +267,27 @@
                 console.error("Error loading JSON data:", error);
             });
 
-        // 결속 효과 계산 공식 (레벨별 비율 적용)
-        function calculateBoundEffect(value, level) {
-            let percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
-            return Math.round(value * percentage); // 반올림 처리
+        // 결속 효과 계산 공식 (옵션별로 다른 방식 적용)
+        function calculateBoundEffect(option, value, level) {
+            let percentage = 0;
+
+            if (["대인방어", "대인피해", "위력"].includes(option)) {
+                // 대인방어, 대인피해, 위력
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.20;
+            } else if (option === "이동속도") {
+                // 이동속도
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.05 : 0.20;
+            } else if (["체력증가%", "마력증가%"].includes(option)) {
+                // 체력증가%, 마력증가%
+                percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
+            } else {
+                // 기본 비율 적용
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
+            }
+
+            return Math.floor(value * percentage); // 내림 처리
         }
+
 
         // 환수 이미지를 화면에 표시
         function displayFamiliarImages(type) {
@@ -321,11 +337,6 @@
             updateStats();
         }
 
-
-
-
-
-
         // 레벨 표시 업데이트
         function updateLevelDisplay() {
             document.getElementById('level-display').textContent = currentLevel;
@@ -341,7 +352,7 @@
 
             Object.keys(currentFamiliar.option).forEach(option => {
                 let baseValue = currentFamiliar.option[option][currentLevel]; // 등록 효과 값
-                let boundValue = calculateBoundEffect(baseValue, currentLevel); // 결속 효과 값
+                let boundValue = calculateBoundEffect(option, baseValue, currentLevel); // 결속 효과 값
 
                 // 등록효과 테이블에는 모든 옵션을 추가
                 let row = document.createElement('tr');
