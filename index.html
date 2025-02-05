@@ -401,10 +401,10 @@
         if (!huntingTimeElement) {
             huntingTimeElement = document.createElement('p');
             huntingTimeElement.id = 'hunting-time-element';
-            huntingTimeElement.innerHTML = `하계 2층으로 파밍 시, 소모시간 : <span id="hunting-time"> ${months}일 ${hours}시간 (약 : ${remainingDays}개월)</span>`;
+            huntingTimeElement.innerHTML = `하계 2층으로 파밍 시, 소모시간 : <span id="hunting-time"> ${days}일 ${hours}시간 (약 : ${remainingDays}개월)</span>`;
             document.getElementById('result').appendChild(huntingTimeElement);
         } else {
-            document.getElementById('hunting-time').textContent = `${months}일 ${hours}시간 (약 : ${remainingDays}개월)`;
+            document.getElementById('hunting-time').textContent = `${days}일 ${hours}시간 (약 : ${remainingDays}개월)`;
         }
 
 
