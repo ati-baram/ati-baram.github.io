@@ -208,46 +208,89 @@
             </div>
           
             <!-- 환수혼 계산기 -->
-            <div class="calculator-section">
-                <h2>환수혼 계산기</h2>
+            <style>
+                .flex-row {
+                  display: flex;
+                  align-items: center;
+                  margin-bottom: 10px;
+                }
+                .flex-row label {
+                  min-width: 120px;
+                  font-weight: bold;
+                }
+                .input-group {
+                  display: flex;
+                  align-items: center;
+                  margin-right: 15px;
+                }
+                .input-group img {
+                  width: 30px;
+                  height: 30px;
+                  margin-right: 5px;
+                }
+                .input-group input {
+                  width: 80px;
+                  padding: 5px;
+                }
+            </style>
               
+            <div class="calculator-section">
+            <h2>환수혼 계산기</h2>
+            
+            <!-- 환수 등급 및 레벨 -->
+            <div class="flex-row">
                 <label for="grade-select">환수 등급:</label>
                 <select id="grade-select">
-                  <option value="legendary">전설 환수</option>
-                  <option value="immortal">불멸 환수</option>
+                <option value="legendary">전설 환수</option>
+                <option value="immortal">불멸 환수</option>
                 </select>
-              
+            </div>
+            
+            <div class="flex-row">
+                <div class="input-group">
                 <label for="current-level">현재 레벨:</label>
                 <input type="number" id="current-level" min="0" max="25" value="0">
-              
+                </div>
+                <div class="input-group">
                 <label for="target-level">목표 레벨:</label>
                 <input type="number" id="target-level" min="1" max="25" value="25">
-              
-                <h3>현재 보유한 환수의 혼</h3>
-                <label for="current-low-soul">하급 환수의 혼:</label>
-                <input type="number" id="current-low-soul" min="0" value="0">
-              
-                <label for="current-mid-soul">상급 환수의 혼:</label>
-                <input type="number" id="current-mid-soul" min="0" value="0">
-              
-                <label for="current-high-soul">최상급 환수의 혼:</label>
-                <input type="number" id="current-high-soul" min="0" value="0">
-              
-                <button id="calculate">필요 경험치 및 환수혼 계산</button>
-              
-                <div id="result">
-                  <h3>계산 결과:</h3>
-                  <p>필요한 총 경험치: <span id="total-exp">0</span></p>
-                  <p>부족한 하급 환수의 혼: <span id="needed-low-soul">0</span>개</p>
-                  <p>부족한 상급 환수의 혼: <span id="needed-mid-soul">0</span>개</p>
-                  <p>부족한 최상급 환수의 혼: <span id="needed-high-soul">0</span>개</p>
-                  <p>상급 환수의 혼 패키지 (50개): <span id="mid-grade-packages">0</span>개</p>
-                  <p>추가 비용: <span id="mid-grade-price">0</span>원</p>
-                  <p>* 캐시 상점 / 성장 지원 / 환수 지원 / 환수의 혼 상자 1개 19,000원</p>
                 </div>
-              </div>
+            </div>
+            
+            <!-- 현재 보유한 환수의 혼 -->
+            <h3>현재 보유한 환수의 혼</h3>
+            <div class="flex-row">
+                <div class="input-group">
+                <img src="images/low-soul.jpg" alt="하급 환수혼">
+                <label for="current-low-soul">하급:</label>
+                <input type="number" id="current-low-soul" min="0" value="0">
+                </div>
+                <div class="input-group">
+                <img src="images/mid-soul.jpg" alt="상급 환수혼">
+                <label for="current-mid-soul">상급:</label>
+                <input type="number" id="current-mid-soul" min="0" value="0">
+                </div>
+                <div class="input-group">
+                <img src="images/high-soul.jpg" alt="최상급 환수혼">
+                <label for="current-high-soul">최상급:</label>
+                <input type="number" id="current-high-soul" min="0" value="0">
+                </div>
+            </div>
+            
+            <button id="calculate">필요 경험치 및 환수혼 계산</button>
+            
+            <div id="result">
+                <h3>계산 결과:</h3>
+                <p>필요한 총 경험치: <span id="total-exp">0</span></p>
+                <p>부족한 하급 환수의 혼: <span id="needed-low-soul">0</span>개</p>
+                <p>부족한 상급 환수의 혼: <span id="needed-mid-soul">0</span>개</p>
+                <p>부족한 최상급 환수의 혼: <span id="needed-high-soul">0</span>개</p>
+                <p>상급 환수의 혼 패키지 (50개): <span id="mid-grade-packages">0</span>개</p>
+                <p>추가 비용: <span id="mid-grade-price">0</span>원</p>
+                <p>* 캐시 상점 / 성장 지원 / 환수 지원 / 환수의 혼 상자 1개 19,000원</p>
+            </div>
+            </div>
               
-          </div> 
 
     <!-- 환수 경험치 계산 -->
     <script>
