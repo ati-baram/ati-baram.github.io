@@ -324,68 +324,68 @@
             font-weight: bold;
         }
         </style>
-          
-    <script>
-    let legendaryData = [];
-    let immortalData = [];
-    let currentType = 'legendary'; 
-    
-    async function loadData() {
-        const response = await fetch('data.json');
-        const data = await response.json();
-    
-        legendaryData = data.legendary;
-        immortalData = data.immortal;
-    
-        // 기본적으로 전설 환수 데이터를 표시
-        currentType = 'legendary';
-        updateExperienceTable(legendaryData);
-    }
-    
-    document.getElementById('btn-legendary').addEventListener('click', () => {
-        currentType = 'legendary';
-        updateExperienceTable(legendaryData);
-    });
-    
-    document.getElementById('btn-immortal').addEventListener('click', () => {
-        currentType = 'immortal';
-        updateExperienceTable(immortalData);
-    });
-    
-    function updateExperienceTable(experienceData) {
-        const experienceArrayContainer = document.getElementById('experience-array-container');
-        experienceArrayContainer.innerHTML = '';
-    
-        const firstHalf = experienceData.slice(0, 13);
-        const secondHalf = experienceData.slice(13, 25);
-    
-        let tableHtml = `<table class="experience-table">
-        <thead>
-            <tr class="${currentType === 'legendary' ? 'legendary-header' : 'immortal-header'}">
-            <th>레벨</th>
-            <th>필요 경험치</th>
-            <th>레벨</th>
-            <th>필요 경험치</th>
-            </tr>
-        </thead>
-        <tbody>`;
-    
-        for (let i = 0; i < 13; i++) {
-        tableHtml += `<tr>
-            <td>${firstHalf[i].level}</td>
-            <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
-            <td>${secondHalf[i]?.level || ''}</td>
-            <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
-        </tr>`;
+       
+    <!-- * 환수 성장 경험치 표 *  -->
+    <script> 
+        let legendaryData = [];
+        let immortalData = [];
+        let currentType = 'legendary'; 
+        
+        async function loadData() {
+            const response = await fetch('data.json');
+            const data = await response.json();
+        
+            legendaryData = data.legendary;
+            immortalData = data.immortal;
+        
+            // 기본적으로 전설 환수 데이터를 표시
+            currentType = 'legendary';
+            updateExperienceTable(legendaryData);
         }
+        
+        document.getElementById('btn-legendary').addEventListener('click', () => {
+            currentType = 'legendary';
+            updateExperienceTable(legendaryData);
+        });
+        
+        document.getElementById('btn-immortal').addEventListener('click', () => {
+            currentType = 'immortal';
+            updateExperienceTable(immortalData);
+        });
     
-        tableHtml += '</tbody></table>';
-        experienceArrayContainer.innerHTML = tableHtml;
-    }
-    
-    loadData();
+        function updateExperienceTable(experienceData) {
+            const experienceArrayContainer = document.getElementById('experience-array-container');
+            experienceArrayContainer.innerHTML = '';
+        
+            const firstHalf = experienceData.slice(0, 13);
+            const secondHalf = experienceData.slice(13, 25);
+        
+            let tableHtml = `<table class="experience-table">
+            <thead>
+                <tr class="${currentType === 'legendary' ? 'legendary-header' : 'immortal-header'}">
+                <th>레벨</th>
+                <th>필요 경험치</th>
+                <th>레벨</th>
+                <th>필요 경험치</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        
+            for (let i = 0; i < 13; i++) {
+            tableHtml += `<tr>
+                <td>${firstHalf[i].level}</td>
+                <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
+                <td>${secondHalf[i]?.level || ''}</td>
+                <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
+            </tr>`;
+            }
+        
+            tableHtml += '</tbody></table>';
+            experienceArrayContainer.innerHTML = tableHtml;
+        }
+        
+        loadData();
     </script>
-
 
     <script>
         // 환수 데이터 불러오기
