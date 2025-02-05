@@ -379,7 +379,7 @@
         // 필요한 사냥 시간 계산 (24시간당 300개 획득)
         const huntingHoursPerDay = 24;
         const soulsPerDay = 300;
-        
+
         const neededHuntingTime = Math.ceil((neededLowSoul / soulsPerDay) * huntingHoursPerDay);
 
         // 시간 -> X일 Y시간으로 변환
@@ -388,7 +388,7 @@
 
         // 몇개월인지 계산 (한 달은 약 30일 기준)
         const months = Math.floor(days / 30);
-        const remainingDays = days % 30;
+        const remainingDays = neededHuntingTime / 24 * 30.44;
 
         // 결과 표시
         document.getElementById('total-exp').textContent = totalExp.toLocaleString();
