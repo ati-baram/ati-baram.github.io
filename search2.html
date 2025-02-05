@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>환수정보</title>
+    <link rel="icon" href="asset/logo.png">
+    <link rel="stylesheet" href="asset/style.css">  
+    <style>
+        /* 기본 레이아웃 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding-top: 50px; /* 탭 메뉴가 고정될 공간을 확보 */
+        }
+        /* 네비게이션 바 */
+        nav {
+            position: fixed; /* 네비게이션 바를 화면 상단에 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #444;
+            display: flex;
+            align-items: center; /* 로고와 탭 메뉴 세로 가운데 정렬 */
+            justify-content: space-between; /* 로고와 탭 메뉴 사이의 간격 조정 */
+            padding: 10px 20px;
+            z-index: 1000;
+        }
+
+        /* 로고 */
+        .logo {
+            flex: 0 0 auto; /* 로고를 왼쪽에 고정 */
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px; /* 로고 이미지 크기 */
+        }
+
+        /* 탭 메뉴 */
+        .tabs {
+            display: flex;
+            justify-content: center; /* 탭을 가운데 정렬 */
+            flex-grow: 1; /* 가운데에 고정되도록 설정 */
+        }
+
+        .tabs a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            text-align: center;
+        }
+
+        .tabs a:hover {
+            background-color: #555;
+        }
+
+        /* 본문 영역 */
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* 반응형 디자인: 작은 화면에서 탭 숨기기 */
+        .menu-toggle {
+            display: none;
+        }
+
+        .menu-toggle:checked + nav {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                width: 100%;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .menu-toggle:checked + nav {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+    
+</head>
+
+<body>
+    <!-- 네비게이션 바 -->
+    <nav>
+        <!-- 로고 -->
+        <div class="logo">
+            <img src="asset/logo.png" alt="로고">
+            <h2>환수정보</h2>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <div class="tabs">
+            <a href="index.html">환수 정보</a>
+            <a href="binding-recommendations.html">결속 추천</a>
+            <a href="binding-ranking.html">결속 랭킹</a>
+            <a href="search.html">캐릭터 조회</a>
+        </div>
+    </nav>
+
+    <!-- 본문 내용 -->
+    <div class="content">
+        <h1>바람의나라: 연 캐릭터 정보 조회</h1>
+            <input type="text" id="characterName" placeholder="캐릭터 이름 입력">
+            <button onclick="fetchCharacterInfo()">조회</button>
+
+            <div id="result"></div>
+
+    <script>
+        async function fetchCharacterInfo() {
+            const characterName = document.getElementById("characterName").value;
+            const API_KEY = ""; // 여기에 API 키 입력
+
+            if (!characterName) {
+                alert("캐릭터 이름을 입력해주세요!");
+                return;
+            }
+            const encodeName = encodeURIComponent(characterName);
+
+            const url = `https://open.api.nexon.com/bn/v1/user/basic?character_name=${encodeName}`;
+            
+            try {
+                const response = await fetch(url, {
+                    headers: { 
+                        "x-nxopen-api-key": API_KEY 
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("API 요청 실패");
+                }
+
+                const data = await response.json();
+                displayCharacterInfo(data);
+            } catch (error) {
+                document.getElementById("result").innerHTML = `<p>조회 실패: ${error.message}</p>`;
+            }
+        }
+
+        function displayCharacterInfo(data) {
+            if (!data || !data.character_name) {
+                document.getElementById("result").innerHTML = "<p>캐릭터 정보를 찾을 수 없습니다.</p>";
+                return;
+            }
+
+            document.getElementById("result").innerHTML = `
+                <h2>${data.character_name}</h2>
+                <p><strong>레벨:</strong> ${data.character_level}</p>
+                <p><strong>직업:</strong> ${data.character_class}</p>
+                <p><strong>서버:</strong> ${data.world_name}</p>
+            `;
+        }
+    </script>
+
+        
+
+    <div class="copyright">
+    &copy; Copyright <strong><span>ATI</span></strong>. All Rights Reserved<br>
+    Thanks to 꼬력, 쭈사야, 어부
+    </div>
+</body>
+</html>
