@@ -281,13 +281,16 @@
             } else if (["체력증가%", "마력증가%"].includes(option)) {
                 // 체력증가%, 마력증가%
                 percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
+            } else if (["체력회복향상", "마력회복향상"].includes(option)) {
+                // 체력회복향상, 마력회복향상
+                return Math.floor(value / 14); // 값 / 14 후 내림 처리 역시 인도인도 인도샨
             } else {
                 // 기본 비율 적용
                 percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
             }
-
             return Math.floor(value * percentage); // 내림 처리
         }
+
 
 
         // 환수 이미지를 화면에 표시
