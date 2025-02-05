@@ -240,6 +240,23 @@
           </div>          
 
     <script>
+        const lowGradeRatio = 10;
+        const midGradeRatio = 100;
+        const highGradeRatio = 1000;
+        const midGradePackageSize = 50;
+        const midGradePackagePrice = 19000;
+
+        let experienceData = {};
+
+        fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            experienceData = data;  // JSON 데이터를 가져와 저장
+        })
+        .catch(error => {
+            console.error('데이터 로드 실패:', error);
+        });
+
         document.getElementById('calculate').addEventListener('click', () => {
         const grade = document.getElementById('grade-select').value;
         const currentLevel = parseInt(document.getElementById('current-level').value);
