@@ -463,6 +463,11 @@
                 imgElement.addEventListener('click', () => selectFamiliar(familiar));
                 familiarImagesContainer.appendChild(imgElement);
             });
+
+            // 스타일 초기화 및 이미지 간격 재설정
+            familiarImagesContainer.style.display = 'flex';
+            familiarImagesContainer.style.flexWrap = 'wrap';
+            familiarImagesContainer.style.gap = '10px';  // 이미지 간격 설정
         }
 
         // 환수 선택 시 해당 데이터 표시
@@ -505,11 +510,12 @@
                 // 환수 정보 숨기기
                 document.getElementById('selected-familiar').style.display = 'none';
 
-                // 환수 이미지 영역 다시 표시
+                // 환수 이미지 영역 다시 표시하고 이미지 간격 유지
                 document.getElementById('familiar-images').style.display = 'block';
+                displayFamiliarImages(currentFamiliar.type);  // 다시 이미지를 일정 간격으로 표시
             });
-    
         }
+
 
 
         // 레벨 표시 업데이트
