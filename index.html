@@ -138,30 +138,44 @@
 
             <div id="selected-familiar" style="display: none;">
                 <h2 id="familiar-name"></h2>
-                <table class="option-table" id="stats-table">
-                    <thead>
-                        <tr>
-                            <th>옵션</th>
-                            <th>등록 효과</th>
-                            <th>결속 효과</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- 능력치 데이터가 여기에 동적으로 추가됩니다 -->
-                    </tbody>
-                </table>
 
-                <div class="level-controls">
-                    <div>
-                        <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
-                    </div>
+                <div class="stats-container">
+                    <table class="option-table" id="stats-table1">
+                        <thead>
+                            <tr>
+                                <th>옵션</th>
+                                <th>등록 효과</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 등록효과 데이터가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
 
-                    <div class="button-group">
-                        <button id="decrease-btn">레벨 내리기</button>
-                        <input type="number" id="level-input" value="0" min="0" max="25" />
-                        <button id="increase-btn">레벨 올리기</button>
-                    </div>
+                    <table class="option-table" id="stats-table2">
+                        <thead>
+                            <tr>
+                                <th>옵션</th>
+                                <th>결속 효과</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 결속효과 데이터가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
                 </div>
+
+            <div class="level-controls">
+                <div>
+                    <span>현재 레벨: </span><span id="level-display" class="level-display">0</span>
+                </div>
+
+                <div class="button-group">
+                    <button id="decrease-btn">레벨 내리기</button>
+                    <input type="number" id="level-input" value="0" min="0" max="25" />
+                    <button id="increase-btn">레벨 올리기</button>
+                </div>
+            </div>
             </div>
         </div>
 
@@ -320,32 +334,41 @@
 
         // 능력치 업데이트
         function updateStats() {
-            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
-            statsTableBody.innerHTML = ''; // 이전 내용 초기화
+            const statsTableBody1 = document.getElementById('stats-table1').querySelector('tbody');
+            const statsTableBody2 = document.getElementById('stats-table2').querySelector('tbody');
+            
+            statsTableBody1.innerHTML = ''; // 등록효과 초기화
+            statsTableBody2.innerHTML = ''; // 결속효과 초기화
 
             Object.keys(currentFamiliar.option).forEach(option => {
-                let row = document.createElement('tr');
-                let optionCell = document.createElement('td');
-                let valueCell = document.createElement('td');
-                let boundValueCell = document.createElement('td'); // 결속 효과 셀 추가
-
-                // 등록 효과 값
                 let baseValue = currentFamiliar.option[option][currentLevel];
-
-                // 결속 효과 값 계산
                 let boundValue = calculateBoundEffect(baseValue, currentLevel);
 
-                optionCell.textContent = option;
-                valueCell.textContent = currentFamiliar.option[option][currentLevel];
-                valueCell.textContent = baseValue;
-                boundValueCell.textContent = boundValue;  // 결속 효과 값 표시
+                // 결속효과 값이 0이면 표시하지 않음
+                if (boundValue > 0) {
+                    let row1 = document.createElement('tr');
+                    let row2 = document.createElement('tr');
 
-                row.appendChild(optionCell);
-                row.appendChild(valueCell);
-                row.appendChild(boundValueCell);  // 결속 효과 셀 추가
-                statsTableBody.appendChild(row);
+                    let optionCell1 = document.createElement('td');
+                    let valueCell1 = document.createElement('td');
+                    optionCell1.textContent = option;
+                    valueCell1.textContent = baseValue;
+                    row1.appendChild(optionCell1);
+                    row1.appendChild(valueCell1);
+
+                    let optionCell2 = document.createElement('td');
+                    let valueCell2 = document.createElement('td');
+                    optionCell2.textContent = option;
+                    valueCell2.textContent = boundValue;
+                    row2.appendChild(optionCell2);
+                    row2.appendChild(valueCell2);
+
+                    statsTableBody1.appendChild(row1);  // 등록효과 테이블에 추가
+                    statsTableBody2.appendChild(row2);  // 결속효과 테이블에 추가
+                }
             });
         }
+
 
 
         // 레벨 업 / 다운 버튼

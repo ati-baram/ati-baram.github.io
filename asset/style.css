@@ -72,21 +72,28 @@ button:disabled {
     font-weight: bold;
 }
 
-/* 능력치 테이블 */
-.option-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.option-table th, .option-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
 
 .option-table th {
     background-color: #f1f1f1;
+}
+/* 능력치 표 */
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* 테이블 사이의 간격 */
+    margin-top: 20px;
+}
+.option-table {
+    border-collapse: collapse;
+    width: 48%; /* 두 테이블이 나란히 배치될 수 있도록 */
+}
+.option-table th, .option-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.option-table th {
+    background-color: #f4f4f4;
 }
 
 /* 경험치 표 */
