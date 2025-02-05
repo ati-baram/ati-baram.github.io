@@ -123,3 +123,13 @@ button:disabled {
 .logo{
     color: white;
 }
+
+.legendary-header {
+    background-color: red;
+    color: white;
+  }
+
+.immortal-header {
+    background-color: orange;
+    color: white;
+}

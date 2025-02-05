@@ -198,60 +198,65 @@
         </div>
     
         <script>
-          let legendaryData = [];
-          let immortalData = [];
-    
-          // JSON 파일을 fetch로 가져오기
-          async function loadData() {
+            let legendaryData = [];
+            let immortalData = [];
+            let currentType = 'legendary'; // 현재 선택된 타입 저장
+          
+            async function loadData() {
               const response = await fetch('data.json');
               const data = await response.json();
-    
+          
               legendaryData = data.legendary;
               immortalData = data.immortal;
-    
-              // 기본적으로 전설 환수 데이터를 배열로 표시
+          
+              // 기본적으로 전설 환수 데이터를 표시
+              currentType = 'legendary';
               updateExperienceTable(legendaryData);
-          }
-    
-          // 버튼 클릭 이벤트 핸들러
-          document.getElementById('btn-legendary').addEventListener('click', () => {
+            }
+          
+            document.getElementById('btn-legendary').addEventListener('click', () => {
+              currentType = 'legendary';
               updateExperienceTable(legendaryData);
-          });
-    
-          document.getElementById('btn-immortal').addEventListener('click', () => {
+            });
+          
+            document.getElementById('btn-immortal').addEventListener('click', () => {
+              currentType = 'immortal';
               updateExperienceTable(immortalData);
-          });
-    
-          // 경험치 배열 업데이트 함수
-          function updateExperienceTable(experienceData) {
+            });
+          
+            function updateExperienceTable(experienceData) {
               const experienceArrayContainer = document.getElementById('experience-array-container');
-              experienceArrayContainer.innerHTML = '';  // 기존 내용 초기화
-    
-              // 데이터를 1-13 레벨과 14-25 레벨로 나누기
-              const firstHalf = experienceData.slice(0, 13);  // 1~13 레벨
-              const secondHalf = experienceData.slice(13, 25); // 14~25 레벨
-    
-              let tableHtml = '<table class="experience-table"><thead><tr><th>레벨</th><th>필요 경험치</th><th>레벨</th><th>필요 경험치</th></tr></thead><tbody>';
-    
-              // 1~13 레벨과 14~25 레벨을 각 행에 채우기
+              experienceArrayContainer.innerHTML = '';
+          
+              const firstHalf = experienceData.slice(0, 13);
+              const secondHalf = experienceData.slice(13, 25);
+          
+              let tableHtml = `<table class="experience-table">
+                <thead>
+                  <tr class="${currentType === 'legendary' ? 'legendary-header' : 'immortal-header'}">
+                    <th>레벨</th>
+                    <th>필요 경험치</th>
+                    <th>레벨</th>
+                    <th>필요 경험치</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+          
               for (let i = 0; i < 13; i++) {
-                  tableHtml += `<tr>
-                                  <td>${firstHalf[i].level}</td>
-                                  <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
-                                  <td>${secondHalf[i]?.level || ''}</td>
-                                  <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
-                              </tr>`;
+                tableHtml += `<tr>
+                  <td>${firstHalf[i].level}</td>
+                  <td>${firstHalf[i].experienceRequired.toLocaleString()}</td>
+                  <td>${secondHalf[i]?.level || ''}</td>
+                  <td>${secondHalf[i]?.experienceRequired?.toLocaleString() || ''}</td>
+                </tr>`;
               }
-    
+          
               tableHtml += '</tbody></table>';
-    
-              // 테이블을 표시
               experienceArrayContainer.innerHTML = tableHtml;
-          }
-    
-          // 초기 데이터 로드
-          loadData();
-        </script>
+            }
+          
+            loadData();
+          </script>
 
     <script>
         // 환수 데이터 불러오기
