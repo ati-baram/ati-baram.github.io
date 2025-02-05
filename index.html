@@ -197,10 +197,33 @@
           </div>
         </div>
     
-        <script>
+        <style>
+            .legendary-header {
+              background-color: red;
+              color: white;
+            }
+            .immortal-header {
+              background-color: orange;
+              color: white;
+            }
+            .experience-table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            .experience-table th, .experience-table td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: center;
+            }
+            .experience-table th {
+              font-weight: bold;
+            }
+          </style>
+          
+          <script>
             let legendaryData = [];
             let immortalData = [];
-            let currentType = 'legendary'; // 현재 선택된 타입 저장
+            let currentType = 'legendary'; 
           
             async function loadData() {
               const response = await fetch('data.json');
@@ -257,18 +280,6 @@
           
             loadData();
           </script>
-        <style>
-        .legendary-header {
-            background-color: red;
-            color: white;
-        }
-
-        .immortal-header {
-            background-color: orange;
-            color: white;
-        }
-
-        </style>
 
 
     <script>
