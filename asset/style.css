@@ -125,11 +125,11 @@ button:disabled {
 }
 
 .legendary-header {
-    background-color: red;
+    background-color: #b62b20;
     color: white;
   }
 
 .immortal-header {
-    background-color: orange;
+    background-color: #fb8802;
     color: white;
 }
