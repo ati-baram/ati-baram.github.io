@@ -334,40 +334,39 @@
 
         // 능력치 업데이트
         function updateStats() {
-            const statsTableBody1 = document.getElementById('stats-table1').querySelector('tbody');
-            const statsTableBody2 = document.getElementById('stats-table2').querySelector('tbody');
-            
-            statsTableBody1.innerHTML = ''; // 등록효과 초기화
-            statsTableBody2.innerHTML = ''; // 결속효과 초기화
+            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
+            const boundTableBody = document.getElementById('bound-table').querySelector('tbody');
+            statsTableBody.innerHTML = '';  // 등록 효과 초기화
+            boundTableBody.innerHTML = '';  // 결속 효과 초기화
 
             Object.keys(currentFamiliar.option).forEach(option => {
-                let baseValue = currentFamiliar.option[option][currentLevel];
-                let boundValue = calculateBoundEffect(baseValue, currentLevel);
+                let baseValue = currentFamiliar.option[option][currentLevel]; // 등록 효과 값
+                let boundValue = calculateBoundEffect(baseValue, currentLevel); // 결속 효과 값
 
-                // 결속효과 값이 0이면 표시하지 않음
+                // 등록효과 테이블에는 모든 옵션을 추가
+                let row = document.createElement('tr');
+                let optionCell = document.createElement('td');
+                let valueCell = document.createElement('td');
+                optionCell.textContent = option;
+                valueCell.textContent = baseValue;
+                row.appendChild(optionCell);
+                row.appendChild(valueCell);
+                statsTableBody.appendChild(row);
+
+                // 결속효과가 0이 아닌 경우에만 결속효과 테이블에 추가
                 if (boundValue > 0) {
-                    let row1 = document.createElement('tr');
-                    let row2 = document.createElement('tr');
-
-                    let optionCell1 = document.createElement('td');
-                    let valueCell1 = document.createElement('td');
-                    optionCell1.textContent = option;
-                    valueCell1.textContent = baseValue;
-                    row1.appendChild(optionCell1);
-                    row1.appendChild(valueCell1);
-
-                    let optionCell2 = document.createElement('td');
-                    let valueCell2 = document.createElement('td');
-                    optionCell2.textContent = option;
-                    valueCell2.textContent = boundValue;
-                    row2.appendChild(optionCell2);
-                    row2.appendChild(valueCell2);
-
-                    statsTableBody1.appendChild(row1);  // 등록효과 테이블에 추가
-                    statsTableBody2.appendChild(row2);  // 결속효과 테이블에 추가
+                    let boundRow = document.createElement('tr');
+                    let boundOptionCell = document.createElement('td');
+                    let boundValueCell = document.createElement('td');
+                    boundOptionCell.textContent = option;
+                    boundValueCell.textContent = boundValue;
+                    boundRow.appendChild(boundOptionCell);
+                    boundRow.appendChild(boundValueCell);
+                    boundTableBody.appendChild(boundRow);
                 }
             });
         }
+
 
 
 
