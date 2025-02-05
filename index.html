@@ -303,7 +303,7 @@
         function calculateBoundEffect(option, value, level) {
             let percentage = 0;
 
-            if (["대인방어", "대인피해", "위력"].includes(option)) {
+            if (["대인방어", "대인피해", "위력", "체력증가", "마력증가"].includes(option)) {
                 // 대인방어, 대인피해, 위력
                 percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.20;
             } else if (option === "이동속도") {
@@ -312,10 +312,18 @@
             } else if (["체력증가%", "마력증가%"].includes(option)) {
                 // 체력증가%, 마력증가%
                 percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
-            } else if (["체력회복향상", "마력회복향상","경험치 획득증가"].includes(option)) {
-                // 체력회복향상, 마력회복향상, 경험치 획득증가
-                return Math.floor(value / 14.2); // 값 / 14 후 내림 처리 역시 인도인도 인도샨
-            } else {
+            } else if (["체력회복향상", "마력회복향상", "경험치 획득증가", "전리품 획득증가"].includes(option)) {
+                // 체력회복향상, 마력회복향상, 경험치 획득증가, 전리품 획득증가
+                if (level < 9) {
+                    percentage = 0.02; // 0~8 레벨은 2%
+                } else if (level < 14) {
+                    percentage = 0.045; // 9~13 레벨은 4.5%
+                } else {
+                    // 14~25 레벨은 값 / 14.2 후 내림 처리
+                    return Math.floor(value / 14.2);
+                }
+            } 
+            else {
                 // 기본 비율 적용
                 percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
             }
