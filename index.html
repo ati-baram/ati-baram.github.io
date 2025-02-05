@@ -199,57 +199,55 @@
           
             <!-- 환수혼 계산기 -->
             <div class="calculator-section">
-              <h2>환수혼 계산기</h2>
-          
-              <label for="grade-select">환수 등급:</label>
-              <select id="grade-select">
-                <option value="legendary">전설 환수</option>
-                <option value="immortal">불멸 환수</option>
-              </select>
-          
-              <label for="current-level">현재 레벨:</label>
-              <input type="number" id="current-level" min="0" max="25" value="0">
-          
-              <label for="target-level">목표 레벨:</label>
-              <input type="number" id="target-level" min="1" max="25" value="25">
-          
-              <button id="calculate">필요 경험치 및 환수혼 계산</button>
-          
-              <div id="result">
-                <h3>계산 결과:</h3>
-                <p>필요한 총 경험치: <span id="total-exp">0</span></p>
-                <p>하급 환수의 혼으로 올릴 경우: <span id="low-grade-soul">0</span>개</p>
-                <p>상급 환수의 혼으로 올릴 경우: <span id="mid-grade-soul">0</span>개</p>
-                <p>최상급 환수의 혼으로 올릴 경우: <span id="high-grade-soul">0</span>개</p>
-                <p>상급 환수의 혼 패키지 (50개): <span id="mid-grade-packages">0</span>개</p>
-                <p>비용: <span id="mid-grade-price">0</span>원</p>
-                <p>* 캐시 상점 / 성장 지원 / 환수 지원 / 환수의 혼 상자 1개 19,000원</p>
+                <h2>환수혼 계산기</h2>
+              
+                <label for="grade-select">환수 등급:</label>
+                <select id="grade-select">
+                  <option value="legendary">전설 환수</option>
+                  <option value="immortal">불멸 환수</option>
+                </select>
+              
+                <label for="current-level">현재 레벨:</label>
+                <input type="number" id="current-level" min="0" max="25" value="0">
+              
+                <label for="target-level">목표 레벨:</label>
+                <input type="number" id="target-level" min="1" max="25" value="25">
+              
+                <h3>현재 보유한 환수의 혼</h3>
+                <label for="current-low-soul">하급 환수의 혼:</label>
+                <input type="number" id="current-low-soul" min="0" value="0">
+              
+                <label for="current-mid-soul">상급 환수의 혼:</label>
+                <input type="number" id="current-mid-soul" min="0" value="0">
+              
+                <label for="current-high-soul">최상급 환수의 혼:</label>
+                <input type="number" id="current-high-soul" min="0" value="0">
+              
+                <button id="calculate">필요 경험치 및 환수혼 계산</button>
+              
+                <div id="result">
+                  <h3>계산 결과:</h3>
+                  <p>필요한 총 경험치: <span id="total-exp">0</span></p>
+                  <p>부족한 하급 환수의 혼: <span id="needed-low-soul">0</span>개</p>
+                  <p>부족한 상급 환수의 혼: <span id="needed-mid-soul">0</span>개</p>
+                  <p>부족한 최상급 환수의 혼: <span id="needed-high-soul">0</span>개</p>
+                  <p>상급 환수의 혼 패키지 (50개): <span id="mid-grade-packages">0</span>개</p>
+                  <p>추가 비용: <span id="mid-grade-price">0</span>원</p>
+                  <p>* 캐시 상점 / 성장 지원 / 환수 지원 / 환수의 혼 상자 1개 19,000원</p>
+                </div>
               </div>
-            </div>
+              
           </div>          
 
     <script>
-        const lowGradeRatio = 10;
-        const midGradeRatio = 100;
-        const highGradeRatio = 1000;
-        const midGradePackageSize = 50;
-        const midGradePackagePrice = 19000;
-
-        let experienceData = {};
-
-        fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            experienceData = data;  // JSON 데이터를 가져와 저장
-        })
-        .catch(error => {
-            console.error('데이터 로드 실패:', error);
-        });
-
         document.getElementById('calculate').addEventListener('click', () => {
         const grade = document.getElementById('grade-select').value;
         const currentLevel = parseInt(document.getElementById('current-level').value);
         const targetLevel = parseInt(document.getElementById('target-level').value);
+
+        const currentLowSoul = parseInt(document.getElementById('current-low-soul').value);
+        const currentMidSoul = parseInt(document.getElementById('current-mid-soul').value);
+        const currentHighSoul = parseInt(document.getElementById('current-high-soul').value);
 
         if (currentLevel >= targetLevel || currentLevel < 0 || targetLevel > 25) {
             alert('올바른 레벨 범위를 입력하세요!');
@@ -262,23 +260,29 @@
             totalExp += experienceData[grade][i].experienceRequired;
         }
 
-        // 환수혼 개수 계산
+        // 필요한 환수혼 개수 계산
         const lowGradeSouls = Math.ceil(totalExp / lowGradeRatio);
         const midGradeSouls = Math.ceil(totalExp / midGradeRatio);
         const highGradeSouls = Math.ceil(totalExp / highGradeRatio);
         const midGradePackages = Math.ceil(midGradeSouls / midGradePackageSize);
         const midGradeTotalPrice = midGradePackages * midGradePackagePrice;
 
+        // 부족한 환수혼 계산
+        const neededLowSoul = Math.max(0, lowGradeSouls - currentLowSoul);
+        const neededMidSoul = Math.max(0, midGradeSouls - currentMidSoul);
+        const neededHighSoul = Math.max(0, highGradeSouls - currentHighSoul);
+
+        const additionalPackages = Math.ceil(neededMidSoul / midGradePackageSize);
+        const additionalCost = additionalPackages * midGradePackagePrice;
+
         // 결과 표시
         document.getElementById('total-exp').textContent = totalExp.toLocaleString();
-        document.getElementById('low-grade-soul').textContent = lowGradeSouls.toLocaleString();
-        document.getElementById('mid-grade-soul').textContent = midGradeSouls.toLocaleString();
-        document.getElementById('high-grade-soul').textContent = highGradeSouls.toLocaleString();
-        document.getElementById('mid-grade-packages').textContent = midGradePackages.toLocaleString();
-        document.getElementById('mid-grade-price').textContent = midGradeTotalPrice.toLocaleString();
-        });
-
-
+        document.getElementById('needed-low-soul').textContent = neededLowSoul.toLocaleString();
+        document.getElementById('needed-mid-soul').textContent = neededMidSoul.toLocaleString();
+        document.getElementById('needed-high-soul').textContent = neededHighSoul.toLocaleString();
+        document.getElementById('mid-grade-packages').textContent = additionalPackages.toLocaleString();
+        document.getElementById('mid-grade-price').textContent = additionalCost.toLocaleString();
+    });
     </script>
 
     <style>
