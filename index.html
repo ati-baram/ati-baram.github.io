@@ -384,6 +384,10 @@
         const days = Math.floor(neededHuntingTime / 24);
         const hours = neededHuntingTime % 24;
 
+        // 몇개월인지 계산 (한 달은 약 30일 기준)
+        const months = Math.floor(days / 30);
+        const remainingDays = days % 30;
+
         // 결과 표시
         document.getElementById('total-exp').textContent = totalExp.toLocaleString();
         document.getElementById('needed-low-soul').textContent = neededLowSoul.toLocaleString();
@@ -397,10 +401,10 @@
         if (!huntingTimeElement) {
             huntingTimeElement = document.createElement('p');
             huntingTimeElement.id = 'hunting-time-element';
-            huntingTimeElement.innerHTML = `하계 2층 사냥 시간: <span id="hunting-time">${days}일 ${hours}시간</span>`;
+            huntingTimeElement.innerHTML = `하계 2층으로 파밍 시, 소모시간 : <span id="hunting-time">${months}개월 ${remainingDays}일 ${hours}시간</span>`;
             document.getElementById('result').appendChild(huntingTimeElement);
         } else {
-            document.getElementById('hunting-time').textContent = `${days}일 ${hours}시간`;
+            document.getElementById('hunting-time').textContent = `${months}개월 ${remainingDays}일 ${hours}시간`;
         }
 
 
