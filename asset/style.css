@@ -108,9 +108,9 @@ button:disabled {
     text-align: center;
 }
 
-.experience-table th {
+/* .experience-table th {
     background-color: #f1f1f1;
-}
+} */
 
 .experience-table td {
     vertical-align: middle;
