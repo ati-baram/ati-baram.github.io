@@ -196,7 +196,91 @@
               <!-- 성장 경험치 데이터가 여기에 동적으로 추가됩니다 -->
           </div>
         </div>
-    
+
+        <div class="calculator">
+            <h2>환수혼 계산기</h2>
+          
+            <!-- 전설/불멸 선택 -->
+            <label for="grade-select">환수 등급:</label>
+            <select id="grade-select">
+              <option value="legendary">전설 환수</option>
+              <option value="immortal">불멸 환수</option>
+            </select>
+          
+            <!-- 현재/목표 레벨 입력 -->
+            <label for="current-level">현재 레벨:</label>
+            <input type="number" id="current-level" min="0" max="25" value="0">
+          
+            <label for="target-level">목표 레벨:</label>
+            <input type="number" id="target-level" min="1" max="25" value="25">
+          
+            <button id="calculate">필요 경험치 및 환수혼 계산</button>
+          
+            <!-- 결과 표시 -->
+            <div id="result">
+              <h3>계산 결과:</h3>
+              <p>필요한 총 경험치: <span id="total-exp">0</span></p>
+              <p>하급 환수의 혼: <span id="low-grade-soul">0</span>개</p>
+              <p>상급 환수의 혼: <span id="mid-grade-soul">0</span>개</p>
+              <p>최상급 환수의 혼: <span id="high-grade-soul">0</span>개</p>
+              <p>상급 환수의 혼 패키지 (50개): <span id="mid-grade-packages">0</span>개</p>
+              <p>상급 환수의 혼 패키지 가격: <span id="mid-grade-price">0</span>원</p>
+            </div>
+          </div>
+
+        <script>
+            const lowGradeRatio = 10;
+            const midGradeRatio = 100;
+            const highGradeRatio = 1000;
+            const midGradePackageSize = 50;
+            const midGradePackagePrice = 19000;
+
+            let experienceData = {};
+
+            fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                experienceData = data;  // JSON 데이터를 가져와 저장
+            })
+            .catch(error => {
+                console.error('데이터 로드 실패:', error);
+            });
+
+            document.getElementById('calculate').addEventListener('click', () => {
+            const grade = document.getElementById('grade-select').value;
+            const currentLevel = parseInt(document.getElementById('current-level').value);
+            const targetLevel = parseInt(document.getElementById('target-level').value);
+
+            if (currentLevel >= targetLevel || currentLevel < 0 || targetLevel > 25) {
+                alert('올바른 레벨 범위를 입력하세요!');
+                return;
+            }
+
+            // 필요한 총 경험치 계산
+            let totalExp = 0;
+            for (let i = currentLevel; i < targetLevel; i++) {
+                totalExp += experienceData[grade][i].experienceRequired;
+            }
+
+            // 환수혼 개수 계산
+            const lowGradeSouls = Math.ceil(totalExp / lowGradeRatio);
+            const midGradeSouls = Math.ceil(totalExp / midGradeRatio);
+            const highGradeSouls = Math.ceil(totalExp / highGradeRatio);
+            const midGradePackages = Math.ceil(midGradeSouls / midGradePackageSize);
+            const midGradeTotalPrice = midGradePackages * midGradePackagePrice;
+
+            // 결과 표시
+            document.getElementById('total-exp').textContent = totalExp.toLocaleString();
+            document.getElementById('low-grade-soul').textContent = lowGradeSouls.toLocaleString();
+            document.getElementById('mid-grade-soul').textContent = midGradeSouls.toLocaleString();
+            document.getElementById('high-grade-soul').textContent = highGradeSouls.toLocaleString();
+            document.getElementById('mid-grade-packages').textContent = midGradePackages.toLocaleString();
+            document.getElementById('mid-grade-price').textContent = midGradeTotalPrice.toLocaleString();
+            });
+
+
+        </script>
+
         <style>
             .legendary-header {
               background-color: #b62b20 !important;
