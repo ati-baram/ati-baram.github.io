@@ -36,6 +36,7 @@
             flex: 0 0 auto; /* 로고를 왼쪽에 고정 */
             display: flex;
             align-items: center;
+            margin-right: 5px;
         }
 
         .logo img {
@@ -92,8 +93,7 @@
                 flex-direction: column;
             }
         }
-    </style>
-    
+    </style>   
 </head>
 
 <body>
@@ -118,20 +118,89 @@
     <div class="content">
         <div class="container">
             <h2>공지사항</h2>
-            차후에 공개 예정! ㅠ <br><br>
-            • 이제 NEXON Open API에서 '게임 데이터 활용을 위한 로그인'(NEXON Open ID) 기능이 제공됩니다.<br>
-            • NEXON Open API를 사용하여 제작된 서비스에서, 넥슨 계정 기반 로그인으로 내 정보를 쉽게 확인할 수 있습니다.<br>
-            제공하는 정보 : 캐릭터 정보 (레벨, 경험치, 국가, 직업 등등), 칭호장착정보, 칭호보유정보
+            탑승 : [전설] <del>숙련된 거대참매, 우두머리 청사자</del>, 하늘꽃사슴, 강철옥좌 도마뱀 / [불멸] 운석갑주돈, 벽력초월용, 황금각 신령양, 비황천마, 화검영사<br>
+            수호 : [전설] <del>왕관깃털수리, 광포한 맹독박쥐</del>, 청풍현 정령록, 복수의 풀깨비 / [불멸] <del>화운 금돼지, 여의주 흑룡, 성운백양, 유성 일각수</del>, 화린금사<br>
+            환수능력치 제보 : <a href="https://open.kakao.com/o/saBUZoeh">오픈톡</a> <a href="양식.txt">제보양식</a>
         </div>
 
         <div class="container">
             <h1>바람의나라: 연 캐릭터 정보 조회</h1>
             <input type="text" id="characterName" placeholder="캐릭터 이름 입력">
             <button onclick="fetchCharacterInfo()">조회</button>
-
             <div id="result"></div>
         </div>
 
+        <div class="container flex-container">
+            
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
+            Thanks to 꼬력, 쭈사야, 어부, 아리샨
+        </div>
+        
+        <style>
+            /* 전체 레이아웃을 flex로 설정 */
+            .flex-container {
+                display: flex;
+                flex-direction: row; /* 가로로 배치 */
+                justify-content: space-between; /* 공간을 분배 */
+                gap: 20px; /* 두 영역 사이에 간격 */
+                flex-wrap: wrap; /* 화면 크기 조정 시 자동으로 줄 바꿈 */
+            }
+        
+            .experience-section, .calculator-section {
+                flex: 1; /* 각 섹션이 나머지 공간을 차지 */
+                min-width: 300px; /* 최소 너비 설정 */
+            }
+        
+            .experience-section {
+                max-width: 50%; /* 최대 너비 설정 */
+            }
+        
+            .calculator-section {
+                max-width: 50%; /* 최대 너비 설정 */
+            }
+        
+            .copyright {
+                margin-top: auto; /* 맨 아래로 고정 */
+                text-align: center;
+                padding: 10px;
+                background-color: #f1f1f1;
+            }
+        
+            .flex-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+        
+            .flex-row label {
+                min-width: 70px;
+                font-weight: bold;
+                margin-right: 5px; /* 레이블과 입력란 간의 간격 */
+            }
+        
+            .input-group {
+                display: flex;
+                align-items: center;
+                margin-right: 10px;
+            }
+        
+            .input-group img {
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+            }
+        
+            .input-group input {
+                width: 50px;
+                padding: 5px;
+            }
+        </style>
+    <!-- Nexon Open API -->
     <script>
         async function fetchCharacterInfo() {
             const characterName = document.getElementById("characterName").value;
@@ -177,12 +246,9 @@
             `;
         }
     </script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
+    crossorigin="anonymous"></script>
 
-        
-
-    <div class="copyright">
-        &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
-        Thanks to 꼬력, 쭈사야, 어부, 아리샨
-    </div>
 </body>
 </html>

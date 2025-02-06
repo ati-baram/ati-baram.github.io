@@ -36,6 +36,7 @@
             flex: 0 0 auto; /* 로고를 왼쪽에 고정 */
             display: flex;
             align-items: center;
+            margin-right: 5px;
         }
 
         .logo img {
@@ -118,14 +119,326 @@
     <div class="content">
         <div class="container">
             <h2>공지사항</h2>
-            차후에 공개 예정!
+            탑승 : [전설] <del>숙련된 거대참매, 우두머리 청사자</del>, 하늘꽃사슴, 강철옥좌 도마뱀 / [불멸] 운석갑주돈, 벽력초월용, 황금각 신령양, 비황천마, 화검영사<br>
+            수호 : [전설] <del>왕관깃털수리, 광포한 맹독박쥐</del>, 청풍현 정령록, 복수의 풀깨비 / [불멸] <del>화운 금돼지, 여의주 흑룡, 성운백양, 유성 일각수</del>, 화린금사<br>
+            환수능력치 제보 : <a href="https://open.kakao.com/o/saBUZoeh">오픈톡</a> <a href="양식.txt">제보양식</a>
         </div>
 
-        
+        <div class="container">
+            
+        </div>
 
-    <div class="copyright">
-        &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
-        Thanks to 꼬력, 쭈사야, 어부, 아리샨
-    </div>
+        <div class="container flex-container">
+            
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
+            Thanks to 꼬력, 쭈사야, 어부, 아리샨
+        </div>
+        
+        <style>
+            /* 전체 레이아웃을 flex로 설정 */
+            .flex-container {
+                display: flex;
+                flex-direction: row; /* 가로로 배치 */
+                justify-content: space-between; /* 공간을 분배 */
+                gap: 20px; /* 두 영역 사이에 간격 */
+                flex-wrap: wrap; /* 화면 크기 조정 시 자동으로 줄 바꿈 */
+            }
+        
+            .experience-section, .calculator-section {
+                flex: 1; /* 각 섹션이 나머지 공간을 차지 */
+                min-width: 300px; /* 최소 너비 설정 */
+            }
+        
+            .experience-section {
+                max-width: 50%; /* 최대 너비 설정 */
+            }
+        
+            .calculator-section {
+                max-width: 50%; /* 최대 너비 설정 */
+            }
+        
+            .copyright {
+                margin-top: auto; /* 맨 아래로 고정 */
+                text-align: center;
+                padding: 10px;
+                background-color: #f1f1f1;
+            }
+        
+            .flex-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+        
+            .flex-row label {
+                min-width: 70px;
+                font-weight: bold;
+                margin-right: 5px; /* 레이블과 입력란 간의 간격 */
+            }
+        
+            .input-group {
+                display: flex;
+                align-items: center;
+                margin-right: 10px;
+            }
+        
+            .input-group img {
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+            }
+        
+            .input-group input {
+                width: 50px;
+                padding: 5px;
+            }
+        </style>
+
+
+    <script>
+        // 환수 데이터 불러오기
+        let familiars = [];
+        let currentFamiliar = null;
+        let currentLevel = 0;
+
+        // JSON 파일을 불러오는 함수
+        fetch('familiar_data.json')
+            .then(response => response.json())
+            .then(data => {
+                familiars = data;
+                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
+            })
+            .catch(error => {
+                console.error("Error loading JSON data:", error);
+            });
+
+        // 결속 효과 계산 공식 (옵션별로 다른 방식 적용)
+        function calculateBoundEffect(option, value, level) {
+            let percentage = 0;
+
+            if (["대인방어", "대인피해", "위력", "체력증가", "마력증가"].includes(option)) {
+                // 대인방어, 대인피해, 위력
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.20;
+            } else if (option === "이동속도") {
+                // 이동속도
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.05 : 0.10;
+            } else if (["체력증가%", "마력증가%"].includes(option)) {
+                // 체력증가%, 마력증가%
+                percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
+            } else if (["체력회복향상", "마력회복향상", "경험치 획득증가", "전리품 획득증가"].includes(option)) {
+                // 체력회복향상, 마력회복향상, 경험치 획득증가, 전리품 획득증가
+                if (level < 9) {
+                    percentage = 0.02; // 0~8 레벨은 2%
+                } else if (level < 14) {
+                    percentage = 0.045; // 9~13 레벨은 4.5%
+                } else {
+                    // 14~25 레벨은 값 / 14.2 후 내림 처리
+                    return Math.floor(value / 14.2);
+                }
+            } 
+            else {
+                // 기본 비율 적용
+                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
+            }
+            return Math.floor(value * percentage); // 내림 처리
+        }
+
+
+
+        // 환수 이미지를 화면에 표시
+        function displayFamiliarImages(type) {
+            const familiarImagesContainer = document.getElementById('familiar-images');
+            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
+
+            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
+
+            filteredFamiliars.forEach(familiar => {
+                const imgElement = document.createElement('img');
+                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
+                imgElement.alt = familiar.name;
+                imgElement.classList.add('familiar-image');
+                imgElement.addEventListener('click', () => selectFamiliar(familiar));
+                familiarImagesContainer.appendChild(imgElement);
+            });
+
+            // 스타일 초기화 및 이미지 간격 재설정
+            familiarImagesContainer.style.display = 'flex';
+            familiarImagesContainer.style.flexWrap = 'wrap';
+            familiarImagesContainer.style.gap = '10px';  // 이미지 간격 설정
+        }
+
+        // 환수 선택 시 해당 데이터 표시
+        function selectFamiliar(familiar) {
+            currentFamiliar = familiar;
+            currentLevel = 0;
+
+            // 환수 정보 업데이트 (기존 코드 그대로 유지)
+            const influenceImageSrc = `asset/ic_${familiar.influence}.jpg`;
+            const gradeStyle = familiar.grade === "불멸" 
+                ? 'color: white; background: #fb8802; padding: 2px 5px; border-radius: 3px;' 
+                : familiar.grade === "전설" 
+                ? 'color: white; background: #b62b20; padding: 2px 5px; border-radius: 3px;' 
+                : 'color: black;';
+
+            const familiarNameElement = document.getElementById('familiar-name');
+            familiarNameElement.innerHTML = `
+                <div style="display: flex; align-items: center;">
+                    <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
+                    <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
+                    <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
+                    <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
+                    <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
+                    <button id="close-btn" style="margin-left: auto; background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer;">닫기</button>
+                </div>
+            `;
+
+            // 환수 정보 영역 표시
+            document.getElementById('selected-familiar').style.display = 'block';
+
+            // 환수 이미지 영역 숨기기
+            document.getElementById('familiar-images').style.display = 'none';
+
+            // 능력치 및 결속 효과 업데이트
+            updateLevelDisplay();
+            updateStats();
+
+            // 닫기 버튼에 이벤트 리스너 추가
+            document.getElementById('close-btn').addEventListener('click', () => {
+                // 환수 정보 숨기기
+                document.getElementById('selected-familiar').style.display = 'none';
+
+                // 환수 이미지 영역 다시 표시하고 이미지 간격 유지
+                document.getElementById('familiar-images').style.display = 'block';
+                displayFamiliarImages(currentFamiliar.type);  // 다시 이미지를 일정 간격으로 표시
+            });
+        }
+
+
+
+        // 레벨 표시 업데이트
+        function updateLevelDisplay() {
+            document.getElementById('level-display').textContent = currentLevel;
+            document.getElementById('level-input').value = currentLevel;
+        }
+
+        // 능력치 업데이트
+        function updateStats() {
+            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
+            const boundTableBody = document.getElementById('bound-table').querySelector('tbody');
+            statsTableBody.innerHTML = '';  // 등록 효과 초기화
+            boundTableBody.innerHTML = '';  // 결속 효과 초기화
+
+            Object.keys(currentFamiliar.option).forEach(option => {
+                let baseValue = currentFamiliar.option[option][currentLevel]; // 등록 효과 값
+                let boundValue = calculateBoundEffect(option, baseValue, currentLevel); // 결속 효과 값
+
+                // 등록효과 테이블에는 모든 옵션을 추가
+                let row = document.createElement('tr');
+                let optionCell = document.createElement('td');
+                let valueCell = document.createElement('td');
+                optionCell.textContent = option;
+                valueCell.textContent = baseValue;
+                row.appendChild(optionCell);
+                row.appendChild(valueCell);
+                statsTableBody.appendChild(row);
+
+                // 결속효과가 0이 아닌 경우에만 결속효과 테이블에 추가
+                if (boundValue > 0) {
+                    let boundRow = document.createElement('tr');
+                    let boundOptionCell = document.createElement('td');
+                    let boundValueCell = document.createElement('td');
+                    boundOptionCell.textContent = option;
+                    boundValueCell.textContent = boundValue;
+                    boundRow.appendChild(boundOptionCell);
+                    boundRow.appendChild(boundValueCell);
+                    boundTableBody.appendChild(boundRow);
+                }
+            });
+        }
+
+        // 레벨 업 / 다운 버튼
+        document.getElementById('decrease-btn').addEventListener('click', () => {
+            if (currentLevel > 0) {
+                currentLevel--;
+                updateLevelDisplay();
+                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
+            }
+        });
+
+        document.getElementById('increase-btn').addEventListener('click', () => {
+            if (currentLevel < 25) {
+                currentLevel++;
+                updateLevelDisplay();
+                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
+            }
+        });
+
+        // 레벨 입력 필드 이벤트
+        document.getElementById('level-input').addEventListener('input', (e) => {
+            let inputLevel = parseInt(e.target.value);
+            if (inputLevel >= 0 && inputLevel <= 25) {
+                currentLevel = inputLevel;
+                updateLevelDisplay();
+                updateStats();
+                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
+            }
+        });
+
+
+        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
+        document.getElementById('btn-suhou').addEventListener('click', () => {
+            displayFamiliarImages("수호");
+        });
+
+        document.getElementById('btn-tapsung').addEventListener('click', () => {
+            displayFamiliarImages("탑승");
+        });
+
+        document.getElementById('btn-byeonshin').addEventListener('click', () => {
+            displayFamiliarImages("변신");
+        });
+    </script>
+
+    <script>
+        // 버튼 클릭 시 색상을 변경하는 함수
+        function setActiveButton(buttonId) {
+            // 모든 버튼에서 active-button 클래스를 제거
+            const buttons = document.querySelectorAll('.button-group button');
+            buttons.forEach(button => {
+                button.classList.remove('active-button');
+            });
+
+            // 클릭한 버튼에 active-button 클래스를 추가
+            const button = document.getElementById(buttonId);
+            button.classList.add('active-button');
+        }
+
+        // 버튼 클릭 이벤트 리스너 추가
+        document.getElementById('btn-suhou').addEventListener('click', () => {
+            setActiveButton('btn-suhou');
+            displayFamiliarImages("수호");
+        });
+
+        document.getElementById('btn-tapsung').addEventListener('click', () => {
+            setActiveButton('btn-tapsung');
+            displayFamiliarImages("탑승");
+        });
+
+        document.getElementById('btn-byeonshin').addEventListener('click', () => {
+            setActiveButton('btn-byeonshin');
+            displayFamiliarImages("변신");
+        });
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
+    crossorigin="anonymous"></script>
+
 </body>
 </html>
