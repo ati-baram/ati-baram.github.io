@@ -380,7 +380,9 @@
         const huntingHoursPerDay = 24;
         const soulsPerDay = 300;
 
+        // 필요한 시간
         const neededHuntingTime = Math.ceil((neededLowSoul / soulsPerDay) * huntingHoursPerDay);
+        
 
         // 시간 -> X일 Y시간으로 변환
         const days = Math.floor(neededHuntingTime / 24);
@@ -388,7 +390,7 @@
 
         // 몇개월인지 계산 (한 달은 약 30일 기준)
         const months = Math.floor(days / 30);
-        const remainingDays = neededHuntingTime / 24 * 30.44;
+        const remainingDays = neededHuntingTime / (24 * 30.44);
 
         // 결과 표시
         document.getElementById('total-exp').textContent = totalExp.toLocaleString();
