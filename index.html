@@ -228,17 +228,14 @@
                 <div class="flex-row">
                     <div class="input-group">
                         <img src="asset/low-soul.jpg" alt="하급 환수혼" style="width: 24px; height: 24px;">
-                        <label for="current-low-soul"></label>
                         <input type="number" id="current-low-soul" min="0" value="0">
                     </div>
                     <div class="input-group">
                         <img src="asset/mid-soul.jpg" alt="상급 환수혼" style="width: 24px; height: 24px;">
-                        <label for="current-mid-soul"></label>
                         <input type="number" id="current-mid-soul" min="0" value="0">
                     </div>
                     <div class="input-group">
                         <img src="asset/high-soul.jpg" alt="최상급 환수혼" style="width: 24px; height: 24px;">
-                        <label for="current-high-soul"></label>
                         <input type="number" id="current-high-soul" min="0" value="0">
                     </div>
                 </div>
@@ -391,7 +388,7 @@
 
         // 몇개월인지 계산 (한 달은 약 30일 기준)
         const months = Math.floor(days / 30);
-        const remainingDays = neededHuntingTime / (24 * 30.44);
+        const remainingDays = (neededHuntingTime / (24 * 30.44)).toFixed(2);
 
         // 결과 표시
         document.getElementById('total-exp').textContent = totalExp.toLocaleString();
