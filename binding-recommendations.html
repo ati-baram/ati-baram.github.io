@@ -98,29 +98,30 @@
             수호 : [전설] 풍현 정령록, 복수의 풀깨비
             환수능력치 제보 : <a href="https://open.kakao.com/o/saBUZoeh">오픈톡</a> <a href="양식.txt">제보양식</a>
         </div>
-
+    
         <div class="container">
             <div>
                 <button id="guardian-button">수호 환수</button>
                 <button id="transform-button">변신 환수</button>
             </div>
             <div id="familiar-list"></div>
-                <div>
-                    <button id="calculate-button">계산하기</button>
-                    <span id="selected-count">선택된 환수: 0/40</span>
-                </div>
-                
-                <!-- 로딩 메시지 -->
-                <div id="loading">계산 중...</div>      
+            <div>
+                <button id="calculate-button">계산하기</button>
+                <span id="selected-count">선택된 환수: 0/40</span>
+            </div>
+            
+            <!-- 로딩 메시지 -->
+            <div id="loading" style="display: none;">계산 중...</div>
         </div>
-
+    
         <div class="container flex-container">
             <!-- 결과를 미리 정의해둔 영역 -->
             <div id="result2">
-                <h3>최적의 6개 조합</h3>
                 <!-- 결과 내용은 JavaScript에서 동적으로 추가됩니다 -->
             </div>
         </div>
+    </div>
+    
         
         <!-- Copyright -->
         <div class="copyright">
@@ -503,8 +504,6 @@
                 detailsDiv.style.display = 'none';
             }
         }
-
-
     </script>
 
 
