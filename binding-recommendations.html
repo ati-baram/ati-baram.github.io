@@ -125,16 +125,20 @@
         </div>
 
         <div class="container">
-            
-            <button id="guardian-button">수호 환수</button>
-            <button id="transform-button">변신 환수</button>
-            <div id="familiar-list"></div>
-            <div id="selected-count">선택된 환수: 0/40</div>
-            <button id="confirm-button">확인</button>
+            <div id="app">
+                <div id="button-group">
+                    <button id="guardian-button">수호 환수</button>
+                    <button id="transform-button">변신 환수</button>
+                </div>
+                <div id="familiar-list"></div>
+                <div id="selected-count">선택된 환수: 0/40</div>
+                <button id="calculate-button">계산</button>
+                <div id="result"></div>
+            </div>    
         </div>
 
         <div class="container flex-container">
-            <div id="result"></div>
+            
         </div>
         
         <!-- Copyright -->
@@ -202,6 +206,29 @@
                 width: 50px;
                 padding: 5px;
             }
+
+            #familiar-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            }
+            .familiar-image {
+                width: 100px;
+                height: 100px;
+                border: 2px solid transparent;
+                cursor: pointer;
+                transition: transform 0.2s, border-color 0.2s;
+            }
+            .familiar-image:hover {
+                transform: scale(1.1);
+            }
+            .familiar-image.selected {
+                border-color: #ffcc00;
+            }
+            #result {
+                margin-top: 20px;
+            }
         </style>
 
 
@@ -214,20 +241,21 @@
             .then(response => response.json())
             .then(data => {
                 familiars = data;
-                displayFamiliars("수호");  // 기본은 수호 환수 표시
+                displayFamiliars("수호");  // 기본값은 수호 환수
             })
             .catch(error => console.error("데이터 로드 실패:", error));
 
         // 환수 목록 표시
         function displayFamiliars(type) {
             const familiarList = document.getElementById('familiar-list');
-            familiarList.innerHTML = '';  // 기존 내용 초기화
+            familiarList.innerHTML = '';  // 기존 목록 초기화
 
             familiars.filter(f => f.type === type).forEach(familiar => {
                 let img = document.createElement('img');
-                img.src = `images/ic_${familiar.ic}.jpg`;  // 환수 이미지 경로 설정
+                img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로 설정
                 img.alt = familiar.name;
                 img.classList.add('familiar-image');
+                img.title = `${familiar.name} (${familiar.grade})`;
                 img.addEventListener('click', () => selectFamiliar(familiar, img));
                 familiarList.appendChild(img);
             });
@@ -253,106 +281,84 @@
         document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
         document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
 
-        // 확인 버튼 클릭 시 최적 조합 계산
-        document.getElementById('confirm-button').addEventListener('click', () => {
+        // 계산 버튼 클릭 시 최적의 조합 계산
+        document.getElementById('calculate-button').addEventListener('click', () => {
             if (selectedFamiliars.length < 6) {
                 alert("최소 6개의 환수를 선택해야 합니다!");
                 return;
             }
-            let bestCombination = findBestCombination(selectedFamiliars);
+            let bestCombination = findBestCombination(selectedFamiliars, "수호");  // 수호 타입으로 계산 (변경 가능)
             displayResult(bestCombination);
         });
- 
-    function findBestCombination(familiars) {
-        let bestCombination = [];
-        let maxScore = 0;
 
-        // 모든 6개 조합 탐색
-        const combinations = getCombinations(familiars, 6);
-        combinations.forEach(combination => {
-            let score = calculateTotalScoreWithGradeAndInfluenceBonus(combination);
-            if (score > maxScore) {
-                maxScore = score;
-                bestCombination = combination;
-            }
-        });
+        // 최적 조합 탐색 및 결과 표시
+        function findBestCombination(familiars, type) {
+            let bestCombination = [];
+            let maxScore = 0;
 
-        console.log("최고 점수:", maxScore);
-        return bestCombination;
-    }
+            const combinations = getCombinations(familiars, 6);
+            combinations.forEach(combination => {
+                let score = calculateTotalScore(combination);  // 점수 계산 함수
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestCombination = combination;
+                }
+            });
 
-    // 모든 조합 생성 함수
-    function getCombinations(arr, selectNumber) {
-        const results = [];
-        if (selectNumber === 1) return arr.map(v => [v]);
-        
-        arr.forEach((fixed, index, origin) => {
-            const rest = origin.slice(index + 1);
-            const combinations = getCombinations(rest, selectNumber - 1);
-            const attached = combinations.map(combination => [fixed, ...combination]);
-            results.push(...attached);
-        });
+            console.log("최고 점수:", maxScore);
+            return bestCombination;
+        }
 
-        return results;
-    }
+        // 조합 생성 함수
+        function getCombinations(arr, selectNumber) {
+            const results = [];
+            if (selectNumber === 1) return arr.map(v => [v]);
 
-    // 결과 표시
-    function displayResult(bestCombination) {
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
-    
-    bestCombination.forEach(familiar => {
-        let div = document.createElement('div');
-        div.innerHTML = `
-            <img src="asset/images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="100" height="100">
-            <p>${familiar.name} (${familiar.grade})</p>
-        `;
-        resultDiv.appendChild(div);
-    });
-}
+            arr.forEach((fixed, index, origin) => {
+                const rest = origin.slice(index + 1);
+                const combinations = getCombinations(rest, selectNumber - 1);
+                const attached = combinations.map(combination => [fixed, ...combination]);
+                results.push(...attached);
+            });
 
+            return results;
+        }
 
-    function displayFamiliars(type) {
-        const familiarList = document.getElementById('familiar-list');
-        familiarList.innerHTML = '';  // 기존 목록 초기화
+        // 결과 표시
+        function displayResult(bestCombination) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+            
+            bestCombination.forEach(familiar => {
+                let div = document.createElement('div');
+                div.innerHTML = `
+                    <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="100" height="100">
+                    <p>${familiar.name} (${familiar.grade})</p>
+                `;
+                resultDiv.appendChild(div);
+            });
 
-        familiars.filter(f => f.type === type).forEach(familiar => {
-            let img = document.createElement('img');
-            img.src = `asset/images/ic_${familiar.ic}.jpg`;  // 이미지 경로 설정
-            img.alt = familiar.name;
-            img.classList.add('familiar-image');
-            img.title = `${familiar.name} (${familiar.grade})`;  // 이미지에 이름과 등급 표시
-            img.addEventListener('click', () => selectFamiliar(familiar, img));
-            familiarList.appendChild(img);
-        });
-    }
+            resultDiv.innerHTML += `
+                <p><strong>최종 점수:</strong> ${calculateTotalScore(bestCombination)}</p>
+                <button id="detail-button">자세히 보기</button>
+            `;
+
+            document.getElementById('detail-button').addEventListener('click', () => displayDetailedResult(bestCombination));
+        }
+
+        // 상세 결과 표시
+        function displayDetailedResult(bestCombination) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML += `
+                <h4>상세 결과</h4>
+                <p><strong>등급 세트 효과:</strong> 피해저항관통 +100, 피해저항 +100</p>
+                <p><strong>세력 세트 효과:</strong> 피해저항관통 +30, 피해저항 +100</p>
+                <p><strong>장착 효과:</strong> 피해저항관통 +547, 피해저항 +710 (예시)</p>
+            `;
+        }
+
 
     </script>
-
-    <style>
-        #familiar-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .familiar-image {
-        width: 100px;
-        height: 100px;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .familiar-image:hover {
-        transform: scale(1.1);
-    }
-
-    .familiar-image.selected {
-        border-color: #ffcc00;
-    }
-
-    </style>
        
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
