@@ -212,6 +212,22 @@
             #result {
                 margin-top: 20px;
             }
+
+            /* 결과값 이미지 */
+            #result2 {
+                display: flex;
+                flex-direction: row;
+                align-items: center; /* 이미지와 능력치를 수평 정렬 */
+            }
+
+            #result2 img {
+                margin-right: 10px; /* 이미지 간 간격 */
+            }
+
+            #result2 .stats {
+                margin-left: 20px; /* 능력치와 이미지 간 간격 */
+            }
+
         </style>
 
 
@@ -350,27 +366,40 @@
 
     // 결과 표시
     function displayResult(bestCombination, maxScore) {
-    const resultDiv = document.getElementById('result2');
-
-    // 결과를 출력하기 전에 기존 내용 초기화
+    const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
 
+    // 환수 이미지를 가로로 나열하고, 능력치를 그 옆에 출력
+    let imagesDiv = document.createElement('div');
+    imagesDiv.style.display = 'flex';  // 이미지를 가로로 나열
+
     bestCombination.forEach(familiar => {
-        let div = document.createElement('div');
-        div.innerHTML = `
-            <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="55" height="55">
-            <p>${familiar.name} (${familiar.grade})</p>
-        `;
-        resultDiv.appendChild(div);
+        let img = document.createElement('img');
+        img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로
+        img.alt = familiar.name;
+        img.width = 55;
+        img.height = 55;
+        img.style.marginRight = '10px';  // 이미지 간 간격 추가
+        imagesDiv.appendChild(img);
     });
 
-    resultDiv.innerHTML += `
+    // 능력치 출력
+    let statsDiv = document.createElement('div');
+    statsDiv.style.display = 'inline-block';  // 능력치는 이미지 옆에 나란히 표시
+    statsDiv.style.marginLeft = '20px';  // 능력치와 이미지 사이 간격 조정
+
+    statsDiv.innerHTML = `
         <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
         <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
         <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
         <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
     `;
+
+    // 이미지와 능력치를 한꺼번에 출력
+    resultDiv.appendChild(imagesDiv);
+    resultDiv.appendChild(statsDiv);
 }
+
 
 </script>
 
