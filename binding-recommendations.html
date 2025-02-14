@@ -227,7 +227,6 @@
             }
             .familiar-image.selected {
                 border-color: #ffcc00;
-                border: 10px;
             }
             #result {
                 margin-top: 20px;
@@ -236,14 +235,15 @@
 
 
     <script>
-       let familiars = [];  // 전체 환수 데이터
+        let familiars = [];  // 전체 환수 데이터
         let selectedFamiliars = [];  // 사용자가 선택한 환수 (최대 40개)
+        let filteredFamiliars = [];  // 25레벨 기준 데이터 (미리 계산된 값들)
 
         // JSON 데이터 로드
-        fetch('familiar_data.json')
+        fetch('filtered_familiar_data.json')
             .then(response => response.json())
             .then(data => {
-                familiars = data;
+                filteredFamiliars = data;
                 displayFamiliars("수호");  // 기본값은 수호 환수
             })
             .catch(error => console.error("데이터 로드 실패:", error));
@@ -253,7 +253,7 @@
             const familiarList = document.getElementById('familiar-list');
             familiarList.innerHTML = '';
 
-            familiars.filter(f => f.type === type).forEach(familiar => {
+            filteredFamiliars.filter(f => f.type === type).forEach(familiar => {
                 let img = document.createElement('img');
                 img.src = `images/ic_${familiar.ic}.jpg`;
                 img.alt = familiar.name;
@@ -290,11 +290,11 @@
                 alert("최소 6개의 환수를 선택해야 합니다!");
                 return;
             }
-            calculateBestCombination(selectedFamiliars, "수호");
+            calculateBestCombination(selectedFamiliars);
         });
 
         // 최적의 조합 탐색 및 결과 표시
-        function calculateBestCombination(familiars, type) {
+        function calculateBestCombination(familiars) {
             const combinations = getCombinations(familiars, 6);
             const totalCombinations = combinations.length;
             let bestCombination = [];
@@ -322,81 +322,24 @@
             }, 100);
         }
 
-        // 세력 세트 효과 계산 함수
-        function calculateInfluenceSetBonus(type, influences) {
-            let setBonus = {
-                피해저항관통: 0,
-                피해저항: 0
-            };
-
-            const influenceConfig = {
-                변신: {
-                    피해저항관통: ["결의", "고요", "냉정"],
-                    피해저항: ["의지", "침착", "활력"]
-                },
-                수호: {
-                    피해저항관통: ["침착", "냉정", "활력"],
-                    피해저항: ["결의", "고요", "의지"]
-                }
-            };
-
-            let config = influenceConfig[type];
-
-            config.피해저항관통.forEach(inf => {
-                let count = influences[inf];
-                if (count >= 2) setBonus.피해저항관통 += 30;
-                if (count >= 3) setBonus.피해저항관통 += 20;
-                if (count >= 4) setBonus.피해저항관통 += 30;
-                if (count >= 5) setBonus.피해저항관통 += 10;
-                if (count >= 6) setBonus.피해저항관통 += 40;
-            });
-
-            config.피해저항.forEach(inf => {
-                let count = influences[inf];
-                if (count >= 2) setBonus.피해저항 += 50;
-                if (count >= 3) setBonus.피해저항 += 30;
-                if (count >= 4) setBonus.피해저항 += 50;
-                if (count >= 5) setBonus.피해저항 += 20;
-                if (count >= 6) setBonus.피해저항 += 50;
-            });
-
-            return setBonus;
-        }
-
-        // 등급 세트 효과 계산 함수
-        function calculateGradeSetBonus(type, legendCount, immortalCount) {
-            let setBonus = {
+        // 결속 효과 점수 계산
+        function calculateTotalScore(combination) {
+            let totalScore = {
                 피해저항관통: 0,
                 피해저항: 0,
                 대인피해: 0,
                 대인방어: 0
             };
 
-            if (type === "수호") {
-                if (legendCount >= 4) setBonus.피해저항관통 += 100;
-                if (legendCount >= 5) setBonus.상태이상저항 = 150;
-                if (legendCount >= 6) setBonus.피해저항 += 100;
+            combination.forEach(familiar => {
+                totalScore.피해저항관통 += familiar.option["피해저항관통"] ? familiar.option["피해저항관통"][0] : 0;
+                totalScore.피해저항 += familiar.option["피해저항"] ? familiar.option["피해저항"][0] : 0;
+                totalScore.대인피해 += familiar.option["대인피해%"] ? familiar.option["대인피해%"][0] * 10 : 0;
+                totalScore.대인방어 += familiar.option["대인방어%"] ? familiar.option["대인방어%"][0] * 10 : 0;
+            });
 
-                if (immortalCount >= 2) setBonus.피해저항관통 += 200;
-                if (immortalCount >= 3) setBonus.피해저항 += 150;
-                if (immortalCount >= 5) setBonus.대인피해 += 20;
-                if (immortalCount >= 6) setBonus.대인방어 += 20;
-            }
-
-            if (type === "변신") {
-                if (legendCount >= 4) setBonus.피해저항관통 += 100;
-                if (legendCount >= 6) setBonus.피해저항 += 100;
-
-                if (immortalCount >= 2) setBonus.피해저항관통 += 150;
-                if (immortalCount >= 3) setBonus.피해저항 += 150;
-                if (immortalCount >= 5) setBonus.대인피해 += 20;
-                if (immortalCount >= 6) setBonus.대인방어 += 20;
-            }
-
-            return setBonus;
+            return totalScore;
         }
-
-
 
         // 조합 생성 함수
         function getCombinations(arr, selectNumber) {
@@ -413,50 +356,11 @@
             return results;
         }
 
-        // 결속 효과 점수 계산
-        function calculateTotalScore(combination) {
-            let totalScore = {
-                피해저항관통: 0,
-                피해저항: 0,
-                대인피해: 0,
-                대인방어: 0
-            };
-
-            combination.forEach(familiar => {
-                totalScore.피해저항관통 += get25LevelOptionValue(familiar, "피해저항관통");
-                totalScore.피해저항 += get25LevelOptionValue(familiar, "피해저항");
-                totalScore.대인피해 += get25LevelOptionValue(familiar, "대인피해%") * 10;
-                totalScore.대인방어 += get25LevelOptionValue(familiar, "대인방어%") * 10;
-            });
-
-            let { legendCount, immortalCount } = countGrades(combination);
-            let influences = countInfluences(combination);
-            let gradeBonus = calculateGradeSetBonus("수호", legendCount, immortalCount);
-            let influenceBonus = calculateInfluenceSetBonus("수호", influences);
-
-            totalScore.피해저항관통 += gradeBonus.피해저항관통 + influenceBonus.피해저항관통;
-            totalScore.피해저항 += gradeBonus.피해저항 + influenceBonus.피해저항;
-            totalScore.대인피해 += gradeBonus.대인피해;
-            totalScore.대인방어 += gradeBonus.대인방어;
-
-            return totalScore;
-        }
-
-
-        // 25레벨 기준 값 가져오기
-        function get25LevelOptionValue(familiar, option) {
-            if (familiar.option[option] && familiar.option[option][24] !== undefined) {
-                return familiar.option[option][24];
-            }
-            return 0;
-        }
-
         // 결과 표시
-        function displayResult(bestCombination) {
+        function displayResult(bestCombination, maxScore) {
             const resultDiv = document.getElementById('result');
-            const totalScore = calculateTotalScore(bestCombination);
-
             resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+
             bestCombination.forEach(familiar => {
                 let div = document.createElement('div');
                 div.innerHTML = `
@@ -467,16 +371,12 @@
             });
 
             resultDiv.innerHTML += `
-                <p><strong>피해저항관통:</strong> ${totalScore.피해저항관통}</p>
-                <p><strong>피해저항:</strong> ${totalScore.피해저항}</p>
-                <p><strong>대인피해%:</strong> ${totalScore.대인피해 / 10}</p>
-                <p><strong>대인방어%:</strong> ${totalScore.대인방어 / 10}</p>
+                <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
+                <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
+                <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
+                <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
             `;
         }
-
-
-
-
     </script>
        
     
