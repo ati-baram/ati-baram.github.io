@@ -505,34 +505,11 @@
                 <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
                 <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
                 <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
-                <button onclick="toggleDetails()">자세히 보기</button>
             `;
 
             resultDiv.appendChild(imagesDiv);
             resultDiv.appendChild(scoreDiv);
-
-            let detailsDiv = document.createElement('div');
-            detailsDiv.id = 'details';
-            detailsDiv.style.display = 'none';
-            detailsDiv.innerHTML = `
-                <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
-                <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
-                <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
-                <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
-            `;
-            resultDiv.appendChild(detailsDiv);
         }
-
-        // 세부 정보 토글 함수
-        function toggleDetails() {
-            const detailsDiv = document.getElementById('details');
-            if (detailsDiv.style.display === 'none') {
-                detailsDiv.style.display = 'block';
-            } else {
-                detailsDiv.style.display = 'none';
-            }
-        }
-
     </script>
 
 
