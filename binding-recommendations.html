@@ -78,7 +78,7 @@
         <!-- 로고 -->
         <div class="logo">
             <img src="asset/logo.png" alt="로고">
-            <h2>결속 추천 ●▅▇█▇▆▅▄▇</h2>
+            <h2>결속 추천b ●▅▇█▇▆▅▄▇</h2>
         </div>
 
         <!-- 탭 메뉴 -->
@@ -427,21 +427,25 @@
                 결의: 0,
                 고요: 0,
                 냉정: 0,
-                의지: 0,
-                침착: 0,
-                활력: 0
+                의지: 0,     // 의지 추가
+                침착: 0,     // 침착 추가
+                활력: 0      // 활력 추가
             };
 
             familiars.forEach(familiar => {
-                familiar.influence.forEach(influence => {
-                    if (influences[influence]) {
-                        influences[influence]++;
-                    }
-                });
+                // familiar.influence가 배열인지 확인한 후 .forEach() 사용
+                if (Array.isArray(familiar.influence)) {
+                    familiar.influence.forEach(influence => {
+                        if (influences[influence]) {
+                            influences[influence]++;
+                        }
+                    });
+                }
             });
 
             return influences;
         }
+
 
         // 등급 계산
         function countGrades(familiars) {
