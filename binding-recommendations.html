@@ -363,7 +363,6 @@
         }
 
         // 등급 세트 효과 계산
-        // 등급 세트 효과 계산 (수호, 변신 기준)
         function calculateGradeSetBonus(type, legendCount, immortalCount) {
             let gradeBonus = {
                 피해저항관통: 0,
@@ -373,7 +372,6 @@
             };
 
             if (type === "수호") {
-                // 수호 세트 효과
                 gradeBonus.피해저항관통 += (legendCount >= 4) ? 100 : 0;  // 전설 4개 기준
                 gradeBonus.피해저항 += (immortalCount >= 6) ? 150 : 0;   // 불멸 6개 기준
                 gradeBonus.피해저항관통 += (immortalCount >= 2) ? 200 : 0; // 불멸 2개 기준
@@ -382,7 +380,6 @@
             }
 
             if (type === "변신") {
-                // 변신 세트 효과
                 gradeBonus.피해저항관통 += (legendCount >= 4) ? 100 : 0;  // 전설 4개 기준
                 gradeBonus.피해저항 += (legendCount >= 6) ? 100 : 0;     // 전설 6개 기준
                 gradeBonus.피해저항관통 += (immortalCount >= 2) ? 150 : 0; // 불멸 2개 기준
@@ -394,9 +391,7 @@
             return gradeBonus;
         }
 
-
         // 세력 세트 효과 계산
-        // 세력 세트 효과 계산 (수호, 변신 기준)
         function calculateInfluenceSetBonus(type, influences) {
             let influenceBonus = {
                 피해저항관통: 0,
@@ -406,17 +401,15 @@
             };
 
             if (type === "수호") {
-                // 수호 세트 효과
-                influenceBonus.피해저항 += influences["결의"] * 50;   // 결의 2개 이상
-                influenceBonus.피해저항 += influences["고요"] * 50;   // 고요 2개 이상
-                influenceBonus.피해저항 += influences["의지"] * 50;   // 의지 2개 이상
-                influenceBonus.피해저항관통 += influences["침착"] * 30; // 침착 2개 이상
-                influenceBonus.피해저항관통 += influences["냉정"] * 30; // 냉정 2개 이상
-                influenceBonus.피해저항관통 += influences["활력"] * 30; // 활력 2개 이상
+                influenceBonus.피해저항 += influences["결의"] * 50;
+                influenceBonus.피해저항 += influences["고요"] * 50;
+                influenceBonus.피해저항 += influences["의지"] * 50;
+                influenceBonus.피해저항관통 += influences["침착"] * 30;
+                influenceBonus.피해저항관통 += influences["냉정"] * 30;
+                influenceBonus.피해저항관통 += influences["활력"] * 30;
             }
 
             if (type === "변신") {
-                // 변신 세트 효과
                 influenceBonus.피해저항 += influences["활력"] * 50;
                 influenceBonus.피해저항 += influences["침착"] * 50;
                 influenceBonus.피해저항 += influences["의지"] * 50;
@@ -428,16 +421,15 @@
             return influenceBonus;
         }
 
-
         // 세력 세트 효과 계산
         function countInfluences(familiars) {
             let influences = {
                 결의: 0,
                 고요: 0,
                 냉정: 0,
-                의지: 0,     // 의지 추가
-                침착: 0,     // 침착 추가
-                활력: 0      // 활력 추가
+                의지: 0,
+                침착: 0,
+                활력: 0
             };
 
             familiars.forEach(familiar => {
@@ -484,26 +476,23 @@
             const resultDiv = document.getElementById('result2');
             resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
 
-            // 이미지 출력
             let imagesDiv = document.createElement('div');
-            imagesDiv.style.display = 'flex';  // 이미지를 가로로 나열
+            imagesDiv.style.display = 'flex';
 
             bestCombination.forEach(familiar => {
                 let img = document.createElement('img');
-                img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로
+                img.src = `images/ic_${familiar.ic}.jpg`;
                 img.alt = familiar.name;
                 img.width = 55;
                 img.height = 55;
-                img.style.marginRight = '10px';  // 이미지 간 간격 추가
+                img.style.marginRight = '10px';
                 imagesDiv.appendChild(img);
             });
 
-            // 간단한 점수 결과 표시
             let scoreDiv = document.createElement('div');
-            scoreDiv.style.display = 'inline-block';  // 이미지와 점수 결과를 나란히 표시
-            scoreDiv.style.marginLeft = '20px';  // 이미지와 점수 사이 간격 조정
+            scoreDiv.style.display = 'inline-block';
+            scoreDiv.style.marginLeft = '20px';
 
-            // 총 점수 계산
             let totalScore = maxScore.피해저항관통 + maxScore.피해저항 + (maxScore.대인피해 * 10) + (maxScore.대인방어 * 10);
 
             scoreDiv.innerHTML = `
@@ -518,7 +507,6 @@
             resultDiv.appendChild(imagesDiv);
             resultDiv.appendChild(scoreDiv);
 
-            // 세부 정보 초기 상태는 숨기기
             let detailsDiv = document.createElement('div');
             detailsDiv.id = 'details';
             detailsDiv.style.display = 'none';
@@ -540,6 +528,7 @@
                 detailsDiv.style.display = 'none';
             }
         }
+
     </script>
 
 
