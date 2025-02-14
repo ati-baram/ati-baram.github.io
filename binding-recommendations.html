@@ -125,7 +125,12 @@
         </div>
 
         <div class="container">
-            
+            <div id="familiar-list"></div>
+            <button id="guardian-button">수호 환수</button>
+            <button id="transform-button">변신 환수</button>
+            <div id="selected-count">선택된 환수: 0/40</div>
+            <button id="confirm-button">확인</button>
+            <div id="result"></div>
         </div>
 
         <div class="container flex-container">
@@ -201,241 +206,154 @@
 
 
     <script>
-        // 환수 데이터 불러오기
-        let familiars = [];
-        let currentFamiliar = null;
-        let currentLevel = 0;
+       let familiars = [];  // 전체 환수 데이터
+        let selectedFamiliars = [];  // 사용자가 선택한 환수 (최대 40개)
 
-        // JSON 파일을 불러오는 함수
+        // JSON 데이터 로드
         fetch('familiar_data.json')
             .then(response => response.json())
             .then(data => {
                 familiars = data;
-                displayFamiliarImages("수호"); // 초기값은 '수호' 타입
+                displayFamiliars("수호");  // 기본은 수호 환수 표시
             })
-            .catch(error => {
-                console.error("Error loading JSON data:", error);
+            .catch(error => console.error("데이터 로드 실패:", error));
+
+        // 환수 목록 표시
+        function displayFamiliars(type) {
+            const familiarList = document.getElementById('familiar-list');
+            familiarList.innerHTML = '';  // 기존 내용 초기화
+
+            familiars.filter(f => f.type === type).forEach(familiar => {
+                let img = document.createElement('img');
+                img.src = `path/to/familiar_images/${familiar.ic}.png`;  // 환수 이미지 경로 설정
+                img.alt = familiar.name;
+                img.classList.add('familiar-image');
+                img.addEventListener('click', () => selectFamiliar(familiar, img));
+                familiarList.appendChild(img);
             });
+        }
 
-        // 결속 효과 계산 공식 (옵션별로 다른 방식 적용)
-        function calculateBoundEffect(option, value, level) {
-            let percentage = 0;
-
-            if (["대인방어", "대인피해", "위력", "체력증가", "마력증가"].includes(option)) {
-                // 대인방어, 대인피해, 위력
-                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.20;
-            } else if (option === "이동속도") {
-                // 이동속도
-                percentage = level < 9 ? 0.05 : level < 14 ? 0.05 : 0.10;
-            } else if (["체력증가%", "마력증가%"].includes(option)) {
-                // 체력증가%, 마력증가%
-                percentage = level < 14 ? 0 : 0.052; // 0~13까지는 0%, 14~25는 5.2%
-            } else if (["체력회복향상", "마력회복향상", "경험치 획득증가", "전리품 획득증가"].includes(option)) {
-                // 체력회복향상, 마력회복향상, 경험치 획득증가, 전리품 획득증가
-                if (level < 9) {
-                    percentage = 0.02; // 0~8 레벨은 2%
-                } else if (level < 14) {
-                    percentage = 0.045; // 9~13 레벨은 4.5%
+        // 환수 선택 기능
+        function selectFamiliar(familiar, img) {
+            if (selectedFamiliars.includes(familiar)) {
+                selectedFamiliars = selectedFamiliars.filter(f => f !== familiar);
+                img.classList.remove('selected');
+            } else {
+                if (selectedFamiliars.length < 40) {
+                    selectedFamiliars.push(familiar);
+                    img.classList.add('selected');
                 } else {
-                    // 14~25 레벨은 값 / 14.2 후 내림 처리
-                    return Math.floor(value / 14.2);
+                    alert("최대 40개의 환수만 선택할 수 있습니다!");
                 }
-            } 
-            else {
-                // 기본 비율 적용
-                percentage = level < 9 ? 0.05 : level < 14 ? 0.15 : 0.25;
             }
-            return Math.floor(value * percentage); // 내림 처리
+            document.getElementById('selected-count').innerText = `선택된 환수: ${selectedFamiliars.length}/40`;
         }
 
+        // 수호/변신 버튼 클릭 이벤트
+        document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
+        document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
 
+        // 확인 버튼 클릭 시 최적 조합 계산
+        document.getElementById('confirm-button').addEventListener('click', () => {
+            if (selectedFamiliars.length < 6) {
+                alert("최소 6개의 환수를 선택해야 합니다!");
+                return;
+            }
+            let bestCombination = findBestCombination(selectedFamiliars);
+            displayResult(bestCombination);
+        });
+ 
+    function findBestCombination(familiars) {
+        let bestCombination = [];
+        let maxScore = 0;
 
-        // 환수 이미지를 화면에 표시
-        function displayFamiliarImages(type) {
-            const familiarImagesContainer = document.getElementById('familiar-images');
-            familiarImagesContainer.innerHTML = '';  // 기존 이미지 삭제
-
-            const filteredFamiliars = familiars.filter(familiar => familiar.type === type);  // 타입에 맞는 데이터만 필터링
-
-            filteredFamiliars.forEach(familiar => {
-                const imgElement = document.createElement('img');
-                imgElement.src = `images/ic_${familiar.ic}.jpg`;  // ic 값을 사용하여 이미지 경로 설정
-                imgElement.alt = familiar.name;
-                imgElement.classList.add('familiar-image');
-                imgElement.addEventListener('click', () => selectFamiliar(familiar));
-                familiarImagesContainer.appendChild(imgElement);
-            });
-
-            // 스타일 초기화 및 이미지 간격 재설정
-            familiarImagesContainer.style.display = 'flex';
-            familiarImagesContainer.style.flexWrap = 'wrap';
-            familiarImagesContainer.style.gap = '10px';  // 이미지 간격 설정
-        }
-
-        // 환수 선택 시 해당 데이터 표시
-        function selectFamiliar(familiar) {
-            currentFamiliar = familiar;
-            currentLevel = 0;
-
-            // 환수 정보 업데이트 (기존 코드 그대로 유지)
-            const influenceImageSrc = `asset/ic_${familiar.influence}.jpg`;
-            const gradeStyle = familiar.grade === "불멸" 
-                ? 'color: white; background: #fb8802; padding: 2px 5px; border-radius: 3px;' 
-                : familiar.grade === "전설" 
-                ? 'color: white; background: #b62b20; padding: 2px 5px; border-radius: 3px;' 
-                : 'color: black;';
-
-            const familiarNameElement = document.getElementById('familiar-name');
-            familiarNameElement.innerHTML = `
-                <div style="display: flex; align-items: center;">
-                    <img id="familiar-image" src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" style="width: 40px; height: 40px; margin-right: 10px; vertical-align: middle;">
-                    <span style="font-weight: bold; font-size: 25px;">${familiar.name}</span>
-                    <span style="margin-left: 10px; font-size: 14px; font-weight: bold; ${gradeStyle}">${familiar.grade}</span>
-                    <img src="${influenceImageSrc}" alt="${familiar.influence}" style="width: 30px; height: 30px; margin-left: 15px; vertical-align: middle;">
-                    <span style="margin-left: 5px; font-size: 14px; font-weight: bold;">${familiar.influence}</span>
-                    <button id="close-btn" style="margin-left: auto; background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer;">닫기</button>
-                </div>
-            `;
-
-            // 환수 정보 영역 표시
-            document.getElementById('selected-familiar').style.display = 'block';
-
-            // 환수 이미지 영역 숨기기
-            document.getElementById('familiar-images').style.display = 'none';
-
-            // 능력치 및 결속 효과 업데이트
-            updateLevelDisplay();
-            updateStats();
-
-            // 닫기 버튼에 이벤트 리스너 추가
-            document.getElementById('close-btn').addEventListener('click', () => {
-                // 환수 정보 숨기기
-                document.getElementById('selected-familiar').style.display = 'none';
-
-                // 환수 이미지 영역 다시 표시하고 이미지 간격 유지
-                document.getElementById('familiar-images').style.display = 'block';
-                displayFamiliarImages(currentFamiliar.type);  // 다시 이미지를 일정 간격으로 표시
-            });
-        }
-
-
-
-        // 레벨 표시 업데이트
-        function updateLevelDisplay() {
-            document.getElementById('level-display').textContent = currentLevel;
-            document.getElementById('level-input').value = currentLevel;
-        }
-
-        // 능력치 업데이트
-        function updateStats() {
-            const statsTableBody = document.getElementById('stats-table').querySelector('tbody');
-            const boundTableBody = document.getElementById('bound-table').querySelector('tbody');
-            statsTableBody.innerHTML = '';  // 등록 효과 초기화
-            boundTableBody.innerHTML = '';  // 결속 효과 초기화
-
-            Object.keys(currentFamiliar.option).forEach(option => {
-                let baseValue = currentFamiliar.option[option][currentLevel]; // 등록 효과 값
-                let boundValue = calculateBoundEffect(option, baseValue, currentLevel); // 결속 효과 값
-
-                // 등록효과 테이블에는 모든 옵션을 추가
-                let row = document.createElement('tr');
-                let optionCell = document.createElement('td');
-                let valueCell = document.createElement('td');
-                optionCell.textContent = option;
-                valueCell.textContent = baseValue;
-                row.appendChild(optionCell);
-                row.appendChild(valueCell);
-                statsTableBody.appendChild(row);
-
-                // 결속효과가 0이 아닌 경우에만 결속효과 테이블에 추가
-                if (boundValue > 0) {
-                    let boundRow = document.createElement('tr');
-                    let boundOptionCell = document.createElement('td');
-                    let boundValueCell = document.createElement('td');
-                    boundOptionCell.textContent = option;
-                    boundValueCell.textContent = boundValue;
-                    boundRow.appendChild(boundOptionCell);
-                    boundRow.appendChild(boundValueCell);
-                    boundTableBody.appendChild(boundRow);
-                }
-            });
-        }
-
-        // 레벨 업 / 다운 버튼
-        document.getElementById('decrease-btn').addEventListener('click', () => {
-            if (currentLevel > 0) {
-                currentLevel--;
-                updateLevelDisplay();
-                updateStats();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
+        // 모든 6개 조합 탐색
+        const combinations = getCombinations(familiars, 6);
+        combinations.forEach(combination => {
+            let score = calculateTotalScoreWithGradeAndInfluenceBonus(combination);
+            if (score > maxScore) {
+                maxScore = score;
+                bestCombination = combination;
             }
         });
 
-        document.getElementById('increase-btn').addEventListener('click', () => {
-            if (currentLevel < 25) {
-                currentLevel++;
-                updateLevelDisplay();
-                updateStats();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
-            }
+        console.log("최고 점수:", maxScore);
+        return bestCombination;
+    }
+
+    // 모든 조합 생성 함수
+    function getCombinations(arr, selectNumber) {
+        const results = [];
+        if (selectNumber === 1) return arr.map(v => [v]);
+        
+        arr.forEach((fixed, index, origin) => {
+            const rest = origin.slice(index + 1);
+            const combinations = getCombinations(rest, selectNumber - 1);
+            const attached = combinations.map(combination => [fixed, ...combination]);
+            results.push(...attached);
         });
 
-        // 레벨 입력 필드 이벤트
-        document.getElementById('level-input').addEventListener('input', (e) => {
-            let inputLevel = parseInt(e.target.value);
-            if (inputLevel >= 0 && inputLevel <= 25) {
-                currentLevel = inputLevel;
-                updateLevelDisplay();
-                updateStats();
-                updateStats();  // 레벨 변경 시 능력치 및 결속 효과 업데이트
-            }
-        });
+        return results;
+    }
+
+    // 결과 표시
+    function displayResult(bestCombination) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+    
+    bestCombination.forEach(familiar => {
+        let div = document.createElement('div');
+        div.innerHTML = `
+            <img src="asset/images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="100" height="100">
+            <p>${familiar.name} (${familiar.grade})</p>
+        `;
+        resultDiv.appendChild(div);
+    });
+}
 
 
-        // 버튼 클릭 시 타입에 맞는 환수 데이터 표시
-        document.getElementById('btn-suhou').addEventListener('click', () => {
-            displayFamiliarImages("수호");
-        });
+    function displayFamiliars(type) {
+        const familiarList = document.getElementById('familiar-list');
+        familiarList.innerHTML = '';  // 기존 목록 초기화
 
-        document.getElementById('btn-tapsung').addEventListener('click', () => {
-            displayFamiliarImages("탑승");
+        familiars.filter(f => f.type === type).forEach(familiar => {
+            let img = document.createElement('img');
+            img.src = `asset/images/ic_${familiar.ic}.jpg`;  // 이미지 경로 설정
+            img.alt = familiar.name;
+            img.classList.add('familiar-image');
+            img.title = `${familiar.name} (${familiar.grade})`;  // 이미지에 이름과 등급 표시
+            img.addEventListener('click', () => selectFamiliar(familiar, img));
+            familiarList.appendChild(img);
         });
+    }
 
-        document.getElementById('btn-byeonshin').addEventListener('click', () => {
-            displayFamiliarImages("변신");
-        });
     </script>
 
-    <script>
-        // 버튼 클릭 시 색상을 변경하는 함수
-        function setActiveButton(buttonId) {
-            // 모든 버튼에서 active-button 클래스를 제거
-            const buttons = document.querySelectorAll('.button-group button');
-            buttons.forEach(button => {
-                button.classList.remove('active-button');
-            });
+    <style>
+        #familiar-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-            // 클릭한 버튼에 active-button 클래스를 추가
-            const button = document.getElementById(buttonId);
-            button.classList.add('active-button');
-        }
+    .familiar-image {
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s, border-color 0.2s;
+    }
 
-        // 버튼 클릭 이벤트 리스너 추가
-        document.getElementById('btn-suhou').addEventListener('click', () => {
-            setActiveButton('btn-suhou');
-            displayFamiliarImages("수호");
-        });
+    .familiar-image:hover {
+        transform: scale(1.1);
+    }
 
-        document.getElementById('btn-tapsung').addEventListener('click', () => {
-            setActiveButton('btn-tapsung');
-            displayFamiliarImages("탑승");
-        });
+    .familiar-image.selected {
+        border-color: #ffcc00;
+    }
 
-        document.getElementById('btn-byeonshin').addEventListener('click', () => {
-            setActiveButton('btn-byeonshin');
-            displayFamiliarImages("변신");
-        });
-    </script>
+    </style>
+       
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
     crossorigin="anonymous"></script>
