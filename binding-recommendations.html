@@ -363,6 +363,7 @@
         }
 
         // 등급 세트 효과 계산
+        // 등급 세트 효과 계산 (수호, 변신 기준)
         function calculateGradeSetBonus(type, legendCount, immortalCount) {
             let gradeBonus = {
                 피해저항관통: 0,
@@ -372,14 +373,30 @@
             };
 
             if (type === "수호") {
-                gradeBonus.피해저항관통 += legendCount * 10;  // 전설 1개당 +10
-                gradeBonus.피해저항 += immortalCount * 20;   // 불멸 1개당 +20
+                // 수호 세트 효과
+                gradeBonus.피해저항관통 += (legendCount >= 4) ? 100 : 0;  // 전설 4개 기준
+                gradeBonus.피해저항 += (immortalCount >= 6) ? 150 : 0;   // 불멸 6개 기준
+                gradeBonus.피해저항관통 += (immortalCount >= 2) ? 200 : 0; // 불멸 2개 기준
+                gradeBonus.대인피해 += (immortalCount >= 5) ? 20 : 0;      // 불멸 5개 기준
+                gradeBonus.대인방어 += (immortalCount >= 6) ? 20 : 0;      // 불멸 6개 기준
+            }
+
+            if (type === "변신") {
+                // 변신 세트 효과
+                gradeBonus.피해저항관통 += (legendCount >= 4) ? 100 : 0;  // 전설 4개 기준
+                gradeBonus.피해저항 += (legendCount >= 6) ? 100 : 0;     // 전설 6개 기준
+                gradeBonus.피해저항관통 += (immortalCount >= 2) ? 150 : 0; // 불멸 2개 기준
+                gradeBonus.피해저항 += (immortalCount >= 6) ? 150 : 0;     // 불멸 6개 기준
+                gradeBonus.대인피해 += (immortalCount >= 5) ? 20 : 0;      // 불멸 5개 기준
+                gradeBonus.대인방어 += (immortalCount >= 6) ? 20 : 0;      // 불멸 6개 기준
             }
 
             return gradeBonus;
         }
 
+
         // 세력 세트 효과 계산
+        // 세력 세트 효과 계산 (수호, 변신 기준)
         function calculateInfluenceSetBonus(type, influences) {
             let influenceBonus = {
                 피해저항관통: 0,
@@ -389,19 +406,38 @@
             };
 
             if (type === "수호") {
-                influenceBonus.피해저항관통 += influences["결의"] * 15;
-                influenceBonus.피해저항 += influences["고요"] * 10;
+                // 수호 세트 효과
+                influenceBonus.피해저항 += influences["결의"] * 50;   // 결의 2개 이상
+                influenceBonus.피해저항 += influences["고요"] * 50;   // 고요 2개 이상
+                influenceBonus.피해저항 += influences["의지"] * 50;   // 의지 2개 이상
+                influenceBonus.피해저항관통 += influences["침착"] * 30; // 침착 2개 이상
+                influenceBonus.피해저항관통 += influences["냉정"] * 30; // 냉정 2개 이상
+                influenceBonus.피해저항관통 += influences["활력"] * 30; // 활력 2개 이상
+            }
+
+            if (type === "변신") {
+                // 변신 세트 효과
+                influenceBonus.피해저항 += influences["활력"] * 50;
+                influenceBonus.피해저항 += influences["침착"] * 50;
+                influenceBonus.피해저항 += influences["의지"] * 50;
+                influenceBonus.피해저항관통 += influences["결의"] * 30;
+                influenceBonus.피해저항관통 += influences["고요"] * 30;
+                influenceBonus.피해저항관통 += influences["냉정"] * 30;
             }
 
             return influenceBonus;
         }
+
 
         // 세력 세트 효과 계산
         function countInfluences(familiars) {
             let influences = {
                 결의: 0,
                 고요: 0,
-                냉정: 0
+                냉정: 0,
+                의지: 0,     // 의지 추가
+                침착: 0,     // 침착 추가
+                활력: 0      // 활력 추가
             };
 
             familiars.forEach(familiar => {
