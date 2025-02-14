@@ -100,11 +100,11 @@
         </div>
 
         <div class="container">
+            <div>
+                <button id="guardian-button">수호 환수</button>
+                <button id="transform-button">변신 환수</button>
+            </div>
             <div id="familiar-list"></div>
-                <div>
-                    <button id="guardian-button">수호 환수</button>
-                    <button id="transform-button">변신 환수</button>
-                </div>
                 <div>
                     <button id="calculate-button">계산하기</button>
                     <span id="selected-count">선택된 환수: 0/40</span>
@@ -116,7 +116,7 @@
 
         <div class="container flex-container">
             <!-- 결과를 미리 정의해둔 영역 -->
-            <div id="result">
+            <div id="result2">
                 <h3>최적의 6개 조합</h3>
                 <!-- 결과 내용은 JavaScript에서 동적으로 추가됩니다 -->
             </div>
@@ -350,7 +350,7 @@
 
     // 결과 표시
     function displayResult(bestCombination, maxScore) {
-    const resultDiv = document.getElementById('result');
+    const resultDiv = document.getElementById('result2');
 
     // 결과를 출력하기 전에 기존 내용 초기화
     resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
