@@ -215,8 +215,8 @@
             margin-top: 10px;
             }
             .familiar-image {
-                width: 40px;
-                height: 40px;
+                width: 55px;
+                height: 55px;
                 border-radius: 4px;
                 border: 2px solid transparent;
                 cursor: pointer;
@@ -459,7 +459,7 @@
             bestCombination.forEach(familiar => {
                 let div = document.createElement('div');
                 div.innerHTML = `
-                    <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="40" height="40">
+                    <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="55" height="55">
                     <p>${familiar.name} (${familiar.grade})</p>
                 `;
                 resultDiv.appendChild(div);
