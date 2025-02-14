@@ -225,7 +225,7 @@
 
             familiars.filter(f => f.type === type).forEach(familiar => {
                 let img = document.createElement('img');
-                img.src = `path/to/familiar_images/${familiar.ic}.png`;  // 환수 이미지 경로 설정
+                img.src = `images/ic_${familiar.ic}.jpg`;  // 환수 이미지 경로 설정
                 img.alt = familiar.name;
                 img.classList.add('familiar-image');
                 img.addEventListener('click', () => selectFamiliar(familiar, img));
