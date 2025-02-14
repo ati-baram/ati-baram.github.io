@@ -230,178 +230,253 @@
 
         </style>
 
+    <script>
+        let familiars = [];  // 전체 환수 데이터
+        let selectedFamiliars = [];  // 사용자가 선택한 환수 (최대 40개)
+        let filteredFamiliars = [];  // 25레벨 기준 데이터 (미리 계산된 값들)
 
-<script>
-    let familiars = [];  // 전체 환수 데이터
-    let selectedFamiliars = [];  // 사용자가 선택한 환수 (최대 40개)
-    let filteredFamiliars = [];  // 25레벨 기준 데이터 (미리 계산된 값들)
-
-    // JSON 데이터 로드
-    fetch('filtered_familiar_data.json')
-        .then(response => response.json())
-        .then(data => {
-            filteredFamiliars = data;
-            console.log("데이터 로드 완료:", filteredFamiliars);
-            displayFamiliars("수호");  // 기본값은 수호 환수
-        })
-        .catch(error => {
-            console.error("데이터 로드 실패:", error);
-            alert("환수 데이터를 로드할 수 없습니다.");
-        });
-
-    // 환수 목록 표시
-    function displayFamiliars(type) {
-        const familiarList = document.getElementById('familiar-list');
-        familiarList.innerHTML = '';
-
-        filteredFamiliars.filter(f => f.type === type).forEach(familiar => {
-            let img = document.createElement('img');
-            img.src = `images/ic_${familiar.ic}.jpg`;
-            img.alt = familiar.name;
-            img.classList.add('familiar-image');
-            img.title = `${familiar.name} (${familiar.grade})`;
-            img.addEventListener('click', () => selectFamiliar(familiar, img));
-            familiarList.appendChild(img);
-        });
-    }
-
-    // 환수 선택 기능
-    function selectFamiliar(familiar, img) {
-        if (selectedFamiliars.includes(familiar)) {
-            selectedFamiliars = selectedFamiliars.filter(f => f !== familiar);
-            img.classList.remove('selected');
-        } else {
-            if (selectedFamiliars.length < 40) {
-                selectedFamiliars.push(familiar);
-                img.classList.add('selected');
-            } else {
-                alert("최대 40개의 환수만 선택할 수 있습니다!");
-            }
-        }
-        document.getElementById('selected-count').innerText = `선택된 환수: ${selectedFamiliars.length}/40`;
-    }
-
-    // 수호/변신 버튼 클릭 이벤트
-    document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
-    document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
-
-    // 계산 버튼 클릭 시 최적의 조합 계산
-    document.getElementById('calculate-button').addEventListener('click', () => {
-        if (selectedFamiliars.length < 6) {
-            alert("최소 6개의 환수를 선택해야 합니다!");
-            return;
-        }
-        calculateBestCombination(selectedFamiliars);
-    });
-
-    // 최적의 조합 탐색 및 결과 표시
-    function calculateBestCombination(familiars) {
-        const combinations = getCombinations(familiars, 6);
-        console.log("조합 생성 완료:", combinations); // 추가된 로그
-        const totalCombinations = combinations.length;
-        let bestCombination = [];
-        let maxScore = { 피해저항관통: 0, 피해저항: 0, 대인피해: 0, 대인방어: 0 };  // 초기화
-
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('loading').innerText = `계산 중... (0/${totalCombinations})`;
-
-        setTimeout(() => {
-            combinations.forEach((combination, index) => {
-                let score = calculateTotalScore(combination);
-                if (score.피해저항관통 > maxScore.피해저항관통 || 
-                    score.피해저항 > maxScore.피해저항 || 
-                    score.대인피해 > maxScore.대인피해 || 
-                    score.대인방어 > maxScore.대인방어) {
-                    maxScore = score;
-                    bestCombination = combination;
-                }
-
-                // 진행 상황 업데이트
-                if (index % 100 === 0) {
-                    document.getElementById('loading').innerText = `계산 중... (${index}/${totalCombinations})`;
-                }
+        // JSON 데이터 로드
+        fetch('filtered_familiar_data.json')
+            .then(response => response.json())
+            .then(data => {
+                filteredFamiliars = data;
+                console.log("데이터 로드 완료:", filteredFamiliars);
+                displayFamiliars("수호");  // 기본값은 수호 환수
+            })
+            .catch(error => {
+                console.error("데이터 로드 실패:", error);
+                alert("환수 데이터를 로드할 수 없습니다.");
             });
 
-            console.log("최적의 조합:", bestCombination);
-            console.log("최대 점수:", maxScore);
+        // 환수 목록 표시
+        function displayFamiliars(type) {
+            const familiarList = document.getElementById('familiar-list');
+            familiarList.innerHTML = '';
 
-            document.getElementById('loading').style.display = 'none';
-            displayResult(bestCombination, maxScore);
-        }, 100);
-    }
+            filteredFamiliars.filter(f => f.type === type).forEach(familiar => {
+                let img = document.createElement('img');
+                img.src = `images/ic_${familiar.ic}.jpg`;
+                img.alt = familiar.name;
+                img.classList.add('familiar-image');
+                img.title = `${familiar.name} (${familiar.grade})`;
+                img.addEventListener('click', () => selectFamiliar(familiar, img));
+                familiarList.appendChild(img);
+            });
+        }
 
-    // 결속 효과 점수 계산
-    function calculateTotalScore(combination) {
-        let totalScore = {
-            피해저항관통: 0,
-            피해저항: 0,
-            대인피해: 0,
-            대인방어: 0
-        };
+        // 환수 선택 기능
+        function selectFamiliar(familiar, img) {
+            if (selectedFamiliars.includes(familiar)) {
+                selectedFamiliars = selectedFamiliars.filter(f => f !== familiar);
+                img.classList.remove('selected');
+            } else {
+                if (selectedFamiliars.length < 40) {
+                    selectedFamiliars.push(familiar);
+                    img.classList.add('selected');
+                } else {
+                    alert("최대 40개의 환수만 선택할 수 있습니다!");
+                }
+            }
+            document.getElementById('selected-count').innerText = `선택된 환수: ${selectedFamiliars.length}/40`;
+        }
 
-        combination.forEach(familiar => {
-            totalScore.피해저항관통 += familiar.option["피해저항관통"] ? familiar.option["피해저항관통"][0] : 0;
-            totalScore.피해저항 += familiar.option["피해저항"] ? familiar.option["피해저항"][0] : 0;
-            totalScore.대인피해 += familiar.option["대인피해%"] ? familiar.option["대인피해%"][0] * 10 : 0;
-            totalScore.대인방어 += familiar.option["대인방어%"] ? familiar.option["대인방어%"][0] * 10 : 0;
+        // 수호/변신 버튼 클릭 이벤트
+        document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
+        document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
+
+        // 계산 버튼 클릭 시 최적의 조합 계산
+        document.getElementById('calculate-button').addEventListener('click', () => {
+            if (selectedFamiliars.length < 6) {
+                alert("최소 6개의 환수를 선택해야 합니다!");
+                return;
+            }
+            calculateBestCombination(selectedFamiliars);
         });
 
-        return totalScore;
-    }
+        // 최적의 조합 탐색 및 결과 표시
+        function calculateBestCombination(familiars) {
+            const combinations = getCombinations(familiars, 6);
+            console.log("조합 생성 완료:", combinations); // 추가된 로그
+            const totalCombinations = combinations.length;
+            let bestCombination = [];
+            let maxScore = { 피해저항관통: 0, 피해저항: 0, 대인피해: 0, 대인방어: 0 };  // 초기화
 
-    // 조합 생성 함수
-    function getCombinations(arr, selectNumber) {
-        const results = [];
-        if (selectNumber === 1) return arr.map(v => [v]);
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading').innerText = `계산 중... (0/${totalCombinations})`;
 
-        arr.forEach((fixed, index, origin) => {
-            const rest = origin.slice(index + 1);
-            const combinations = getCombinations(rest, selectNumber - 1);
-            const attached = combinations.map(combination => [fixed, ...combination]);
-            results.push(...attached);
-        });
+            setTimeout(() => {
+                combinations.forEach((combination, index) => {
+                    let score = calculateTotalScore(combination);
+                    if (score.피해저항관통 > maxScore.피해저항관통 || 
+                        score.피해저항 > maxScore.피해저항 || 
+                        score.대인피해 > maxScore.대인피해 || 
+                        score.대인방어 > maxScore.대인방어) {
+                        maxScore = score;
+                        bestCombination = combination;
+                    }
 
-        return results;
-    }
+                    // 진행 상황 업데이트
+                    if (index % 100 === 0) {
+                        document.getElementById('loading').innerText = `계산 중... (${index}/${totalCombinations})`;
+                    }
+                });
 
-    // 결과 표시
-    function displayResult(bestCombination, maxScore) {
-    const resultDiv = document.getElementById('result2');
-    resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+                console.log("최적의 조합:", bestCombination);
+                console.log("최대 점수:", maxScore);
 
-    // 환수 이미지를 가로로 나열하고, 능력치를 그 옆에 출력
-    let imagesDiv = document.createElement('div');
-    imagesDiv.style.display = 'flex';  // 이미지를 가로로 나열
+                document.getElementById('loading').style.display = 'none';
+                displayResult(bestCombination, maxScore);
+            }, 100);
+        }
 
-    bestCombination.forEach(familiar => {
-        let img = document.createElement('img');
-        img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로
-        img.alt = familiar.name;
-        img.width = 55;
-        img.height = 55;
-        img.style.marginRight = '10px';  // 이미지 간 간격 추가
-        imagesDiv.appendChild(img);
-    });
+        // 결속 효과 점수 계산
+        function calculateTotalScore(combination) {
+            let totalScore = {
+                피해저항관통: 0,
+                피해저항: 0,
+                대인피해: 0,
+                대인방어: 0
+            };
 
-    // 능력치 출력
-    let statsDiv = document.createElement('div');
-    statsDiv.style.display = 'inline-block';  // 능력치는 이미지 옆에 나란히 표시
-    statsDiv.style.marginLeft = '20px';  // 능력치와 이미지 사이 간격 조정
+            // 등급 세트 효과와 세력 세트 효과 계산
+            const gradeCount = countGrades(combination);
+            const influenceCount = countInfluences(combination);
 
-    statsDiv.innerHTML = `
-        <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
-        <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
-        <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
-        <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
-    `;
+            combination.forEach(familiar => {
+                totalScore.피해저항관통 += familiar.option["피해저항관통"] ? familiar.option["피해저항관통"][0] : 0;
+                totalScore.피해저항 += familiar.option["피해저항"] ? familiar.option["피해저항"][0] : 0;
+                totalScore.대인피해 += familiar.option["대인피해%"] ? familiar.option["대인피해%"][0] * 10 : 0;
+                totalScore.대인방어 += familiar.option["대인방어%"] ? familiar.option["대인방어%"][0] * 10 : 0;
+            });
 
-    // 이미지와 능력치를 한꺼번에 출력
-    resultDiv.appendChild(imagesDiv);
-    resultDiv.appendChild(statsDiv);
-}
+            // 등급 세트 효과와 세력 세트 효과 반영
+            const gradeBonus = calculateGradeSetBonus("수호", gradeCount.legendCount, gradeCount.immortalCount);
+            const influenceBonus = calculateInfluenceSetBonus("수호", influenceCount);
 
+            totalScore.피해저항관통 += gradeBonus.피해저항관통 + influenceBonus.피해저항관통;
+            totalScore.피해저항 += gradeBonus.피해저항 + influenceBonus.피해저항;
+            totalScore.대인피해 += gradeBonus.대인피해 + influenceBonus.대인피해;
+            totalScore.대인방어 += gradeBonus.대인방어 + influenceBonus.대인방어;
 
-</script>
+            return totalScore;
+        }
+
+        // 등급 세트 효과 계산
+        function calculateGradeSetBonus(type, legendCount, immortalCount) {
+            let gradeBonus = {
+                피해저항관통: 0,
+                피해저항: 0,
+                대인피해: 0,
+                대인방어: 0
+            };
+
+            if (type === "수호") {
+                gradeBonus.피해저항관통 += legendCount * 10;  // 전설 1개당 +10
+                gradeBonus.피해저항 += immortalCount * 20;   // 불멸 1개당 +20
+            }
+
+            return gradeBonus;
+        }
+
+        // 세력 세트 효과 계산
+        function calculateInfluenceSetBonus(type, influences) {
+            let influenceBonus = {
+                피해저항관통: 0,
+                피해저항: 0,
+                대인피해: 0,
+                대인방어: 0
+            };
+
+            if (type === "수호") {
+                influenceBonus.피해저항관통 += influences["결의"] * 15;
+                influenceBonus.피해저항 += influences["고요"] * 10;
+            }
+
+            return influenceBonus;
+        }
+
+        // 세력 세트 효과 계산
+        function countInfluences(familiars) {
+            let influences = {
+                결의: 0,
+                고요: 0,
+                냉정: 0
+            };
+
+            familiars.forEach(familiar => {
+                familiar.influence.forEach(influence => {
+                    if (influences[influence]) {
+                        influences[influence]++;
+                    }
+                });
+            });
+
+            return influences;
+        }
+
+        // 등급 계산
+        function countGrades(familiars) {
+            let legendCount = 0;
+            let immortalCount = 0;
+
+            familiars.forEach(familiar => {
+                if (familiar.grade === "전설") legendCount++;
+                if (familiar.grade === "불멸") immortalCount++;
+            });
+
+            return { legendCount, immortalCount };
+        }
+
+        // 조합 생성 함수
+        function getCombinations(arr, selectNumber) {
+            const results = [];
+            if (selectNumber === 1) return arr.map(v => [v]);
+
+            arr.forEach((fixed, index, origin) => {
+                const rest = origin.slice(index + 1);
+                const combinations = getCombinations(rest, selectNumber - 1);
+                const attached = combinations.map(combination => [fixed, ...combination]);
+                results.push(...attached);
+            });
+
+            return results;
+        }
+
+        // 결과 표시
+        function displayResult(bestCombination, maxScore) {
+            const resultDiv = document.getElementById('result2');
+            resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+
+            let imagesDiv = document.createElement('div');
+            imagesDiv.style.display = 'flex';  // 이미지를 가로로 나열
+
+            bestCombination.forEach(familiar => {
+                let img = document.createElement('img');
+                img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로
+                img.alt = familiar.name;
+                img.width = 55;
+                img.height = 55;
+                img.style.marginRight = '10px';  // 이미지 간 간격 추가
+                imagesDiv.appendChild(img);
+            });
+
+            let statsDiv = document.createElement('div');
+            statsDiv.style.display = 'inline-block';  // 능력치는 이미지 옆에 나란히 표시
+            statsDiv.style.marginLeft = '20px';  // 능력치와 이미지 사이 간격 조정
+
+            statsDiv.innerHTML = `
+                <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
+                <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
+                <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
+                <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
+            `;
+
+            resultDiv.appendChild(imagesDiv);
+            resultDiv.appendChild(statsDiv);
+        }
+
+    </script>
+
 
        
     
