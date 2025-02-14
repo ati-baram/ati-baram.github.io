@@ -68,31 +68,6 @@
             padding: 20px;
             flex-grow: 1;
         }
-
-        /* 반응형 디자인: 작은 화면에서 탭 숨기기 */
-        .menu-toggle {
-            display: none;
-        }
-
-        .menu-toggle:checked + nav {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                display: none;
-                width: 100%;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .menu-toggle:checked + nav {
-                display: flex;
-                flex-direction: column;
-            }
-        }
     </style>
     
 </head>
