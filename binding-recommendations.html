@@ -125,21 +125,26 @@
         </div>
 
         <div class="container">
-            <div id="app">
-                <div id="button-group">
+            <div id="familiar-list"></div>
+                <div>
                     <button id="guardian-button">수호 환수</button>
                     <button id="transform-button">변신 환수</button>
                 </div>
-                <div id="familiar-list"></div>
-                <div id="selected-count">선택된 환수: 0/40</div>
-                <button id="calculate-button">계산</button>
-                <div id="loading">계산 중... (0/0)</div>
+                <div>
+                    <button id="calculate-button">계산하기</button>
+                    <span id="selected-count">선택된 환수: 0/40</span>
+                </div>
                 
-            </div>   
+                <!-- 로딩 메시지 -->
+                <div id="loading">계산 중...</div>      
         </div>
 
         <div class="container flex-container">
-            <div id="result"></div>
+            <!-- 결과를 미리 정의해둔 영역 -->
+            <div id="result">
+                <h3>최적의 6개 조합</h3>
+                <!-- 결과 내용은 JavaScript에서 동적으로 추가됩니다 -->
+            </div>
         </div>
         
         <!-- Copyright -->
@@ -370,27 +375,28 @@
 
     // 결과 표시
     function displayResult(bestCombination, maxScore) {
-        const resultDiv = document.getElementById('result');
-        
-        // 결과를 출력하기 전에 기존 내용 초기화
-        resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
+    const resultDiv = document.getElementById('result');
 
-        bestCombination.forEach(familiar => {
-            let div = document.createElement('div');
-            div.innerHTML = `
-                <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="55" height="55">
-                <p>${familiar.name} (${familiar.grade})</p>
-            `;
-            resultDiv.appendChild(div);
-        });
+    // 결과를 출력하기 전에 기존 내용 초기화
+    resultDiv.innerHTML = '<h3>최적의 6개 조합</h3>';
 
-        resultDiv.innerHTML += `
-            <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
-            <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
-            <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
-            <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
+    bestCombination.forEach(familiar => {
+        let div = document.createElement('div');
+        div.innerHTML = `
+            <img src="images/ic_${familiar.ic}.jpg" alt="${familiar.name}" width="55" height="55">
+            <p>${familiar.name} (${familiar.grade})</p>
         `;
-    }
+        resultDiv.appendChild(div);
+    });
+
+    resultDiv.innerHTML += `
+        <p><strong>피해저항관통:</strong> ${maxScore.피해저항관통}</p>
+        <p><strong>피해저항:</strong> ${maxScore.피해저항}</p>
+        <p><strong>대인피해%:</strong> ${maxScore.대인피해 / 10}</p>
+        <p><strong>대인방어%:</strong> ${maxScore.대인방어 / 10}</p>
+    `;
+}
+
 </script>
 
        
