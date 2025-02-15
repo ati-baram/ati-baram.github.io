@@ -119,6 +119,10 @@ button:disabled {
 /*credits*/
 .copyright{
     text-align: center;
+    margin-top: auto; /* 맨 아래로 고정 */
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
 }
 .logo{
     color: white;
