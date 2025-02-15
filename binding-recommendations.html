@@ -15,9 +15,88 @@
     #familiar-list img.selected { border: 3px solid blue; }
     #selected-count, #score-area { margin-top: 20px; font-size: 18px; }
     #result-container { margin-top: 20px; font-size: 18px; }
+    /* 기본 레이아웃 스타일 */
+    body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding-top: 50px; /* 탭 메뉴가 고정될 공간을 확보 */
+        }
+        /* 네비게이션 바 */
+        nav {
+            position: fixed; /* 네비게이션 바를 화면 상단에 고정 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #444;
+            display: flex;
+            align-items: center; /* 로고와 탭 메뉴 세로 가운데 정렬 */
+            justify-content: space-between; /* 로고와 탭 메뉴 사이의 간격 조정 */
+            padding: 10px 20px;
+            z-index: 1000;
+        }
+
+        /* 로고 */
+        .logo {
+            flex: 0 0 auto; /* 로고를 왼쪽에 고정 */
+            display: flex;
+            align-items: center;
+            margin-right: 5px;
+        }
+
+        .logo img {
+            height: 40px; /* 로고 이미지 크기 */
+        }
+
+        /* 탭 메뉴 */
+        .tabs {
+            display: flex;
+            justify-content: center; /* 탭을 가운데 정렬 */
+            flex-grow: 1; /* 가운데에 고정되도록 설정 */
+        }
+
+        .tabs a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            text-align: center;
+        }
+
+        .tabs a:hover {
+            background-color: #555;
+        }
+
+        /* 본문 영역 */
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+        }
   </style>
 </head>
 <body>
+    <!-- 네비게이션 바 -->
+    <nav>
+        <!-- 로고 -->
+        <div class="logo">
+            <img src="asset/logo.png" alt="로고">
+            <h2>결속추천_test_1</h2>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <div class="tabs">
+            <a href="index.html">환수 정보</a>
+            <a href="binding-recommendations.html">결속 추천</a>
+            <a href="binding-ranking.html">결속 랭킹</a>
+            <a href="search.html">캐릭터 조회</a>
+        </div>
+    </nav>
+
+
+
   <div class="button-container">
     <button id="guardian-button">수호</button>
     <button id="transform-button">변신</button>
