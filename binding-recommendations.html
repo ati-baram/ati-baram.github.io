@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<h1>환수 최적 조합 계산기</h1>
+<h1>결속추천</h1>
 
 <button id="guardian-button">수호</button>
 <button id="transform-button">변신</button>
@@ -44,7 +44,7 @@
         .then(data => {
             familiars = data;
             console.log("데이터 로드 완료:", familiars);
-            displayFamiliars("수호");  // 기본값은 수호 환수
+            displayFamiliars("수호");  // 기본값은 수호
         })
         .catch(error => {
             console.error("데이터 로드 실패:", error);
@@ -161,7 +161,6 @@
                 const count = influenceSetEffects[influence];
 
                 if (type === '수호') {
-                    // 수호 타입
                     if (influence === '결의' || influence === '고요' || influence === '의지') {
                         if (count >= 2) totalResistance += 50;
                         if (count >= 3) totalResistance += 80;
@@ -176,9 +175,7 @@
                         if (count >= 5) totalPenetration += 90;
                         if (count === 6) totalPenetration += 130;
                     }
-            
                 } else if (type === '변신') {
-                    // 변신 타입
                     if (influence === '결의' || influence === '고요' || influence === '냉정') {
                         if (count >= 2) totalPenetration += 30;
                         if (count >= 3) totalPenetration += 50;
@@ -222,14 +219,15 @@
                         for (let m = l + 1; m < selectedFamiliars.length - 1; m++) {
                             for (let n = m + 1; n < selectedFamiliars.length; n++) {
                                 let combination = [
-                                    selectedFamiliars[i], 
-                                    selectedFamiliars[j], 
-                                    selectedFamiliars[k], 
-                                    selectedFamiliars[l], 
-                                    selectedFamiliars[m], 
+                                    selectedFamiliars[i],
+                                    selectedFamiliars[j],
+                                    selectedFamiliars[k],
+                                    selectedFamiliars[l],
+                                    selectedFamiliars[m],
                                     selectedFamiliars[n]
                                 ];
                                 let { score, totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease } = calculateScore(combination);
+                                
                                 if (score > maxScore) {
                                     maxScore = score;
                                     bestCombination = combination;
@@ -241,19 +239,21 @@
             }
         }
 
-        // 최적 조합 출력
+        // 최적의 조합 출력
         const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = `<h2>최고 점수 조합: ${maxScore}</h2>`;
-        bestCombination.forEach(familiar => {
-            const img = document.createElement('img');
-            img.src = `images/ic_${familiar.ic}.jpg`;  // 이미지 경로에 맞게 수정
-            img.alt = familiar.name;
-            resultDiv.appendChild(img);
-
-            resultDiv.innerHTML += `<p>${familiar.name} - 점수: ${maxScore}</p>`;
-        });
+        resultDiv.innerHTML = `
+            최고 점수 조합: ${maxScore}<br>
+            ${bestCombination.map(f => `<img src="images/ic_${f.ic}.jpg" class="familiar-image" alt="${f.name}" title="${f.name}">`).join('')}
+            <br>세력: ${bestCombination.map(f => f.influence).join(', ')}
+            <br>등급: ${bestCombination.map(f => f.grade).join(', ')}
+            <br>피해저항관통: ${totalPenetration}
+            <br>피해저항: ${totalResistance}
+            <br>대인피해%: ${totalDamageIncrease}
+            <br>대인방어%: ${totalDamageReduction}
+        `;
     });
-</script>
+
+    </script>
 
 </body>
 </html>
