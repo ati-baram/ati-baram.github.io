@@ -44,7 +44,7 @@
         .then(data => {
             familiars = data;
             console.log("데이터 로드 완료:", familiars);
-            displayFamiliars("수호");  // 기본값은 수호
+            displayFamiliars("수호");  // 기본값은 수호 환수
         })
         .catch(error => {
             console.error("데이터 로드 실패:", error);
@@ -143,62 +143,65 @@
             totalResistance += influenceEffects.totalResistance;
         });
 
-        // 세력 세트 효과 적용
-        function calculateInfluenceSetEffects(familiarCombination, type) {
-            let totalPenetration = 0;
-            let totalResistance = 0;
-
-            // 세력별 효과 적용
-            let influenceSetEffects = {};
-
-            familiarCombination.forEach(familiar => {
-                const { influence } = familiar;
-                influenceSetEffects[influence] = (influenceSetEffects[influence] || 0) + 1;
-            });
-
-            // 세력 세트 효과 적용 (수호와 변신 차이 반영)
-            for (let influence in influenceSetEffects) {
-                const count = influenceSetEffects[influence];
-
-                if (type === '수호') {
-                    if (influence === '결의' || influence === '고요' || influence === '의지') {
-                        if (count >= 2) totalResistance += 50;
-                        if (count >= 3) totalResistance += 80;
-                        if (count >= 4) totalResistance += 130;
-                        if (count >= 5) totalResistance += 150;
-                        if (count === 6) totalResistance += 200;
-                    }
-                    if (influence === '침착' || influence === '냉정' || influence === '활력') {
-                        if (count >= 2) totalPenetration += 30;
-                        if (count >= 3) totalPenetration += 50;
-                        if (count >= 4) totalPenetration += 80;
-                        if (count >= 5) totalPenetration += 90;
-                        if (count === 6) totalPenetration += 130;
-                    }
-                } else if (type === '변신') {
-                    if (influence === '결의' || influence === '고요' || influence === '냉정') {
-                        if (count >= 2) totalPenetration += 30;
-                        if (count >= 3) totalPenetration += 50;
-                        if (count >= 4) totalPenetration += 80;
-                        if (count >= 5) totalPenetration += 90;
-                        if (count === 6) totalPenetration += 130;
-                    }
-                    if (influence === '활력' || influence === '침착' || influence === '의지') {
-                        if (count >= 2) totalResistance += 50;
-                        if (count >= 3) totalResistance += 80;
-                        if (count >= 4) totalResistance += 130;
-                        if (count >= 5) totalResistance += 150;
-                        if (count === 6) totalResistance += 200;
-                    }
-                }
-            }
-
-            return { totalPenetration, totalResistance };
-        }
-
         // 최종 점수 계산
         let score = totalPenetration + totalResistance + (totalDamageReduction * 10) + (totalDamageIncrease * 10);
         return { score, totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease };
+    }
+
+    // 세력 세트 효과 계산 (수호/변신 차이 반영)
+    function calculateInfluenceSetEffects(familiarCombination, type) {
+        let totalPenetration = 0;
+        let totalResistance = 0;
+
+        // 세력별 효과 적용
+        let influenceSetEffects = {};
+
+        familiarCombination.forEach(familiar => {
+            const { influence } = familiar;
+            influenceSetEffects[influence] = (influenceSetEffects[influence] || 0) + 1;
+        });
+
+        // 세력 세트 효과 적용 (수호와 변신 차이 반영)
+        for (let influence in influenceSetEffects) {
+            const count = influenceSetEffects[influence];
+
+            if (type === '수호') {
+                // 수호 타입
+                if (influence === '결의' || influence === '고요' || influence === '의지') {
+                    if (count >= 2) totalResistance += 50;
+                    if (count >= 3) totalResistance += 80;
+                    if (count >= 4) totalResistance += 130;
+                    if (count >= 5) totalResistance += 150;
+                    if (count === 6) totalResistance += 200;
+                }
+                if (influence === '침착' || influence === '냉정' || influence === '활력') {
+                    if (count >= 2) totalPenetration += 30;
+                    if (count >= 3) totalPenetration += 50;
+                    if (count >= 4) totalPenetration += 80;
+                    if (count >= 5) totalPenetration += 90;
+                    if (count === 6) totalPenetration += 130;
+                }
+            
+            } else if (type === '변신') {
+                // 변신 타입
+                if (influence === '결의' || influence === '고요' || influence === '냉정') {
+                    if (count >= 2) totalPenetration += 30;
+                    if (count >= 3) totalPenetration += 50;
+                    if (count >= 4) totalPenetration += 80;
+                    if (count >= 5) totalPenetration += 90;
+                    if (count === 6) totalPenetration += 130;
+                }
+                if (influence === '활력' || influence === '침착' || influence === '의지') {
+                    if (count >= 2) totalResistance += 50;
+                    if (count >= 3) totalResistance += 80;
+                    if (count >= 4) totalResistance += 130;
+                    if (count >= 5) totalResistance += 150;
+                    if (count === 6) totalResistance += 200;
+                }
+            }
+        }
+
+        return { totalPenetration, totalResistance };
     }
 
     // 최적의 점수 조합을 찾아서 출력
@@ -241,6 +244,8 @@
 
         // 최적의 조합 출력
         const resultDiv = document.getElementById('result');
+        const { totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease } = calculateScore(bestCombination);
+
         resultDiv.innerHTML = `
             최고 점수 조합: ${maxScore}<br>
             ${bestCombination.map(f => `<img src="images/ic_${f.ic}.jpg" class="familiar-image" alt="${f.name}" title="${f.name}">`).join('')}
@@ -252,6 +257,7 @@
             <br>대인방어%: ${totalDamageReduction}
         `;
     });
+
 
     </script>
 
