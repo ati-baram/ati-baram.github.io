@@ -242,21 +242,48 @@
             }
         }
 
-        // 최적의 조합 출력
-        const resultDiv = document.getElementById('result');
+        // 세력과 등급을 정리하기 위한 함수
+        function getCount(items) {
+            const counts = {};
+            items.forEach(item => {
+                counts[item] = (counts[item] || 0) + 1;
+            });
+            return counts;
+        }
+
+        // 세력과 등급 값 추출
+        const influences = bestCombination.map(f => f.influence);
+        const grades = bestCombination.map(f => f.grade);
+
+        // 세력과 등급을 정리
+        const influenceCount = getCount(influences);
+        const gradeCount = getCount(grades);
+
+        // 세력과 등급을 출력 형식에 맞게 변환
+        const influenceText = Object.keys(influenceCount)
+            .map(key => `${influenceCount[key]}${key}`)
+            .join(' ');
+        const gradeText = Object.keys(gradeCount)
+            .map(key => `${gradeCount[key]}${key}`)
+            .join(' ');
+
+        // 최종 점수 계산
         const { totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease } = calculateScore(bestCombination);
 
+        // 결과 출력
+        const resultDiv = document.getElementById('result');
         resultDiv.innerHTML = `
             최고 점수 조합: ${maxScore}<br>
             ${bestCombination.map(f => `<img src="images/ic_${f.ic}.jpg" class="familiar-image" alt="${f.name}" title="${f.name}">`).join('')}
-            <br>세력: ${bestCombination.map(f => f.influence).join(', ')}
-            <br>등급: ${bestCombination.map(f => f.grade).join(', ')}
+            <br>세력: ${influenceText}
+            <br>등급: ${gradeText}
             <br>피해저항관통: ${totalPenetration}
             <br>피해저항: ${totalResistance}
             <br>대인피해%: ${totalDamageIncrease}
             <br>대인방어%: ${totalDamageReduction}
         `;
     });
+
 
 
     </script>
