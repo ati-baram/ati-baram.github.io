@@ -87,66 +87,56 @@
     document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
     document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
 
-    // 점수 계산 함수 (수호, 변신에 따른 능력치 계산 포함)
+    // 등급세트 효과 계산
     function calculateScore(familiarCombination) {
-        let totalPenetration = 0;
-        let totalResistance = 0;
-        let totalDamageReduction = 0;
-        let totalDamageIncrease = 0;
-        let gradeSetEffects = { "전설": 0, "불멸": 0 };  // 등급 세트 효과
-        let influenceSetEffects = {};  // 세력 세트 효과
+    let totalPenetration = 0;
+    let totalResistance = 0;
+    let totalDamageReduction = 0;
+    let totalDamageIncrease = 0;
+    let gradeSetEffects = { "수호": { "전설": 0, "불멸": 0 }, "변신": { "전설": 0, "불멸": 0 } };
 
-        familiarCombination.forEach(familiar => {
-            const { option, grade, influence, type } = familiar;
-            totalPenetration += option['피해저항관통'] || 0;
-            totalResistance += option['피해저항'] || 0;
-            totalDamageReduction += option['대인방어%'] || 0;
-            totalDamageIncrease += option['대인피해%'] || 0;
+    familiarCombination.forEach(familiar => {
+        const { option, grade, type } = familiar;
+        totalPenetration += option['피해저항관통'] || 0;
+        totalResistance += option['피해저항'] || 0;
+        totalDamageReduction += option['대인방어%'] || 0;
+        totalDamageIncrease += option['대인피해%'] || 0;
 
-            // 등급세트효과 계산 (수호, 변신)
-            if (type === '수호' || type === '변신') {
-                if (grade === '전설') {
-                    gradeSetEffects["전설"] += 1;
-                    if (gradeSetEffects["전설"] === 4) totalPenetration += 100;
-                    if (gradeSetEffects["전설"] === 6) {
-                        totalPenetration += 100;
-                        totalResistance += 100;
-                    }
-                } else if (grade === '불멸') {
-                    gradeSetEffects["불멸"] += 1;
-                    if (gradeSetEffects["불멸"] === 2) totalPenetration += 200;
-                    if (gradeSetEffects["불멸"] === 3) {
+        // 등급 세트 효과 계산 (수호, 변신 별도 처리)
+        if (type === '수호' || type === '변신') {
+            gradeSetEffects[type][grade] += 1;
+
+            if (grade === '전설') {
+                if (gradeSetEffects[type]["전설"] === 4) totalPenetration += 100;
+                if (gradeSetEffects[type]["전설"] === 6) {
+                    totalPenetration += 100;
+                    totalResistance += 100;
+                }
+            } else if (grade === '불멸') {
+                if (type === '수호') {
+                    if (gradeSetEffects["수호"]["불멸"] === 2) totalPenetration += 200;
+                    if (gradeSetEffects["수호"]["불멸"] >= 3) {
                         totalPenetration += 200;
                         totalResistance += 150;
                     }
-                    if (gradeSetEffects["불멸"] === 4) {
-                        totalPenetration += 200;
+                    if (gradeSetEffects["수호"]["불멸"] >= 5) totalDamageIncrease += 20;
+                    if (gradeSetEffects["수호"]["불멸"] === 6) totalDamageReduction += 20;
+                } else if (type === '변신') {
+                    if (gradeSetEffects["변신"]["불멸"] === 2) totalPenetration += 150;
+                    if (gradeSetEffects["변신"]["불멸"] >= 3) {
+                        totalPenetration += 150;
                         totalResistance += 150;
                     }
-                    if (gradeSetEffects["불멸"] === 5) {
-                        totalPenetration += 200;
-                        totalResistance += 150;
-                        totalDamageIncrease += 20;
-                    }
-                    if (gradeSetEffects["불멸"] === 6) {
-                        totalPenetration += 200;
-                        totalResistance += 150;
-                        totalDamageIncrease += 20;
-                        totalDamageReduction += 20;
-                    }
+                    if (gradeSetEffects["변신"]["불멸"] >= 5) totalDamageIncrease += 20;
+                    if (gradeSetEffects["변신"]["불멸"] === 6) totalDamageReduction += 20;
                 }
             }
+        }
+    });
 
-            // 세력 세트 효과 계산 (수호/변신 차이 반영)
-            const influenceEffects = calculateInfluenceSetEffects(familiarCombination, type);
-            totalPenetration += influenceEffects.totalPenetration;
-            totalResistance += influenceEffects.totalResistance;
-        });
+    return { totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease };
+}
 
-        // 최종 점수 계산
-        let score = totalPenetration + totalResistance + (totalDamageReduction * 10) + (totalDamageIncrease * 10);
-        return { score, totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease };
-    }
 
     // 세력 세트 효과 계산 (수호/변신 차이 반영)
     function calculateInfluenceSetEffects(familiarCombination, type) {
