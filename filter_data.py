@@ -1,71 +1,43 @@
 import json
-import math
 
-# 결속 효과 계산 함수
-def calculate_bound_effect(option, value, level):
-    percentage = 0
+# 원본 데이터 로드
+with open("familiar_data.json", "r", encoding="utf-8") as f:
+    familiar_data = json.load(f)
 
-    # 대인방어, 대인피해, 위력, 체력증가, 마력증가
-    if option in ["대인방어", "대인피해", "위력", "체력증가", "마력증가"]:
-        percentage = 0.05 if level < 9 else 0.15 if level < 14 else 0.20
-    elif option == "이동속도":
-        # 이동속도
-        percentage = 0.05 if level < 9 else 0.05 if level < 14 else 0.10
-    elif option in ["체력증가%", "마력증가%"]:
-        # 체력증가%, 마력증가%
-        percentage = 0 if level < 14 else 0.052
-    elif option in ["체력회복향상", "마력회복향상", "경험치 획득증가", "전리품 획득증가"]:
-        # 회복 향상, 경험치, 전리품 획득
-        if level < 9:
-            percentage = 0.02
-        elif level < 14:
-            percentage = 0.045
-        else:
-            return math.floor(value / 14.2)
-    else:
-        # 기본 비율 적용
-        percentage = 0.05 if level < 9 else 0.15 if level < 14 else 0.25
-    
-    return math.floor(value * percentage)  # 내림 처리
-
-def filter_and_apply_effect(input_json, level):
-    # level이 25일 경우만 처리
-    if level != 25:
-        return
-
-    # 입력 데이터를 파싱
-    with open(input_json, 'r', encoding='utf-8') as file:
-        data = json.load(file)
-
+# 필요한 옵션만 남기고 정제하는 함수
+def filter_familiar_data(data):
     filtered_data = []
-
-    for item in data:
-        if item["type"] == "탑승":
-            continue
-        
-        filtered_item = {
-            "grade": item["grade"],
-            "type": item["type"],
-            "influence": item["influence"],
-            "name": item["name"],
-            "ic": item["ic"],
-            "option": {}
-        }
-
-        for key in ["피해저항관통", "피해저항", "대인피해%", "대인방어%"]:
-            # 값이 있으면 마지막 값 추출하고, 없다면 0
-            if key in item["option"] and item["option"][key]:
-                last_value = item["option"][key][-1]
-                bound_effect = calculate_bound_effect(key, last_value, level)
-                filtered_item["option"][key] = [bound_effect]
-            else:
-                filtered_item["option"][key] = [0]
-        
-        filtered_data.append(filtered_item)
+    target_options = ["피해저항관통", "피해저항", "대인피해%", "대인방어%"]
+    level_index = 25  # 25레벨 값 사용
     
-    # 결과를 새로운 JSON 파일로 저장
-    with open('filtered_and_effected_familiar_data_level25.json', 'w', encoding='utf-8') as outfile:
-        json.dump(filtered_data, outfile, ensure_ascii=False, indent=4)
+    for familiar in data:
+        filtered_options = {}
+        
+        # 대상 옵션 중 존재하는 것만 추가
+        for option in target_options:
+            values = familiar["option"].get(option, [])  # 옵션이 없으면 빈 리스트 반환
+            if len(values) > level_index:  # 25레벨 값이 존재하는 경우만 추가
+                filtered_options[option] = values[level_index]
+        
+        # 옵션이 하나라도 존재하는 경우만 추가
+        if filtered_options:
+            filtered_familiar = {
+                "grade": familiar["grade"],
+                "type": familiar["type"],
+                "influence": familiar["influence"],
+                "name": familiar["name"],
+                "ic": familiar["ic"],
+                "option": filtered_options
+            }
+            filtered_data.append(filtered_familiar)
+    
+    return filtered_data
 
-# 함수 실행 예시 (level=25로 설정)
-filter_and_apply_effect('familiar_data.json', 25)
+# 데이터 필터링
+filtered_familiar_data = filter_familiar_data(familiar_data)
+
+# 결과 저장
+with open("filtered_familiar_data.json", "w", encoding="utf-8") as f:
+    json.dump(filtered_familiar_data, f, ensure_ascii=False, indent=4)
+
+print("필터링 완료!")
