@@ -60,7 +60,7 @@
   <nav>
     <div class="logo">
       <img src="asset/logo.png" alt="로고">
-      <h2>결속추천_test_6</h2>
+      <h2>결속추천_test_7</h2>
     </div>
     <div class="tabs">
       <a href="index.html">환수 정보</a>
@@ -177,7 +177,8 @@
     function calculateGuardianGradeSetBonus(famils) {
       const guardians = famils.filter(f => f.type === "수호");
       const legendCount = guardians.filter(f => f.grade === "전설").length;
-      const immortalCount = guardians.filter(f => f.grade === "불멸").length;
+      // 불멸 판별: grade가 "불멸" 또는 "멸"이면
+      const immortalCount = guardians.filter(f => f.grade === "불멸" || f.grade === "멸").length;
       let bonus = { pen: 0, res: 0, dam: 0, def: 0 };
       if (legendCount >= 6) { bonus.pen += 100; bonus.res += 100; }
       else if (legendCount >= 4) { bonus.pen += 100; }
@@ -192,7 +193,8 @@
     function calculateTransformationGradeSetBonus(famils) {
       const trans = famils.filter(f => f.type === "변신");
       const legendCount = trans.filter(f => f.grade === "전설").length;
-      const immortalCount = trans.filter(f => f.grade === "불멸").length;
+      // 불멸 판별: grade가 "불멸" 또는 "멸"이면
+      const immortalCount = trans.filter(f => f.grade === "불멸" || f.grade === "멸").length;
       let bonus = { pen: 0, res: 0, dam: 0, def: 0 };
       if (legendCount >= 6) { bonus.pen += 100; bonus.res += 100; }
       else if (legendCount >= 4) { bonus.pen += 100; }
@@ -367,9 +369,6 @@
           img.style.height = "60px";
           selectedImagesDiv.appendChild(img);
       });
-      
-    //   // 또한 score-area 업데이트 (옵션)
-    //   document.getElementById('score-area').innerText = `총 결속점수: ${totalScore}`;
     }
   </script>
 </body>
