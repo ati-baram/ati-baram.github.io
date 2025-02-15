@@ -1,282 +1,324 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-9206573130293174">
-    <link rel="icon" href="asset/logo.png">
-    <title>결속추천</title>
-    <style>
-        .familiar-image {
-            width: 55px;
-            margin: 5px;
-            cursor: pointer;
-        }
-        .selected {
-            border: 5px solid red;
-        }
-        #result {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>환수 선택 및 결속 계산</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .button-container { margin-bottom: 20px; }
+    .button-container button { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
+    #familiar-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    #familiar-list img { width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; }
+    #familiar-list img.selected { border: 3px solid blue; }
+    #selected-count, #score-area { margin-top: 20px; font-size: 18px; }
+    #result-container { margin-top: 20px; font-size: 18px; }
+  </style>
 </head>
 <body>
+  <div class="button-container">
+    <button id="guardian-button">수호</button>
+    <button id="transform-button">변신</button>
+    <button id="calculate-button">계산하기</button>
+  </div>
+  <div id="familiar-list"></div>
+  <div id="selected-count">선택된 환수: 0/40</div>
+  <div id="score-area">총 결속점수: 0</div>
+  <!-- 결과 상세 내역을 표시할 영역 -->
+  <div id="result-container"></div>
 
-<h1>결속추천</h1>
-
-<button id="guardian-button">수호</button>
-<button id="transform-button">변신</button>
-
-<div id="familiar-list"></div>
-
-<p id="selected-count">선택된 환수: 0/40</p>
-<button id="calculate-button">최적 조합 계산</button>
-
-<div id="result"></div>
-
-<script>
-    let familiars = [];  // 전체 환수 데이터
-    let selectedFamiliars = [];  // 사용자가 선택한 환수 (최대 40개)
+  <script>
+    let familiars = [];           // 전체 환수 데이터
+    let selectedFamiliars = [];   // 사용자가 선택한 환수 (최대 40개)
 
     // JSON 데이터 로드
     fetch('linked_data.json')
-        .then(response => response.json())
-        .then(data => {
-            familiars = data;
-            console.log("데이터 로드 완료:", familiars);
-            displayFamiliars("수호");  // 기본값은 수호 환수
-        })
-        .catch(error => {
-            console.error("데이터 로드 실패:", error);
-            alert("환수 데이터를 로드할 수 없습니다.");
-        });
+      .then(response => response.json())
+      .then(data => {
+          familiars = data;
+          console.log("데이터 로드 완료:", familiars);
+          displayFamiliars("수호");  // 기본값은 수호 환수
+      })
+      .catch(error => {
+          console.error("데이터 로드 실패:", error);
+          alert("환수 데이터를 로드할 수 없습니다.");
+      });
 
     // 환수 목록 표시
     function displayFamiliars(type) {
-        const familiarList = document.getElementById('familiar-list');
-        familiarList.innerHTML = '';
+      const familiarList = document.getElementById('familiar-list');
+      familiarList.innerHTML = '';
 
-        familiars.filter(f => f.type === type).forEach(familiar => {
-            let img = document.createElement('img');
-            img.src = `images/ic_${familiar.ic}.jpg`; // 이미지 경로에 맞게 수정
-            img.alt = familiar.name;
-            img.classList.add('familiar-image');
-            img.title = `${familiar.name} (${familiar.grade})`;
-            img.addEventListener('click', () => selectFamiliar(familiar, img));
-            familiarList.appendChild(img);
-        });
+      familiars.filter(f => f.type === type).forEach(familiar => {
+          let img = document.createElement('img');
+          img.src = `images/ic_${familiar.ic}.jpg`;
+          img.alt = familiar.name;
+          img.title = `${familiar.name} (${familiar.grade})`;
+          img.classList.add('familiar-image');
+          img.addEventListener('click', () => selectFamiliar(familiar, img));
+          familiarList.appendChild(img);
+      });
     }
 
     // 환수 선택 기능
     function selectFamiliar(familiar, img) {
-        if (selectedFamiliars.includes(familiar)) {
-            selectedFamiliars = selectedFamiliars.filter(f => f !== familiar);
-            img.classList.remove('selected');
-        } else {
-            if (selectedFamiliars.length < 40) {
-                selectedFamiliars.push(familiar);
-                img.classList.add('selected');
-            } else {
-                alert("최대 40개의 환수만 선택할 수 있습니다!");
-            }
-        }
-        document.getElementById('selected-count').innerText = `선택된 환수: ${selectedFamiliars.length}/40`;
+      if (selectedFamiliars.includes(familiar)) {
+          selectedFamiliars = selectedFamiliars.filter(f => f !== familiar);
+          img.classList.remove('selected');
+      } else {
+          if (selectedFamiliars.length < 40) {
+              selectedFamiliars.push(familiar);
+              img.classList.add('selected');
+          } else {
+              alert("최대 40개의 환수만 선택할 수 있습니다!");
+          }
+      }
+      document.getElementById('selected-count').innerText = `선택된 환수: ${selectedFamiliars.length}/40`;
     }
 
-    // 수호/변신 버튼 클릭 이벤트
+    // 버튼 이벤트 등록
     document.getElementById('guardian-button').addEventListener('click', () => displayFamiliars("수호"));
     document.getElementById('transform-button').addEventListener('click', () => displayFamiliars("변신"));
-
-    // 등급세트 효과 계산
-    function calculateScore(familiarCombination) {
-    let totalPenetration = 0;
-    let totalResistance = 0;
-    let totalDamageReduction = 0;
-    let totalDamageIncrease = 0;
-    let gradeSetEffects = { "수호": { "전설": 0, "불멸": 0 }, "변신": { "전설": 0, "불멸": 0 } };
-
-    familiarCombination.forEach(familiar => {
-        const { option, grade, type } = familiar;
-        totalPenetration += option['피해저항관통'] || 0;
-        totalResistance += option['피해저항'] || 0;
-        totalDamageReduction += option['대인방어%'] || 0;
-        totalDamageIncrease += option['대인피해%'] || 0;
-
-        // 등급 세트 효과 계산 (수호, 변신 별도 처리)
-        if (type === '수호' || type === '변신') {
-            gradeSetEffects[type][grade] += 1;
-
-            if (grade === '전설') {
-                if (gradeSetEffects[type]["전설"] === 4) totalPenetration += 100;
-                if (gradeSetEffects[type]["전설"] === 6) {
-                    totalPenetration += 100;
-                    totalResistance += 100;
-                }
-            } else if (grade === '불멸') {
-                if (type === '수호') {
-                    if (gradeSetEffects["수호"]["불멸"] === 2) totalPenetration += 200;
-                    if (gradeSetEffects["수호"]["불멸"] >= 3) {
-                        totalPenetration += 200;
-                        totalResistance += 150;
-                    }
-                    if (gradeSetEffects["수호"]["불멸"] >= 5) totalDamageIncrease += 20;
-                    if (gradeSetEffects["수호"]["불멸"] === 6) totalDamageReduction += 20;
-                } else if (type === '변신') {
-                    if (gradeSetEffects["변신"]["불멸"] === 2) totalPenetration += 150;
-                    if (gradeSetEffects["변신"]["불멸"] >= 3) {
-                        totalPenetration += 150;
-                        totalResistance += 150;
-                    }
-                    if (gradeSetEffects["변신"]["불멸"] >= 5) totalDamageIncrease += 20;
-                    if (gradeSetEffects["변신"]["불멸"] === 6) totalDamageReduction += 20;
-                }
-            }
-        }
+    // "계산하기" 버튼: 클릭 시 총 결속점수와 상세 내역을 표시
+    document.getElementById('calculate-button').addEventListener('click', () => {
+      updateBondScore();
     });
 
-    return { totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease };
-}
+    // =======================
+    // 점수 계산 관련 함수들
+    // =======================
 
-
-    // 세력 세트 효과 계산 (수호/변신 차이 반영)
-    function calculateInfluenceSetEffects(familiarCombination, type) {
-        let totalPenetration = 0;
-        let totalResistance = 0;
-
-        // 세력별 효과 적용
-        let influenceSetEffects = {};
-
-        familiarCombination.forEach(familiar => {
-            const { influence } = familiar;
-            influenceSetEffects[influence] = (influenceSetEffects[influence] || 0) + 1;
-        });
-
-        // 세력 세트 효과 적용 (수호와 변신 차이 반영)
-        for (let influence in influenceSetEffects) {
-            const count = influenceSetEffects[influence];
-
-            if (type === '수호') {
-                // 수호 타입
-                if (influence === '결의' || influence === '고요' || influence === '의지') {
-                    if (count >= 2) totalResistance += 50;
-                    if (count >= 3) totalResistance += 80;
-                    if (count >= 4) totalResistance += 130;
-                    if (count >= 5) totalResistance += 150;
-                    if (count === 6) totalResistance += 200;
-                }
-                if (influence === '침착' || influence === '냉정' || influence === '활력') {
-                    if (count >= 2) totalPenetration += 30;
-                    if (count >= 3) totalPenetration += 50;
-                    if (count >= 4) totalPenetration += 80;
-                    if (count >= 5) totalPenetration += 90;
-                    if (count === 6) totalPenetration += 130;
-                }
-            
-            } else if (type === '변신') {
-                // 변신 타입
-                if (influence === '결의' || influence === '고요' || influence === '냉정') {
-                    if (count >= 2) totalPenetration += 30;
-                    if (count >= 3) totalPenetration += 50;
-                    if (count >= 4) totalPenetration += 80;
-                    if (count >= 5) totalPenetration += 90;
-                    if (count === 6) totalPenetration += 130;
-                }
-                if (influence === '활력' || influence === '침착' || influence === '의지') {
-                    if (count >= 2) totalResistance += 50;
-                    if (count >= 3) totalResistance += 80;
-                    if (count >= 4) totalResistance += 130;
-                    if (count >= 5) totalResistance += 150;
-                    if (count === 6) totalResistance += 200;
-                }
-            }
-        }
-
-        return { totalPenetration, totalResistance };
+    // 1. 기본 점수 계산: 공식 → 피해저항관통 + 피해저항 + (대인피해% * 10) + (대인방어% * 10)
+    function calculateBaseScore(familiar) {
+      const opt = familiar.option || {};
+      const pen = Number(opt["피해저항관통"] || 0);
+      const res = Number(opt["피해저항"] || 0);
+      const dam = Number(opt["대인피해%"] || 0);
+      const def = Number(opt["대인방어%"] || 0);
+      return pen + res + (dam * 10) + (def * 10);
     }
 
-    // 최적의 점수 조합을 찾아서 출력
-    document.getElementById('calculate-button').addEventListener('click', () => {
-        if (selectedFamiliars.length < 6) {
-            alert("최소 6개의 환수를 선택해야 합니다.");
-            return;
-        }
+    // 2. 수호 등급 세트 효과 (grade set bonus)
+    function calculateGuardianGradeSetBonus(familiars) {
+      const guardians = familiars.filter(f => f.type === "수호");
+      const legendCount = guardians.filter(f => f.grade === "전설").length;
+      const immortalCount = guardians.filter(f => f.grade === "불멸").length;
+      let bonus = { pen: 0, res: 0, dam: 0, def: 0 };
 
-        let maxScore = 0;
-        let bestCombination = [];
+      // 전설 효과
+      if (legendCount >= 6) {
+          bonus.pen += 100;
+          bonus.res += 100;
+      } else if (legendCount >= 4) {
+          bonus.pen += 100;
+      }
+      // 불멸 효과
+      if (immortalCount >= 6) {
+          bonus.pen += 200;
+          bonus.res += 150;
+          bonus.dam += 20;
+          bonus.def += 20;
+      } else if (immortalCount >= 5) {
+          bonus.pen += 200;
+          bonus.res += 150;
+          bonus.dam += 20;
+      } else if (immortalCount >= 3) {
+          bonus.pen += 200;
+          bonus.res += 150;
+      } else if (immortalCount >= 2) {
+          bonus.pen += 200;
+      }
+      return bonus;
+    }
 
-        // 6개 선택한 환수들 중 모든 조합을 계산
-        for (let i = 0; i < selectedFamiliars.length - 5; i++) {
-            for (let j = i + 1; j < selectedFamiliars.length - 4; j++) {
-                for (let k = j + 1; k < selectedFamiliars.length - 3; k++) {
-                    for (let l = k + 1; l < selectedFamiliars.length - 2; l++) {
-                        for (let m = l + 1; m < selectedFamiliars.length - 1; m++) {
-                            for (let n = m + 1; n < selectedFamiliars.length; n++) {
-                                let combination = [
-                                    selectedFamiliars[i],
-                                    selectedFamiliars[j],
-                                    selectedFamiliars[k],
-                                    selectedFamiliars[l],
-                                    selectedFamiliars[m],
-                                    selectedFamiliars[n]
-                                ];
-                                let { score, totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease } = calculateScore(combination);
-                                
-                                if (score > maxScore) {
-                                    maxScore = score;
-                                    bestCombination = combination;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    // 3. 변신 등급 세트 효과 (grade set bonus)
+    function calculateTransformationGradeSetBonus(familiars) {
+      const trans = familiars.filter(f => f.type === "변신");
+      const legendCount = trans.filter(f => f.grade === "전설").length;
+      const immortalCount = trans.filter(f => f.grade === "불멸").length;
+      let bonus = { pen: 0, res: 0, dam: 0, def: 0 };
 
-        // 세력과 등급을 정리하기 위한 함수
-        function getCount(items) {
-            const counts = {};
-            items.forEach(item => {
-                counts[item] = (counts[item] || 0) + 1;
-            });
-            return counts;
-        }
+      // 전설 효과
+      if (legendCount >= 6) {
+          bonus.pen += 100;
+          bonus.res += 100;
+      } else if (legendCount >= 4) {
+          bonus.pen += 100;
+      }
+      // 불멸 효과
+      if (immortalCount >= 6) {
+          bonus.pen += 150;
+          bonus.res += 150;
+          bonus.dam += 20;
+          bonus.def += 20;
+      } else if (immortalCount >= 5) {
+          bonus.pen += 150;
+          bonus.res += 150;
+          bonus.dam += 20;
+      } else if (immortalCount >= 3) {
+          bonus.pen += 150;
+          bonus.res += 150;
+      } else if (immortalCount >= 2) {
+          bonus.pen += 150;
+      }
+      return bonus;
+    }
 
-        // 세력과 등급 값 추출
-        const influences = bestCombination.map(f => f.influence);
-        const grades = bestCombination.map(f => f.grade);
+    // 4. 수호 세력세트 효과 (influence set bonus)
+    function calculateGuardianInfluenceSetBonus(familiars) {
+      const guardians = familiars.filter(f => f.type === "수호");
+      let bonus = { pen: 0, res: 0 };
+      // 결의, 고요, 의지: 피해저항 보너스
+      ["결의", "고요", "의지"].forEach(infl => {
+          const count = guardians.filter(f => f.influence === infl).length;
+          if (count >= 2) {
+              if (count === 2) bonus.res += 50;
+              else if (count === 3) bonus.res += 80;
+              else if (count === 4) bonus.res += 130;
+              else if (count === 5) bonus.res += 150;
+              else if (count >= 6) bonus.res += 200;
+          }
+      });
+      // 침착, 냉정, 활력: 피해저항관통 보너스
+      ["침착", "냉정", "활력"].forEach(infl => {
+          const count = guardians.filter(f => f.influence === infl).length;
+          if (count >= 2) {
+              if (count === 2) bonus.pen += 30;
+              else if (count === 3) bonus.pen += 50;
+              else if (count === 4) bonus.pen += 80;
+              else if (count === 5) bonus.pen += 90;
+              else if (count >= 6) bonus.pen += 130;
+          }
+      });
+      return bonus;
+    }
 
-        // 세력과 등급을 정리
-        const influenceCount = getCount(influences);
-        const gradeCount = getCount(grades);
+    // 5. 변신 세력세트 효과 (influence set bonus)
+    function calculateTransformationInfluenceSetBonus(familiars) {
+      const trans = familiars.filter(f => f.type === "변신");
+      let bonus = { pen: 0, res: 0 };
+      // 활력, 침착, 의지: 피해저항 보너스
+      ["활력", "침착", "의지"].forEach(infl => {
+          const count = trans.filter(f => f.influence === infl).length;
+          if (count >= 2) {
+              if (count === 2) bonus.res += 50;
+              else if (count === 3) bonus.res += 80;
+              else if (count === 4) bonus.res += 130;
+              else if (count === 5) bonus.res += 150;
+              else if (count >= 6) bonus.res += 200;
+          }
+      });
+      // 결의, 고요, 냉정: 피해저항관통 보너스
+      ["결의", "고요", "냉정"].forEach(infl => {
+          const count = trans.filter(f => f.influence === infl).length;
+          if (count >= 2) {
+              if (count === 2) bonus.pen += 30;
+              else if (count === 3) bonus.pen += 50;
+              else if (count === 4) bonus.pen += 80;
+              else if (count === 5) bonus.pen += 90;
+              else if (count >= 6) bonus.pen += 130;
+          }
+      });
+      return bonus;
+    }
 
-        // 세력과 등급을 출력 형식에 맞게 변환
-        const influenceText = Object.keys(influenceCount)
-            .map(key => `${influenceCount[key]}${key}`)
-            .join(' ');
-        const gradeText = Object.keys(gradeCount)
-            .map(key => `${gradeCount[key]}${key}`)
-            .join(' ');
+    // 6. 총 결속점수 계산 (기본점수 + 각 세트 효과 보너스)
+    function calculateTotalBondScore() {
+      let baseScore = 0;
+      selectedFamiliars.forEach(f => {
+          baseScore += calculateBaseScore(f);
+      });
+      
+      const guardianGradeBonus = calculateGuardianGradeSetBonus(selectedFamiliars);
+      const guardianInfluenceBonus = calculateGuardianInfluenceSetBonus(selectedFamiliars);
+      const transformationGradeBonus = calculateTransformationGradeSetBonus(selectedFamiliars);
+      const transformationInfluenceBonus = calculateTransformationInfluenceSetBonus(selectedFamiliars);
+      
+      const totalBonus = 
+            guardianGradeBonus.pen + guardianGradeBonus.res +
+            guardianInfluenceBonus.pen + guardianInfluenceBonus.res +
+            transformationGradeBonus.pen + transformationGradeBonus.res +
+            transformationInfluenceBonus.pen + transformationInfluenceBonus.res;
+      
+      return baseScore + totalBonus;
+    }
 
-        // 최종 점수 계산
-        const { totalPenetration, totalResistance, totalDamageReduction, totalDamageIncrease } = calculateScore(bestCombination);
+    // 선택한 환수들의 결속점수와 상세 내역을 화면에 업데이트하는 함수
+    function updateBondScore() {
+      // 총 결속점수 계산
+      const totalScore = calculateTotalBondScore();
 
-        // 결과 출력
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = `
-            최고 점수 조합: ${maxScore}<br>
-            ${bestCombination.map(f => `<img src="images/ic_${f.ic}.jpg" class="familiar-image" alt="${f.name}" title="${f.name}">`).join('')}
-            <br>세력: ${influenceText}
-            <br>등급: ${gradeText}
-            <br>피해저항관통: ${totalPenetration}
-            <br>피해저항: ${totalResistance}
-            <br>대인피해%: ${totalDamageIncrease}
-            <br>대인방어%: ${totalDamageReduction}
-        `;
-    });
-
-
-
-    </script>
-
+      // 선택된 환수들의 기본 스탯 합계
+      let basePen = 0, baseRes = 0, baseDam = 0, baseDef = 0;
+      selectedFamiliars.forEach(f => {
+          const opt = f.option || {};
+          basePen += Number(opt["피해저항관통"] || 0);
+          baseRes += Number(opt["피해저항"] || 0);
+          baseDam += Number(opt["대인피해%"] || 0);
+          baseDef += Number(opt["대인방어%"] || 0);
+      });
+      
+      // 등급 세트 보너스 (수호, 변신)
+      const guardianGradeBonus = calculateGuardianGradeSetBonus(selectedFamiliars);
+      const transformationGradeBonus = calculateTransformationGradeSetBonus(selectedFamiliars);
+      // 세력 세트 보너스 (수호, 변신)
+      const guardianInfluenceBonus = calculateGuardianInfluenceSetBonus(selectedFamiliars);
+      const transformationInfluenceBonus = calculateTransformationInfluenceSetBonus(selectedFamiliars);
+      
+      const bonusPen = guardianGradeBonus.pen + transformationGradeBonus.pen + guardianInfluenceBonus.pen + transformationInfluenceBonus.pen;
+      const bonusRes = guardianGradeBonus.res + transformationGradeBonus.res + guardianInfluenceBonus.res + transformationInfluenceBonus.res;
+      const bonusDam = (guardianGradeBonus.dam + transformationGradeBonus.dam) * 10;  // 대인피해% 보너스는 *10
+      const bonusDef = (guardianGradeBonus.def + transformationGradeBonus.def) * 10;  // 대인방어% 보너스는 *10
+      
+      const finalPen = basePen + bonusPen;
+      const finalRes = baseRes + bonusRes;
+      const finalDam = (baseDam * 10) + bonusDam;
+      const finalDef = (baseDef * 10) + bonusDef;
+      
+      // 등급 breakdown
+      let gradeCounts = {};
+      selectedFamiliars.forEach(f => {
+          gradeCounts[f.grade] = (gradeCounts[f.grade] || 0) + 1;
+      });
+      let gradeStr = "";
+      for (const [grade, count] of Object.entries(gradeCounts)) {
+          gradeStr += `${count}${grade} `;
+      }
+      
+      // 세력 breakdown
+      let influenceCounts = {};
+      selectedFamiliars.forEach(f => {
+          influenceCounts[f.influence] = (influenceCounts[f.influence] || 0) + 1;
+      });
+      let influenceStr = "";
+      for (const [infl, count] of Object.entries(influenceCounts)) {
+          influenceStr += `${count}${infl} `;
+      }
+      
+      // 결과 표시 (하단 result-container 영역)
+      const resultContainer = document.getElementById('result-container');
+      resultContainer.innerHTML = `
+        <div>최고결속점수 : ${totalScore}</div>
+        <div id="selected-images" style="display: flex; gap: 5px; margin: 10px 0;"></div>
+        <div>등급 : ${gradeStr.trim()}</div>
+        <div>세력 : ${influenceStr.trim()}</div>
+        <div>피해저항관통 : ${finalPen}</div>
+        <div>피해저항 : ${finalRes}</div>
+        <div>대인피해% : ${finalDam}</div>
+        <div>대인방어% : ${finalDef}</div>
+      `;
+      
+      // 선택된 환수들의 이미지를 가로로 표시
+      const selectedImagesDiv = document.getElementById('selected-images');
+      selectedImagesDiv.innerHTML = "";
+      selectedFamiliars.forEach(f => {
+          let img = document.createElement('img');
+          img.src = `images/ic_${f.ic}.jpg`;
+          img.alt = f.name;
+          img.style.width = "60px";
+          img.style.height = "60px";
+          selectedImagesDiv.appendChild(img);
+      });
+    }
+  </script>
 </body>
 </html>
