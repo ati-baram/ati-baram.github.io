@@ -269,13 +269,13 @@
       
       const bonusPen = guardianGradeBonus.pen + transformationGradeBonus.pen + guardianInfluenceBonus.pen + transformationInfluenceBonus.pen;
       const bonusRes = guardianGradeBonus.res + transformationGradeBonus.res + guardianInfluenceBonus.res + transformationInfluenceBonus.res;
-      const bonusDam = (guardianGradeBonus.dam + transformationGradeBonus.dam) * 10;  // 대인피해% 보너스는 *10
-      const bonusDef = (guardianGradeBonus.def + transformationGradeBonus.def) * 10;  // 대인방어% 보너스는 *10
+      const bonusDam = guardianGradeBonus.dam + transformationGradeBonus.dam;
+      const bonusDef = guardianGradeBonus.def + transformationGradeBonus.def; 
       
       const finalPen = basePen + bonusPen;
       const finalRes = baseRes + bonusRes;
-      const finalDam = (baseDam * 10) + bonusDam;
-      const finalDef = (baseDef * 10) + bonusDef;
+      const finalDam = baseDam + bonusDam;
+      const finalDef = baseDef * 10 + bonusDef;
       
       // 등급 breakdown
       let gradeCounts = {};
