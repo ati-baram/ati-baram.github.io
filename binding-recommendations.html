@@ -137,26 +137,66 @@
                 }
             }
 
-            // 세력세트효과 계산
-            influenceSetEffects[influence] = (influenceSetEffects[influence] || 0) + 1;
+            // 세력 세트 효과 계산 (수호/변신 차이 반영)
+            const influenceEffects = calculateInfluenceSetEffects(familiarCombination, type);
+            totalPenetration += influenceEffects.totalPenetration;
+            totalResistance += influenceEffects.totalResistance;
         });
 
         // 세력 세트 효과 적용
-        for (let influence in influenceSetEffects) {
-            const count = influenceSetEffects[influence];
-            if (influence === '결의' || influence === '고요' || influence === '의지') {
-                if (count >= 2) totalResistance += 50;
-                if (count >= 3) totalResistance += 80;
-                if (count >= 4) totalResistance += 130;
-                if (count >= 5) totalResistance += 150;
-                if (count === 6) totalResistance += 200;
-            } else if (influence === '침착' || influence === '냉정' || influence === '활력') {
-                if (count >= 2) totalPenetration += 30;
-                if (count >= 3) totalPenetration += 50;
-                if (count >= 4) totalPenetration += 80;
-                if (count >= 5) totalPenetration += 90;
-                if (count === 6) totalPenetration += 130;
+        function calculateInfluenceSetEffects(familiarCombination, type) {
+            let totalPenetration = 0;
+            let totalResistance = 0;
+
+            // 세력별 효과 적용
+            let influenceSetEffects = {};
+
+            familiarCombination.forEach(familiar => {
+                const { influence } = familiar;
+                influenceSetEffects[influence] = (influenceSetEffects[influence] || 0) + 1;
+            });
+
+            // 세력 세트 효과 적용 (수호와 변신 차이 반영)
+            for (let influence in influenceSetEffects) {
+                const count = influenceSetEffects[influence];
+
+                if (type === '수호') {
+                    // 수호 타입
+                    if (influence === '결의' || influence === '고요' || influence === '의지') {
+                        if (count >= 2) totalResistance += 50;
+                        if (count >= 3) totalResistance += 80;
+                        if (count >= 4) totalResistance += 130;
+                        if (count >= 5) totalResistance += 150;
+                        if (count === 6) totalResistance += 200;
+                    }
+                    if (influence === '침착' || influence === '냉정' || influence === '활력') {
+                        if (count >= 2) totalPenetration += 30;
+                        if (count >= 3) totalPenetration += 50;
+                        if (count >= 4) totalPenetration += 80;
+                        if (count >= 5) totalPenetration += 90;
+                        if (count === 6) totalPenetration += 130;
+                    }
+            
+                } else if (type === '변신') {
+                    // 변신 타입
+                    if (influence === '결의' || influence === '고요' || influence === '냉정') {
+                        if (count >= 2) totalPenetration += 30;
+                        if (count >= 3) totalPenetration += 50;
+                        if (count >= 4) totalPenetration += 80;
+                        if (count >= 5) totalPenetration += 90;
+                        if (count === 6) totalPenetration += 130;
+                    }
+                    if (influence === '활력' || influence === '침착' || influence === '의지') {
+                        if (count >= 2) totalResistance += 50;
+                        if (count >= 3) totalResistance += 80;
+                        if (count >= 4) totalResistance += 130;
+                        if (count >= 5) totalResistance += 150;
+                        if (count === 6) totalResistance += 200;
+                    }
+                }
             }
+
+            return { totalPenetration, totalResistance };
         }
 
         // 최종 점수 계산
