@@ -260,7 +260,7 @@
       
       const resultContainer = document.getElementById('result-container');
       resultContainer.innerHTML = `
-        <div>환산점수 : ${totalScore}</div>
+        <div style="font-weight: bold;">환산점수 : ${totalScore}</div>
         <div id="selected-images" style="display: flex; gap: 5px; margin: 10px 0;"></div>
         <div>등급 : ${gradeStr.trim()}</div>
         <div>세력 : ${influenceStr.trim()}</div>
