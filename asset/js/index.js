@@ -91,7 +91,7 @@ const resultSection = document.getElementById('result');
 resultSection.classList.add('show');  // 페이드 인 클래스 추가
 });
 
-
+// 환수 성장 경험치표
 let legendaryData = [];
 let immortalData = [];
 let currentType = 'legendary'; 
@@ -230,7 +230,7 @@ function selectFamiliar(familiar) {
     currentLevel = 0;
 
     // 환수 정보 업데이트 (기존 코드 그대로 유지)
-    const influenceImageSrc = `asset/ic_${familiar.influence}.jpg`;
+    const influenceImageSrc = `asset/img/ic_${familiar.influence}.jpg`;
     const gradeStyle = familiar.grade === "불멸" 
         ? 'color: white; background: #fb8802; padding: 2px 5px; border-radius: 3px;' 
         : familiar.grade === "전설" 
