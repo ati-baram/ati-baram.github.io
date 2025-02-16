@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-9206573130293174">
+  <link rel="icon" href="asset/img/logo.png">
+  <link rel="stylesheet" href="asset/style.css">  
+  <title>환수정보</title>
+  <style>
+    .button-container { margin-bottom: 20px; }
+    .button-container button { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
+    #familiar-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    #familiar-list img { width: 55px; height: 55px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; }
+    #familiar-list img.selected { border: 3px solid blue; }
+    #selected-count, #score-area { margin-top: 20px; font-size: 18px; }
+    #result-container { margin-top: 20px; font-size: 18px; }
+    /* 기본 레이아웃 스타일 */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      padding-top: 50px; /* 탭 메뉴가 고정될 공간 확보 */
+    }
+    /* 네비게이션 바 */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      z-index: 1000;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo img { height: 40px; }
+    .tabs { display: flex; justify-content: center; flex-grow: 1; }
+    .tabs a {
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 0 10px;
+      text-align: center;
+    }
+    .tabs a:hover { background-color: #555; }
+    .content { padding: 20px; flex-grow: 1; }
+  </style>
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <nav>
+    <div class="logo">
+      <img src="asset/img/logo.png" alt="로고">
+      <h2>결속추천</h2>
+    </div>
+    <div class="tabs">
+      <a href="index.html">환수 정보</a>
+      <a href="recommend.html">결속 추천</a>
+      <a href="ranking.html">결속 랭킹</a>
+    </div>
+  </nav>
+
+    <div class="content">
+        <div class="container">
+            <h2>공지사항</h2>
+            현재 아래의 환수들의 능력치 데이터가 없습니다. 제보 부탁드립니다.<br>
+            탑승 : [불멸] 운석갑주돈, 벽력초월용, 황금각 신령양, 비황천마, 화검영사<br>
+            수호 : [전설] 풍현 정령록, 복수의 풀깨비
+            환수능력치 제보 : <a href="https://open.kakao.com/o/saBUZoeh">오픈톡</a> <a href="/asset/양식.txt">제보양식</a>
+        </div>
+        <div class="container">
+            <div class="button-container">
+                <button id="guardian-button">수호</button>
+                <button id="transform-button">변신</button>
+                <button id="calculate-button">계산하기</button>
+            </div>
+
+            <div id="familiar-list"></div>
+            <div id="selected-count">선택된 환수: 0/40</div>
+        </div>
+        <div class="container">
+            <div id="score-area"></div>
+            <!-- 결과 상세 내역을 표시할 영역 -->
+            <div id="result-container"></div>
+        </div>
+    </div>
+
+     <!-- Copyright -->
+     <div class="copyright">
+        &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
+        Thanks to 꼬력, 쭈사야, 어부, 아리샨
+    </div>
+
+    <script src="/asset/js/recommend.js"></script>
+  
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
+    crossorigin="anonymous"></script>
+</body>
+</html>

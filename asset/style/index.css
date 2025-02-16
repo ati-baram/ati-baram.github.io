@@ -1,0 +1,78 @@
+.flex-container {
+    display: flex;
+    flex-direction: row; /* 가로로 배치 */
+    justify-content: space-between; /* 공간을 분배 */
+    gap: 20px; /* 두 영역 사이에 간격 */
+    flex-wrap: wrap; /* 화면 크기 조정 시 자동으로 줄 바꿈 */
+}
+
+.experience-section, .calculator-section {
+    flex: 1; /* 각 섹션이 나머지 공간을 차지 */
+    min-width: 300px; /* 최소 너비 설정 */
+}
+
+.experience-section {
+    max-width: 50%; /* 최대 너비 설정 */
+}
+
+.calculator-section {
+    max-width: 50%; /* 최대 너비 설정 */
+}
+
+.copyright {
+    margin-top: auto; /* 맨 아래로 고정 */
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+}
+
+.flex-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.flex-row label {
+    min-width: 70px;
+    font-weight: bold;
+    margin-right: 5px; /* 레이블과 입력란 간의 간격 */
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.input-group img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.input-group input {
+    width: 50px;
+    padding: 5px;
+}
+
+.legendary-header {
+    background-color: #b62b20 !important;
+    color: white !important;
+}
+.immortal-header {
+    background-color: #fb8802 !important;
+    color: white !important;
+}
+.experience-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.experience-table th, .experience-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.experience-table th {
+    font-weight: bold;
+}
