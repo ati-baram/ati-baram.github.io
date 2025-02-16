@@ -1,8 +1,12 @@
 /* 전체적인 스타일 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Orbit', sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     margin: 20px;
     background-color: #f4f4f4;
+    padding-top: 50px;
 }
 
 .container {
@@ -204,14 +208,7 @@ button:disabled {
     margin: 5px 0;
   }
 
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    padding-top: 50px; /* 탭 메뉴가 고정될 공간을 확보 */
-}
+
 /* 네비게이션 바 */
 nav {
     position: fixed; /* 네비게이션 바를 화면 상단에 고정 */
