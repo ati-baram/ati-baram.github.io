@@ -14,10 +14,6 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    color: #333;
-}
-
 /* 환수 이미지 스타일 */
 .familiar-images {
     display: flex;
@@ -54,6 +50,7 @@ button {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 15px;
 }
 button {
     margin-bottom: 20px;
