@@ -282,3 +282,16 @@
       });
     }
   
+document.getElementById('reset-button').addEventListener('click', () => {
+    // 선택된 환수 배열 초기화
+    selectedFamiliars = [];
+    
+    // 모든 환수 이미지에서 선택 표시 제거
+    const images = document.querySelectorAll('.familiar-image');
+    images.forEach(img => {
+        img.classList.remove('selected');
+    });
+    
+    // 선택 개수 업데이트
+    document.getElementById('selected-count').innerText = `선택된 환수: 0/40`;
+    });
