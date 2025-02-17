@@ -85,5 +85,6 @@ body {
   .score {
     font-weight: bold;
     margin-left: 15px;
+    white-space: nowrap;
   }
   
