@@ -38,29 +38,58 @@ function loadRankingData(file, containerId) {
         // 각 랭킹 항목의 컨테이너
         const entryDiv = document.createElement('div');
         entryDiv.className = 'ranking-entry';
-        
+
         // 순위 표시
         const h2 = document.createElement('h2');
         h2.textContent = (index + 1) + '위';
         entryDiv.appendChild(h2);
-        
+
         // 6개의 환수 이미지를 포함하는 div
         const imagesDiv = document.createElement('div');
         imagesDiv.className = 'images';
+        let factionCount = {}; // 세력 개수 저장
+
         entry.combo.forEach(item => {
+          // 환수 이미지 추가
           const img = document.createElement('img');
           img.src = 'images/ic_' + item.ic + '.jpg';
           img.alt = item.name;
           imagesDiv.appendChild(img);
+
+          // 세력 카운팅
+          let faction = item.influence; // 세력 이름 (ex: "고요")
+          factionCount[faction] = (factionCount[faction] || 0) + 1;
         });
         entryDiv.appendChild(imagesDiv);
-        
+
+        // 세력 정보 추가
+        const factionDiv = document.createElement('div');
+        factionDiv.className = 'faction-container';
+
+        Object.entries(factionCount).forEach(([faction, count]) => {
+          const factionItem = document.createElement('div');
+          factionItem.className = 'faction-item';
+
+          const factionImg = document.createElement('img');
+          factionImg.src = 'asset/img/ic_' + faction + '.jpg'; // 세력 이미지 경로
+          factionImg.alt = faction;
+
+          const factionText = document.createElement('span');
+          factionText.textContent = "x" + count;
+
+          factionItem.appendChild(factionImg);
+          factionItem.appendChild(factionText);
+          factionDiv.appendChild(factionItem);
+        });
+
+        entryDiv.appendChild(factionDiv);
+
         // 점수 표시
         const scoreDiv = document.createElement('div');
         scoreDiv.className = 'score';
         scoreDiv.textContent = '점수 : ' + entry.score;
         entryDiv.appendChild(scoreDiv);
-        
+
         rankingContainer.appendChild(entryDiv);
       });
     })

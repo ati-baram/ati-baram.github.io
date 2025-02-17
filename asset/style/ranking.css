@@ -6,15 +6,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  /* 메인 버튼 (변신/수호) */
-  .main-tabs {
+}
+
+/* 메인 버튼 (변신/수호) */
+.main-tabs {
     display: flex;
     gap: 20px;
-  }
-  
-  .main-tab-button {
+}
+
+.main-tab-button {
     padding: 10px 30px;
     cursor: pointer;
     background: #007bff;
@@ -22,68 +22,94 @@ body {
     border: none;
     border-radius: 5px;
     font-weight: bold;
-  }
-  
-  .main-tab-button.active {
+}
+
+.main-tab-button.active {
     background: #0056b3;
-  }
-  
-  /* 서브 랭킹 (불멸 포함/비포함) */
-  .ranking-container {
+}
+
+/* 서브 랭킹 (불멸 포함/불멸 비포함) */
+.ranking-container {
     display: flex;
     width: 80%;
     gap: 20px;
     justify-content: space-between;
-  }
-  
-  .ranking-box {
+}
+
+.ranking-box {
     flex: 1;
     background: #fff;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  }
-  
-  .ranking-title {
+}
+
+.ranking-title {
     font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
-  }
-  
-  /* 랭킹 리스트 */
-  .ranking-entry {
+}
+
+/* 랭킹 리스트 (각 항목) */
+.ranking-entry {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* 요소들이 한 줄에 정렬되도록 */
+    flex-wrap: nowrap; /* 줄 바꿈 방지 */
     background: #fff;
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 8px;
     box-shadow: 0 0 3px rgba(0,0,0,0.1);
-  }
-  
-  .ranking-entry h2 {
-    margin: 0 20px 0 0;
+}
+
+/* 순위 (1위, 2위...) */
+.ranking-entry h2 {
+    margin: 0 15px 0 0;
     font-size: 1em;
     font-weight: bold;
     width: 50px;
     text-align: center;
-  }
-  
-  .images {
+}
+
+/* 환수 이미지 컨테이너 */
+.images {
     display: flex;
     gap: 5px;
-  }
-  
-  .images img {
+}
+
+/* 환수 이미지 크기 조정 */
+.images img {
     width: 40px;
     height: 40px;
-  }
-  
-  .score {
-    font-weight: bold;
+}
+
+/* 세력 정보 컨테이너 */
+.faction-container {
+    display: flex;
+    gap: 10px;
     margin-left: 15px;
-    white-space: nowrap;
-  }
-  
+    align-items: center;
+}
+
+/* 각 세력 아이콘과 숫자 */
+.faction-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 세력 아이콘 크기 조정 */
+.faction-item img {
+    width: 30px;
+    height: 30px;
+}
+
+/* 점수 표시 */
+.score {
+    font-weight: bold;
+    margin-left: auto; /* 점수가 자동으로 오른쪽 정렬되도록 */
+    white-space: nowrap; /* 점수 줄 바꿈 방지 */
+}
