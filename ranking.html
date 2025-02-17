@@ -1,36 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>변신 & 수호 결속 랭킹</title>
-  <link rel="stylesheet" href="/asset/style/style.css">
-  <link rel="stylesheet" href="/asset/style/ranking.css">
+    <meta charset="UTF-8">
+    <title>환수정보</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-9206573130293174">
+    <link rel="icon" href="asset/img/logo.png">
+    <link rel="stylesheet" href="/asset/style/style.css">
+    <link rel="stylesheet" href="/asset/style/ranking.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbit&display=swap" rel="stylesheet">
 </head>
+
+<style>
+    * {font-family: 'Orbit',sans-serif;}
+</style>
+
 <body>
+    <!-- 네비게이션 바 -->
+    <nav>
+        <div class="logo">
+            <img src="asset/img/logo.png" alt="로고">
+            <h2>결속추천</h2>
+        </div>
+        <div class="tabs">
+            <a href="index.html">환수정보</a>
+            <a href="recommend.html">결속추천</a>
+            <a href="ranking.html">결속랭킹</a>
+        </div>
+    </nav>
 
-  <h1>변신 & 수호 결속 랭킹</h1>
+    <div class="content">
+        <div class="container"></div>
+            <h1>변신 & 수호 결속 랭킹</h1>
+            <!-- 메인 탭 버튼 -->
+            <div class="main-tabs">
+                <button class="main-tab-button active" onclick="switchCategory('transformation', this)">변신</button>
+                <button class="main-tab-button" onclick="switchCategory('guardian', this)">수호</button>
+            </div>
 
-  <!-- 메인 탭 버튼 -->
-  <div class="main-tabs">
-    <button class="main-tab-button active" onclick="switchCategory('transformation', this)">변신</button>
-    <button class="main-tab-button" onclick="switchCategory('guardian', this)">수호</button>
-  </div>
+            <!-- 랭킹을 표시할 컨테이너 -->
+            <div class="ranking-container">
+                <!-- 불멸 포함 -->
+                <div class="ranking-box">
+                <div class="ranking-title">불멸 포함</div>
+                <div id="ranking-included"></div>
+                </div>
 
-  <!-- 랭킹을 표시할 컨테이너 -->
-  <div class="ranking-container">
-    <!-- 불멸 포함 -->
-    <div class="ranking-box">
-      <div class="ranking-title">불멸 포함</div>
-      <div id="ranking-included"></div>
+                <!-- 불멸 비포함 -->
+                <div class="ranking-box">
+                <div class="ranking-title">불멸 비포함</div>
+                <div id="ranking-excluded"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- 불멸 비포함 -->
-    <div class="ranking-box">
-      <div class="ranking-title">불멸 비포함</div>
-      <div id="ranking-excluded"></div>
+    <!-- Copyright -->
+    <div class="copyright">
+        &copy; Copyright <strong><span>아티</span></strong>. All Rights Reserved<br>
+        Thanks to 꼬력, 쭈사야, 어부, 아리샨
     </div>
-  </div>
 
   <script src="asset/js/ranking.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
+    crossorigin="anonymous"></script>
 </body>
 </html>
