@@ -1,5 +1,5 @@
 // top10_t.json 파일에서 데이터를 불러옵니다.
-fetch('top10_t.json')
+fetch('asset/json/top10_t.json')
 .then(response => response.json())
 .then(data => {
   const rankingContainer = document.getElementById('ranking');
