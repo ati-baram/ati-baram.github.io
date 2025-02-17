@@ -46,15 +46,11 @@ body {
 
 /* 설명 리스트를 박스로 감싸기 */
 .info-list {
-    list-style-type: none;
-    padding: 10px 15px;
     margin: 0;
     font-size: 14px;
     color: #444;
-    border: 1px solid #000;  /* 검은색 테두리 */
     background: #fff;  /* 배경색 */
     border-radius: 5px; /* 모서리 둥글게 */
-    width: 450px;  /* 설명 박스의 너비 고정 */
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
