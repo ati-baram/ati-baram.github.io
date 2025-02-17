@@ -18,7 +18,7 @@ h1 {
     font-weight: bold;
   }
   .images {
-    width: auto;
+    width: 350PX;
     height: auto;
     display: flex;
     gap: 10px;
