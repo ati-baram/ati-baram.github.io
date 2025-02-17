@@ -3,16 +3,24 @@ h1 {
     margin-bottom: 30px;
   }
   .ranking-entry {
+    display: flex;
     background: #fff;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 20px;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
   }
+  .ranking-entry .rank {
+    margin-right: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
   .ranking-entry h2 {
     margin: 0 0 10px 0;
   }
   .images {
+    width: 55px;
+    height: 55px;
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
@@ -23,4 +31,5 @@ h1 {
   }
   .score {
     font-weight: bold;
+    margin-left: 20px;
   }
