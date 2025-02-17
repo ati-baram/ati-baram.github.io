@@ -87,7 +87,7 @@ function loadRankingData(file, containerId) {
         // 점수 표시
         const scoreDiv = document.createElement('div');
         scoreDiv.className = 'score';
-        scoreDiv.textContent = '점수 : ' + entry.score;
+        scoreDiv.textContent = ' | 점수 : ' + entry.score;
         entryDiv.appendChild(scoreDiv);
 
         rankingContainer.appendChild(entryDiv);
