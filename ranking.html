@@ -16,7 +16,7 @@
 </head>
 
 <style>
-    * {font-family: 'Orbit',sans-serif;}
+    * {font-family: 'Orbit', sans-serif;}
 </style>
 
 <body>
@@ -36,20 +36,23 @@
     <div class="content">
         <div class="container">
             <h1>변신 & 수호 결속 랭킹</h1>
-            <span>Update : 25.02.18 기준</span>
-            <!-- 메인 탭 버튼 -->
-            <div class="main-tabs">
-                <button class="main-tab-button active" onclick="switchCategory('transformation', this)">변신</button>
-                <button class="main-tab-button" onclick="switchCategory('guardian', this)">수호</button>
-            </div>
+            <p class="update-date">Update : 25.02.18 기준</p>
 
-            <div class="sub-tabs">
-                <ul>
+            <!-- 버튼과 설명을 가로 정렬하는 컨테이너 -->
+            <div class="top-section">
+                <!-- 메인 탭 버튼 -->
+                <div class="main-tabs">
+                    <button class="main-tab-button active" onclick="switchCategory('transformation', this)">변신</button>
+                    <button class="main-tab-button" onclick="switchCategory('guardian', this)">수호</button>
+                </div>
+
+                <!-- 설명 리스트 -->
+                <ul class="info-list">
                     <li>환수 레벨은 25렙 기준으로 계산됩니다.</li>
                     <li>점수 = 피해저항관통 + 피해저항 + (대인피해% + 대인방어%) x 10 으로 계산됩니다.</li>
-                    <li>최대결속점수 즉, 선택된 환수들 중 환산타채가 가장높은 조합을 보여줍니다.</li>
-                    <li>틀릴수도있어요...</li>
-                  </ul>
+                    <li>최대 결속 점수, 즉 선택된 환수들 중 환산 타채가 가장 높은 조합을 보여줍니다.</li>
+                    <li>틀릴 수도 있어요...</li>
+                </ul>
             </div>
         </div>
 
@@ -76,8 +79,8 @@
         Thanks to 꼬력, 쭈사야, 어부, 아리샨
     </div>
 
-  <script src="asset/js/ranking.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
-    crossorigin="anonymous"></script>
+    <script src="asset/js/ranking.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
+        crossorigin="anonymous"></script>
 </body>
 </html>
