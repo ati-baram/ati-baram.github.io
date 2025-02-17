@@ -14,13 +14,6 @@
     <title>결속 랭킹</title>
     <style>
         * {font-family: 'Orbit',sans-serif;}
-        .button-container { margin-bottom: 20px; }
-        .button-container button { margin-right: 10px; padding: 10px 20px; font-size: 16px; }
-        #ranking-list { margin-top: 20px; }
-        .ranking-item { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        .ranking-images { display: flex; gap: 5px; }
-        .ranking-images img { width: 50px; height: 50px; border: 1px solid #ccc; }
-        .ranking-score { font-weight: bold; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -37,15 +30,8 @@
     </nav>
 
     <div class="content">
-        <div class="container">
-            <div class="button-container">
-                <button id="guardian-button" class="mode-button active" data-type="수호">수호</button>
-                <button id="transform-button" class="mode-button" data-type="변신">변신</button>
-                <button id="include-immortal-button" class="mode-button active">불멸 포함</button>
-                <button id="exclude-immortal-button" class="mode-button">불멸 비포함</button>
-            </div>
-            <div id="ranking-list"></div>
-        </div>
+        <h1>변신 결속 랭킹</h1>
+        <div id="ranking"></div>
     </div>
 
     <script src="/asset/js/ranking.js"></script>
