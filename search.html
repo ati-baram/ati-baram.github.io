@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바람의나라: 연 캐릭터 조회</title>
+    <script>
+        async function fetchOCID() {
+            const characterName = document.getElementById("characterName").value;
+            const serverName = document.getElementById("serverName").value;
+
+            if (!characterName || !serverName) {
+                alert("캐릭터명과 서버명을 입력하세요.");
+                return;
+            }
+
+            const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
+            const ocidUrl = `https://openapi.nexon.com/ko/game/baramy/ocid?id=7&character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(serverName)}`;
+
+            try {
+                const response = await fetch(ocidUrl, {
+                    method: "GET",
+                    headers: {
+                        "x-nxopen-api-key": apiKey
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`OCID 조회 실패: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.ocid) {
+                    throw new Error("OCID를 찾을 수 없습니다.");
+                }
+
+                fetchCharacterInfo(data.ocid); // OCID로 캐릭터 정보 조회
+            } catch (error) {
+                console.error("OCID 조회 오류:", error);
+                alert("캐릭터의 OCID를 불러오는데 실패했습니다.");
+            }
+        }
+
+        async function fetchCharacterInfo(ocid) {
+            const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
+            const characterUrl = `https://openapi.nexon.com/ko/game/baramy/character/basic?id=7&ocid=${ocid}`;
+
+            try {
+                const response = await fetch(characterUrl, {
+                    method: "GET",
+                    headers: {
+                        "x-nxopen-api-key": apiKey
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayCharacterData(data);
+            } catch (error) {
+                console.error("캐릭터 정보 조회 오류:", error);
+                alert("캐릭터 정보를 불러오는데 실패했습니다.");
+            }
+        }
+
+        function displayCharacterData(data) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `
+                <h3>캐릭터 정보</h3>
+                <p><strong>닉네임:</strong> ${data.character_name}</p>
+                <p><strong>서버:</strong> ${data.server_name}</p>
+                <p><strong>레벨:</strong> ${data.level}</p>
+                <p><strong>직업:</strong> ${data.job}</p>
+                <p><strong>길드:</strong> ${data.guild_name || "없음"}</p>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h2>바람의나라: 연 캐릭터 조회</h2>
+    <input type="text" id="characterName" placeholder="캐릭터명 입력">
+    <select id="serverName">
+        <option value="">서버 선택</option>
+        <option value="연">연</option>
+        <option value="해명">해명</option>
+        <option value="무휼">무휼</option>
+        <option value="세류">세류</option>
+    </select>
+    <button onclick="fetchOCID()">조회</button>
+    <div id="result"></div>
+</body>
+</html>
