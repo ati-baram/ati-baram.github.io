@@ -6,6 +6,7 @@
     <title>바람의나라: 연 캐릭터 조회</title>
     <script>
         const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
+        // const apiKey = "test_c0115d4000b9041e99c825b2f73ad1cd6af9479e0fbba2f6db93f87c1dd2ef51efe8d04e6d233bd35cf2fabdeb93fb0d"; // 아리샨
         const servers = ["연", "해명", "세류", "무휼"];
 
         async function fetchOCID() {
@@ -113,10 +114,9 @@
                 <p><strong>닉네임 :</strong> ${data.character_name}</p>
                 <p><strong>서버 :</strong> ${data.server_name}</p>
                 <p><strong>레벨 :</strong> ${data.character_level}</p>
-                <p><strong>경험치 :</strong> ${data.character_exp.toLocaleString()} EXP</p>
                 <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
-                <p><strong>국가 :</strong> ${data.character_nation}</p>
-                <p><strong>성별 :</strong> ${data.character_gender}</p>
+                <p><strong>경험치 :</strong> ${data.character_exp.toLocaleString()} EXP</p>
+
                 <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
                 <hr>
                 ${titleHtml}
