@@ -97,8 +97,7 @@
 
                 const characterInfos = await Promise.all(validResults.map(async data => {
                     const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
-                    const titleEquipment = await fetchTitleEquipment(data.ocid);
-                    return { ...characterData, ocid: data.ocid, serverDate, titleEquipment };
+                    return { ...characterData, ocid: data.ocid, serverDate };
                 }));
 
                 const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
@@ -106,6 +105,26 @@
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
+            }
+        }
+
+        async function fetchCharacterInfo(ocid) {
+            try {
+                const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/basic?ocid=${ocid}`, {
+                    method: "GET",
+                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
+                }
+
+                const characterData = await response.json();
+                const serverDate = response.headers.get("date"); // 서버 응답 시간
+                return { characterData, serverDate };
+            } catch (error) {
+                console.error("캐릭터 정보 조회 오류:", error);
+                return { characterData: null, serverDate: null };
             }
         }
 
@@ -155,8 +174,8 @@
                 return;
             }
             const intervalTime = parseInt(selectedInterval.value, 10);
-            trackingIntervals[cardId] = setInterval(() => fetchCharacterData(characterName, cardId), intervalTime);
-            fetchCharacterData(characterName, cardId);
+            trackingIntervals[cardId] = setInterval(() => fetchCharacterInfo(characterName), intervalTime);
+            fetchCharacterInfo(characterName);
             alert(`${characterName}의 정보를 ${intervalTime / 1000}초마다 조회합니다.`);
         }
 
