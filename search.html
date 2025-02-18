@@ -81,31 +81,37 @@
             try {
                 document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
 
-                const ocidRequests = servers.map(server =>
-                    fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
-                        method: "GET",
-                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                    }).then(response => response.ok ? response.json() : null)
-                );
-
-                const ocidResults = await Promise.all(ocidRequests);
-                const validResults = ocidResults.filter(data => data && data.ocid);
-                if (validResults.length === 0) {
+                const ocid = await getOCID(characterName);
+                if (!ocid) {
                     document.getElementById("result").innerText = "캐릭터 정보를 찾을 수 없습니다.";
                     return;
                 }
 
-                const characterInfos = await Promise.all(validResults.map(async data => {
-                    const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
-                    return { ...characterData, ocid: data.ocid, serverDate };
-                }));
-
-                const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
-                displayCharacterData(highestLevelCharacter, "result");
+                const { characterData, serverDate } = await fetchCharacterInfo(ocid);
+                displayCharacterData(characterData, "result", serverDate);
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
             }
+        }
+
+        async function getOCID(characterName) {
+            for (const server of servers) {
+                try {
+                    const response = await fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
+                        method: "GET",
+                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.ocid) return data.ocid;
+                    }
+                } catch (error) {
+                    console.error("OCID 가져오기 오류:", error);
+                }
+            }
+            return null;
         }
 
         async function fetchCharacterInfo(ocid) {
@@ -128,62 +134,59 @@
             }
         }
 
-        function addCharacter() {
-            const characterName = document.getElementById("trackingCharacterName").value.trim();
-            if (!characterName) {
-                alert("캐릭터명을 입력하세요.");
+        function displayCharacterData(data, elementId, serverDate) {
+            if (!data) {
+                document.getElementById(elementId).innerText = "데이터 없음";
                 return;
             }
 
-            const cardId = `char-${characterName}`;
-            if (document.getElementById(cardId)) {
-                alert("이미 등록된 캐릭터입니다.");
-                return;
+            let formattedKST = "서버 응답 시간 없음";
+            if (serverDate) {
+                try {
+                    const gmtTime = new Date(serverDate);
+                    gmtTime.setHours(gmtTime.getHours() + 9);
+                    formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
+                } catch (error) {
+                    console.error("서버 응답 시간 변환 오류:", error);
+                }
             }
 
-            const characterCard = document.createElement("div");
-            characterCard.className = "character-card";
-            characterCard.id = cardId;
-            characterCard.innerHTML = `
-                <strong>${characterName}</strong>
-                <div class="option-group">
-                    <label><input type="radio" name="interval-${cardId}" value="10000"> 10초</label>
-                    <label><input type="radio" name="interval-${cardId}" value="30000"> 30초</label>
-                    <label><input type="radio" name="interval-${cardId}" value="60000"> 1분</label>
-                    <label><input type="radio" name="interval-${cardId}" value="300000"> 5분</label>
-                    <label><input type="radio" name="interval-${cardId}" value="600000"> 10분</label>
-                </div>
-                <button onclick="startTracking('${characterName}', '${cardId}')">추적하기</button>
-                <button onclick="stopTracking('${characterName}', '${cardId}')">중지</button>
-                <button onclick="removeCharacter('${cardId}')">제거</button>
-                <div class="result" id="result-${cardId}">결과 대기 중...</div>
+            document.getElementById(elementId).innerHTML = `
+                <strong>닉네임:</strong> ${data.character_name}<br>
+                <strong>레벨:</strong> ${data.character_level}<br>
+                <strong>직업:</strong> ${data.character_class_group_name} (${data.character_class_name})<br>
+                <strong>서버:</strong> ${data.server_name}<br>
+                <strong>경험치:</strong> ${data.character_exp.toLocaleString()} EXP<br>
+                <strong>서버 응답 시간:</strong> ${formattedKST}<br>
             `;
-            document.getElementById("characterList").appendChild(characterCard);
-        }
-
-        function removeCharacter(cardId) {
-            stopTracking(null, cardId);
-            document.getElementById(cardId)?.remove();
         }
 
         function startTracking(characterName, cardId) {
-            stopTracking(characterName, cardId);
+            stopTracking(cardId);
             const selectedInterval = document.querySelector(`input[name="interval-${cardId}"]:checked`);
             if (!selectedInterval) {
                 alert("조회 주기를 선택하세요.");
                 return;
             }
+
             const intervalTime = parseInt(selectedInterval.value, 10);
-            trackingIntervals[cardId] = setInterval(() => fetchCharacterInfo(characterName), intervalTime);
-            fetchCharacterInfo(characterName);
+            trackingIntervals[cardId] = setInterval(async () => {
+                const ocid = await getOCID(characterName);
+                if (ocid) {
+                    const { characterData, serverDate } = await fetchCharacterInfo(ocid);
+                    displayCharacterData(characterData, `result-${cardId}`, serverDate);
+                } else {
+                    document.getElementById(`result-${cardId}`).innerText = "캐릭터 정보를 찾을 수 없습니다.";
+                }
+            }, intervalTime);
+
             alert(`${characterName}의 정보를 ${intervalTime / 1000}초마다 조회합니다.`);
         }
 
-        function stopTracking(characterName, cardId) {
+        function stopTracking(cardId) {
             if (trackingIntervals[cardId]) {
                 clearInterval(trackingIntervals[cardId]);
                 delete trackingIntervals[cardId];
-                if (characterName) alert(`${characterName}의 자동 조회를 중지했습니다.`);
             }
         }
     </script>
