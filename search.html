@@ -70,7 +70,25 @@
             }
         }
 
-        function displayCharacterData(data) {
+        function displayCharacterData(data, serverDate) {
+            // 서버 시간을 한국 시간(KST)으로 변환
+            const gmtTime = new Date(serverDate);
+            const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
+
+            // 한국 시간 포맷 변경
+            const year = kstTime.getFullYear();
+            const month = String(kstTime.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
+            const day = String(kstTime.getDate()).padStart(2, '0'); // 일 (01~31)
+            const hours = kstTime.getHours();
+            const minutes = String(kstTime.getMinutes()).padStart(2, '0');
+            const seconds = String(kstTime.getSeconds()).padStart(2, '0');
+            
+            // 오전/오후 구분
+            const period = hours >= 12 ? "오후" : "오전";
+            const formattedHours = hours % 12 || 12; // 12시간 형식 (0시는 12로 변경)
+
+            const formattedKST = `${year}/${month}/${day} ${period} ${formattedHours}:${minutes}:${seconds} (KST)`;
+
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
                 <h3>캐릭터 정보</h3>
@@ -82,8 +100,11 @@
                 <p><strong>국가 :</strong> ${data.character_nation}</p>
                 <p><strong>성별 :</strong> ${data.character_gender}</p>
                 <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
+                <hr>
+                <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
             `;
         }
+
 
     </script>
 </head>
