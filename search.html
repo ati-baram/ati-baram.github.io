@@ -78,20 +78,15 @@
                 return;
             }
 
-            try {
-                document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
+            document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
 
-                const highestCharacter = await findHighestLevelCharacter(characterName);
-                if (!highestCharacter) {
-                    document.getElementById("result").innerText = "캐릭터 정보를 찾을 수 없습니다.";
-                    return;
-                }
-
-                displayCharacterData(highestCharacter, "result");
-            } catch (error) {
-                console.error("OCID 조회 오류:", error);
-                alert("캐릭터 정보를 불러오는데 실패했습니다.");
+            const highestCharacter = await findHighestLevelCharacter(characterName);
+            if (!highestCharacter) {
+                document.getElementById("result").innerText = "캐릭터 정보를 찾을 수 없습니다.";
+                return;
             }
+
+            displayCharacterData(highestCharacter, "result");
         }
 
         async function findHighestLevelCharacter(characterName) {
