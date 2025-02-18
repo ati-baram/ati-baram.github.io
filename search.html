@@ -96,7 +96,31 @@
             }
         }
 
-        function displayCharacterData(data, titleEquipment) {
+        function displayCharacterData(data, serverDate, titleEquipment) {
+            let formattedKST;
+
+            if (serverDate) {
+                try {
+                    const gmtTime = new Date(serverDate);
+                    if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
+
+                    const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
+                    const year = kstTime.getUTCFullYear();
+                    const month = String(kstTime.getUTCMonth() + 1).padStart(2, '0');
+                    const day = String(kstTime.getUTCDate()).padStart(2, '0');
+                    const hours = String(kstTime.getUTCHours()).padStart(2, '0');
+                    const minutes = String(kstTime.getUTCMinutes()).padStart(2, '0');
+                    const seconds = String(kstTime.getUTCSeconds()).padStart(2, '0');
+
+                    formattedKST = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} KST`;
+                } catch (error) {
+                    console.error("서버 응답 시간 변환 오류:", error);
+                    formattedKST = "서버 응답 시간 오류";
+                }
+            } else {
+                formattedKST = "서버 응답 시간 없음";
+            }
+
             let titleHtml = "<h3>칭호</h3>";
             
             if (titleEquipment && titleEquipment.title_equipment.length > 0) {
@@ -121,6 +145,7 @@
                 <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
                 <p><strong>경험치 :</strong> ${data.character_exp.toLocaleString()} EXP</p>
                 <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
+                <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
                 <hr>
                 ${titleHtml}
             `;
