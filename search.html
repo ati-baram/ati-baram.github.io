@@ -69,9 +69,11 @@
 
                 const data = await response.json();
                 const serverDate = response.headers.get("date"); // 서버에서 응답한 시간
-                console.log("서버에서 받은 Date 헤더:", serverDate);
 
-                displayCharacterData(data, serverDate);
+                // 추가로 칭호 정보도 가져오기
+                const titleEquipment = await fetchTitleEquipment(ocid);
+
+                displayCharacterData(data, serverDate, titleEquipment);
             } catch (error) {
                 console.error("캐릭터 정보 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
@@ -79,26 +81,45 @@
         }
 
 
-        function displayCharacterData(data, serverDate) {
+        async function fetchTitleEquipment(ocid) {
+            const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
+            const titleUrl = `https://open.api.nexon.com/baramy/v1/character/title-equipment?ocid=${ocid}`;
+
+            try {
+                const response = await fetch(titleUrl, {
+                    method: "GET",
+                    headers: {
+                        "accept": "application/json",
+                        "x-nxopen-api-key": apiKey
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`칭호 정보 조회 실패: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.title_equipment; // 칭호 정보 배열 반환
+            } catch (error) {
+                console.error("칭호 정보 조회 오류:", error);
+                return null;
+            }
+        }
+
+
+
+        function displayCharacterData(data, serverDate, titleEquipment) {
             let formattedKST;
 
             if (serverDate) {
                 try {
-                    // 서버에서 받은 GMT 시간을 UTC 기준으로 변환 (로컬 변환 방지)
                     const gmtTime = new Date(serverDate);
+                    if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
 
-                    // 유효한 날짜인지 확인
-                    if (isNaN(gmtTime.getTime())) {
-                        throw new Error("Invalid Date");
-                    }
-
-                    // KST (한국 시간)으로 변환
-                    const kstTime = new Date(gmtTime.getTime() + (9 * 60 * 60 * 1000)); // GMT+9
-
-                    // 한국 시간 포맷 변경 (YYYY-MM-DD HH:mm:ss)
+                    const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
                     const year = kstTime.getUTCFullYear();
-                    const month = String(kstTime.getUTCMonth() + 1).padStart(2, '0'); // 월 (01~12)
-                    const day = String(kstTime.getUTCDate()).padStart(2, '0'); // 일 (01~31)
+                    const month = String(kstTime.getUTCMonth() + 1).padStart(2, '0');
+                    const day = String(kstTime.getUTCDate()).padStart(2, '0');
                     const hours = String(kstTime.getUTCHours()).padStart(2, '0');
                     const minutes = String(kstTime.getUTCMinutes()).padStart(2, '0');
                     const seconds = String(kstTime.getUTCSeconds()).padStart(2, '0');
@@ -111,7 +132,20 @@
             } else {
                 formattedKST = "서버 응답 시간 없음";
             }
-            console.log("변환된 KST 시간:", formattedKST);
+
+            // 칭호 목록 생성
+            let titleHtml = "<h3>칭호 정보</h3>";
+            if (titleEquipment && titleEquipment.length > 0) {
+                titleHtml += "<ul>";
+                titleEquipment.forEach(title => {
+                    titleHtml += `<li>[${title.title_type_name}] ${title.title_name}</li>`;
+                });
+                titleHtml += "</ul>";
+            } else {
+                titleHtml += "<p>장착된 칭호 없음</p>";
+            }
+
+            // 결과 표시
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
                 <h3>캐릭터 정보</h3>
@@ -125,8 +159,11 @@
                 <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
                 <hr>
                 <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
+                <hr>
+                ${titleHtml}
             `;
         }
+
 
     </script>
 </head>
