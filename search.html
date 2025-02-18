@@ -98,13 +98,17 @@
 
         function displayCharacterData(data, titleEquipment) {
             let titleHtml = "<h3>칭호 정보</h3>";
+            
             if (titleEquipment && titleEquipment.title_equipment.length > 0) {
-                titleHtml += "<ul>";
-                titleEquipment.title_equipment.forEach(title => {
-                    const type = title.title_equipment_type === "1" ? "장착 칭호" : "표시 칭호";
-                    titleHtml += `<li>[${type}] ${title.title_type_name} - ${title.title_name}</li>`;
-                });
-                titleHtml += "</ul>";
+                const equippedTitles = titleEquipment.title_equipment
+                    .filter(title => title.title_equipment_type === "1") // 장착 칭호만 필터링
+                    .map(title => `<li>[장착 칭호] ${title.title_type_name} - ${title.title_name}</li>`);
+
+                if (equippedTitles.length > 0) {
+                    titleHtml += "<ul>" + equippedTitles.join('') + "</ul>";
+                } else {
+                    titleHtml += "<p>장착된 칭호 없음</p>";
+                }
             } else {
                 titleHtml += "<p>장착된 칭호 없음</p>";
             }
@@ -116,12 +120,12 @@
                 <p><strong>레벨 :</strong> ${data.character_level}</p>
                 <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
                 <p><strong>경험치 :</strong> ${data.character_exp.toLocaleString()} EXP</p>
-
                 <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
                 <hr>
                 ${titleHtml}
             `;
         }
+
     </script>
 </head>
 <body>
