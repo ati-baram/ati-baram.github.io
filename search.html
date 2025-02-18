@@ -140,6 +140,24 @@
             }
         }
 
+        async function fetchTitleEquipment(ocid) {
+            try {
+                const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/title-equipment?ocid=${ocid}`, {
+                    method: "GET",
+                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`칭호 정보 조회 실패: ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error("칭호 정보 조회 오류:", error);
+                return null;
+            }
+        }
+
         function displayCharacterData(data, serverDate, titleEquipment) {
             let formattedKST = "서버 응답 시간 없음";
 
