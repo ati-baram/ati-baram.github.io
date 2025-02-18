@@ -93,11 +93,12 @@
 
             if (serverDate) {
                 try {
-                    const gmtTime = new Date(serverDate);
+                    const gmtTime = new Date(serverDate); // 서버 응답 시간 (UTC)
                     if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
 
-                    const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
-                    formattedKST = kstTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
+                    gmtTime.setHours(gmtTime.getHours() + 9); // UTC → KST 변환
+
+                    formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
                 } catch (error) {
                     console.error("서버 응답 시간 변환 오류:", error);
                 }
@@ -129,6 +130,7 @@
                 ${titleHtml}
             `;
         }
+
     </script>
 </head>
 <body>
