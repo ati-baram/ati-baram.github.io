@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>바람의나라: 연 캐릭터 조회</title>
+    <title>캐릭터 조회</title>
     <script>
         const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
         // const apiKey = "test_c0115d4000b9041e99c825b2f73ad1cd6af9479e0fbba2f6db93f87c1dd2ef51efe8d04e6d233bd35cf2fabdeb93fb0d"; // 아리샨
@@ -97,7 +97,7 @@
         }
 
         function displayCharacterData(data, titleEquipment) {
-            let titleHtml = "<h3>칭호 정보</h3>";
+            let titleHtml = "<h3>칭호</h3>";
             
             if (titleEquipment && titleEquipment.title_equipment.length > 0) {
                 const equippedTitles = titleEquipment.title_equipment
@@ -129,7 +129,7 @@
     </script>
 </head>
 <body>
-    <h2>바람의나라: 연 캐릭터 조회</h2>
+    <h2>캐릭터 조회</h2>
     <input type="text" id="characterName" placeholder="캐릭터명 입력">
     <button onclick="fetchOCID()">조회</button>
     <div id="result"></div>
