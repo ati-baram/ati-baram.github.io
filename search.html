@@ -75,8 +75,10 @@
         }
 
         function displayCharacterData(data, serverDate) {
-            // 서버 시간을 한국 시간(KST)으로 변환
-            const gmtTime = new Date(serverDate);
+            // 서버에서 받은 시간이 없으면 현재 시간 사용
+            const gmtTime = serverDate ? new Date(serverDate) : new Date();
+
+            // 한국 시간(KST)으로 변환
             const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
 
             // 한국 시간 포맷 변경
@@ -108,6 +110,7 @@
                 <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
             `;
         }
+
 
 
     </script>
