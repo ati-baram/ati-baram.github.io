@@ -30,16 +30,20 @@
                 }
 
                 const data = await response.json();
+                console.log("OCID API 응답:", data);  // API 응답 데이터 확인
+
                 if (!data.ocid) {
-                    throw new Error("OCID를 찾을 수 없습니다.");
+                    alert("OCID를 찾을 수 없습니다. 캐릭터명과 서버명을 확인하세요.");
+                    return;
                 }
 
-                fetchCharacterInfo(data.ocid); // OCID로 캐릭터 정보 조회
+                fetchCharacterInfo(data.ocid);
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터의 OCID를 불러오는데 실패했습니다.");
             }
         }
+
 
         async function fetchCharacterInfo(ocid) {
             const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
