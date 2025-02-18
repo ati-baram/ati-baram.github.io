@@ -49,6 +49,17 @@
         .option-group { margin-top: 5px; }
         .result { margin-top: 10px; font-size: 14px; }
         button { margin-top: 5px; cursor: pointer; }
+
+        .button-group {
+            display: flex; /* ✅ 버튼을 가로로 정렬 */
+            gap: 5px; /* ✅ 버튼 간격 조절 */
+            margin-top: 5px;
+        }
+        .button-group button {
+            flex: 1; /* ✅ 버튼 크기를 동일하게 */
+            padding: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -247,9 +258,11 @@
                     <label><input type="radio" name="interval-${cardId}" value="300000"> 5분</label>
                     <label><input type="radio" name="interval-${cardId}" value="600000"> 10분</label>
                 </div>
-                <button onclick="startTracking('${characterName}', '${cardId}')">추적하기</button>
-                <button onclick="stopTracking('${characterName}', '${cardId}')">중지</button>
-                <button onclick="removeCharacter('${cardId}')">제거</button>
+                <div class="button-group"> <!-- ✅ 버튼을 감싸는 div 추가 -->
+                    <button onclick="startTracking('${characterName}', '${cardId}')">추적하기</button>
+                    <button onclick="stopTracking('${characterName}', '${cardId}')">중지</button>
+                    <button onclick="removeCharacter('${cardId}')">제거</button>
+                </div>
                 <div class="result" id="result-${cardId}">결과 대기 중...</div>
             `;
             document.getElementById("characterList").appendChild(characterCard);
