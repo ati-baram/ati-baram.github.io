@@ -133,6 +133,10 @@
                     const titleEquipment = await fetchTitleEquipment(highestLevelCharacter.ocid);
                     displayCharacterData(highestLevelCharacter, highestLevelCharacter.serverDate, titleEquipment);
                 }
+
+                // ✅ 입력란 비우기
+                characterInput.value = "";
+
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
@@ -252,6 +256,10 @@
                 <div class="result" id="result-${cardId}">결과 대기 중...</div>
             `;
             document.getElementById("characterList").appendChild(characterCard);
+
+            // ✅ 입력란 비우기
+            characterInput.value = "";    
+
         }
         // 캐릭터 등록 해제
         function removeCharacter(cardId) {
