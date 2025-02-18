@@ -332,6 +332,46 @@
                 resultElement.innerText = "❌ 데이터 조회 중 오류 발생";
             }
         }
+
+        function displayCharacterTrackingData(data, serverDate, titleEquipment, resultElement) {
+            let formattedKST = "서버 응답 시간 없음";
+
+            if (serverDate) {
+                try {
+                    const gmtTime = new Date(serverDate);
+                    if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
+                    formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
+                } catch (error) {
+                    console.error("서버 응답 시간 변환 오류:", error);
+                }
+            }
+
+            let titleHtml = "<h3>칭호</h3>";
+            const equippedTitles = titleEquipment?.title_equipment?.filter(title => title.title_equipment_type === "1") || [];
+
+            if (equippedTitles.length > 0) {
+                titleHtml += "<ul>";
+                equippedTitles.forEach(title => {
+                    titleHtml += `<li>${title.title_type_name} - ${title.title_name}</li>`;
+                });
+                titleHtml += "</ul>";
+            } else {
+                titleHtml += "<p>장착된 칭호 없음</p>";
+            }
+
+            resultElement.innerHTML = `
+                <h3>캐릭터 정보</h3>
+                <p><strong>닉네임 :</strong> ${data.character_name}</p>
+                <p><strong>서버 :</strong> ${data.server_name}</p>
+                <p><strong>레벨 :</strong> ${data.character_level}</p>
+                <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
+                <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
+                <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
+                <hr>
+                ${titleHtml}
+            `;
+        }
+
     </script>
 </body>
 </html>
