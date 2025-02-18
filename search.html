@@ -81,37 +81,37 @@
             try {
                 document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
 
-                // 🔹 4개 서버에서 OCID 조회
-                const ocidRequests = servers.map(server =>
-                    fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
-                        method: "GET",
-                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                    }).then(response => response.ok ? response.json() : null)
-                );
-
-                const ocidResults = await Promise.all(ocidRequests);
-                const validResults = ocidResults.filter(data => data && data.ocid);
-
-                if (validResults.length === 0) {
+                const highestCharacter = await findHighestLevelCharacter(characterName);
+                if (!highestCharacter) {
                     document.getElementById("result").innerText = "캐릭터 정보를 찾을 수 없습니다.";
                     return;
                 }
 
-                // 🔹 가장 높은 레벨의 캐릭터 찾기
-                const characterInfos = await Promise.all(validResults.map(async data => {
-                    const { characterData, serverDate, titleEquipment } = await fetchCharacterInfo(data.ocid);
-                    return { ...characterData, ocid: data.ocid, serverDate, titleEquipment };
-                }));
-
-                const highestLevelCharacter = characterInfos.reduce((max, char) => 
-                    (char.character_level > max.character_level ? char : max), characterInfos[0]
-                );
-
-                displayCharacterData(highestLevelCharacter, "result", highestLevelCharacter.serverDate, highestLevelCharacter.titleEquipment);
+                displayCharacterData(highestCharacter, "result");
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
             }
+        }
+
+        async function findHighestLevelCharacter(characterName) {
+            const ocidRequests = servers.map(server =>
+                fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
+                    method: "GET",
+                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                }).then(response => response.ok ? response.json() : null)
+            );
+
+            const ocidResults = await Promise.all(ocidRequests);
+            const validResults = ocidResults.filter(data => data && data.ocid);
+            if (validResults.length === 0) return null;
+
+            const characterInfos = await Promise.all(validResults.map(async data => {
+                const { characterData, serverDate, titleEquipment } = await fetchCharacterInfo(data.ocid);
+                return { ...characterData, ocid: data.ocid, serverDate, titleEquipment };
+            }));
+
+            return characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
         }
 
         async function fetchCharacterInfo(ocid) {
@@ -121,13 +121,12 @@
                     headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
 
                 const characterData = await response.json();
-                const serverDate = response.headers.get("date"); 
+                const serverDate = response.headers.get("date");
                 const titleEquipment = await fetchTitleEquipment(ocid);
+
                 return { characterData, serverDate, titleEquipment };
             } catch (error) {
                 console.error("캐릭터 정보 조회 오류:", error);
@@ -142,9 +141,7 @@
                     headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`칭호 정보 조회 실패: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`칭호 정보 조회 실패: ${response.status}`);
 
                 return await response.json();
             } catch (error) {
@@ -153,21 +150,22 @@
             }
         }
 
-        function displayCharacterData(data, elementId, serverDate, titleEquipment) {
+        function displayCharacterData(data, elementId) {
             if (!data) {
                 document.getElementById(elementId).innerText = "데이터 없음";
                 return;
             }
 
-            let formattedKST = "서버 응답 시간 없음";
-            if (serverDate) {
-                try {
-                    const gmtTime = new Date(serverDate);
-                    gmtTime.setHours(gmtTime.getHours() + 9);
-                    formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
-                } catch (error) {
-                    console.error("서버 응답 시간 변환 오류:", error);
-                }
+            let titleHtml = "<h3>칭호</h3>";
+            const equippedTitles = data.titleEquipment?.title_equipment?.filter(title => title.title_equipment_type === "1") || [];
+            if (equippedTitles.length > 0) {
+                titleHtml += "<ul>";
+                equippedTitles.forEach(title => {
+                    titleHtml += `<li>${title.title_type_name} - ${title.title_name}</li>`;
+                });
+                titleHtml += "</ul>";
+            } else {
+                titleHtml += "<p>장착된 칭호 없음</p>";
             }
 
             document.getElementById(elementId).innerHTML = `
@@ -176,7 +174,7 @@
                 <strong>직업:</strong> ${data.character_class_group_name} (${data.character_class_name})<br>
                 <strong>서버:</strong> ${data.server_name}<br>
                 <strong>경험치:</strong> ${data.character_exp.toLocaleString()} EXP<br>
-                <strong>서버 응답 시간:</strong> ${formattedKST}<br>
+                ${titleHtml}
             `;
         }
     </script>
