@@ -96,7 +96,7 @@
                     const gmtTime = new Date(serverDate); // 서버 응답 시간 (UTC)
                     if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
 
-                    gmtTime.setHours(gmtTime.getHours() + 9); // UTC → KST 변환
+                    // gmtTime.setHours(gmtTime.getHours() + 9); // UTC → KST 변환
 
                     formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
                 } catch (error) {
