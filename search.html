@@ -49,6 +49,7 @@
         }
 
 
+
         async function fetchCharacterInfo(ocid) {
             const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
             const characterUrl = `https://open.api.nexon.com/baramy/v1/character/basic?ocid=${ocid}`;
@@ -67,17 +68,18 @@
                 }
 
                 const data = await response.json();
-                displayCharacterData(data);
+                const serverDate = response.headers.get("date"); // 서버에서 응답한 시간
+                console.log("서버에서 받은 Date 헤더:", serverDate);
+
+                displayCharacterData(data, serverDate);
             } catch (error) {
                 console.error("캐릭터 정보 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
             }
         }
 
+
         function displayCharacterData(data, serverDate) {
-           
-            const serverDate = response.headers.get("date"); // 서버에서 응답한 시간
-            console.log("서버에서 받은 Date 헤더:", serverDate);
             // 서버에서 받은 시간이 없으면 현재 시간 사용
             const gmtTime = serverDate ? new Date(serverDate) : new Date();
 
@@ -113,9 +115,6 @@
                 <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
             `;
         }
-
-
-
     </script>
 </head>
 <body>
