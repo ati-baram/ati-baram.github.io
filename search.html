@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,14 +16,17 @@
             margin: auto;
             gap: 20px;
         }
-         /* 왼쪽 캐릭터 조회 영역 */
-         .search-section {
+
+        /* 왼쪽 캐릭터 조회 영역 */
+        .search-section {
             width: 45%;
         }
-         /* 오른쪽 예의주시 목록 */
-         .tracking-section {
+
+        /* 오른쪽 예의주시 목록 */
+        .tracking-section {
             width: 50%;
         }
+
         /* 캐릭터 카드 스타일 */
         .character-card {
             border: 1px solid #ccc; 
@@ -60,7 +65,7 @@
 
         <!-- 오른쪽: 예의주시하는 캐릭터 -->
         <div class="tracking-section">
-            <h3>예의주시</h3>
+            <h3>예의주시하는 캐릭터</h3>
             <input type="text" id="trackingCharacterName" placeholder="캐릭터명 입력">
             <button onclick="addCharacter()">등록</button>
             <div class="character-list" id="characterList"></div>
@@ -68,112 +73,95 @@
     </div>
 
     <script>
-        async function fetchCharacterData(characterName, cardId) {
-            document.getElementById(`result-${cardId}`).innerText = `🔄 ${characterName} 정보 갱신 중...`;
-    
-            try {
-                const ocidRequests = servers.map(server =>
-                    fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
-                        method: "GET",
-                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                    }).then(response => response.ok ? response.json() : null)
-                );
-    
-                const ocidResults = await Promise.all(ocidRequests);
-                const validResults = ocidResults.filter(data => data && data.ocid);
-                if (validResults.length === 0) {
-                    document.getElementById(`result-${cardId}`).innerText = "캐릭터 정보를 찾을 수 없습니다.";
-                    return;
-                }
+        const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
+        const servers = ["연", "해명", "세류", "무휼"];
+        let trackingIntervals = {};
 
-                const characterInfos = await Promise.all(validResults.map(async data => {
-                    const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
-                    const titleEquipment = await fetchTitleEquipment(data.ocid);
-                    return { ...characterData, ocid: data.ocid, serverDate, titleEquipment };
-                }));
-                const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
-                displayCharacterData(highestLevelCharacter, cardId);
-            } catch (error) {
-                console.error("캐릭터 조회 오류:", error);
-            }
-        }
-        async function fetchCharacterInfo(ocid) {
-            try {
-                const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/basic?ocid=${ocid}`, {
-                    method: "GET",
-                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
-                }
-    
-                const characterData = await response.json();
-                const serverDate = response.headers.get("date"); // 서버 응답 시간
-                return { characterData, serverDate };
-            } catch (error) {
-                console.error("캐릭터 정보 조회 오류:", error);
-                return { characterData: null, serverDate: null };
-            }
-        }
-    
-        async function fetchTitleEquipment(ocid) {
-            try {
-                const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/title-equipment?ocid=${ocid}`, {
-                    method: "GET",
-                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`칭호 정보 조회 실패: ${response.status}`);
-                }
-    
-                return await response.json();
-            } catch (error) {
-                console.error("칭호 정보 조회 오류:", error);
-                return null;
-            }
-        }
-        function displayCharacterData(data, cardId) {
-            if (!data) {
-                document.getElementById(`result-${cardId}`).innerText = "데이터 없음";
+        function fetchOCID() {
+            const characterName = document.getElementById("characterName").value.trim();
+            if (!characterName) {
+                alert("캐릭터명을 입력하세요.");
                 return;
             }
-             // 🔹 서버 응답 시간 변환 (UTC → KST)
-             let formattedKST = "서버 응답 시간 없음";
-            if (data.serverDate) {
-                try {
-                    const gmtTime = new Date(data.serverDate);
-                    gmtTime.setHours(gmtTime.getHours() + 9); // UTC → KST 변환
-                    formattedKST = gmtTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
-                } catch (error) {
-                    console.error("서버 응답 시간 변환 오류:", error);
-                }
+            document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
+            setTimeout(() => {
+                document.getElementById("result").innerHTML = `
+                    <strong>닉네임:</strong> ${characterName}<br>
+                    <strong>레벨:</strong> 99<br>
+                    <strong>서버:</strong> 연<br>
+                    <strong>경험치:</strong> 123,456,789 EXP
+                `;
+            }, 1000); // 실제 API 연결 시 이 부분을 수정
+        }
+
+        function addCharacter() {
+            const characterName = document.getElementById("trackingCharacterName").value.trim();
+            if (!characterName) {
+                alert("캐릭터명을 입력하세요.");
+                return;
             }
-    
-            // 🔹 장착 칭호 필터링
-            let titleHtml = "<h3>칭호</h3>";
-            const equippedTitles = data.titleEquipment?.title_equipment?.filter(title => title.title_equipment_type === "1") || [];
-    
-            if (equippedTitles.length > 0) {
-                titleHtml += "<ul>";
-                equippedTitles.forEach(title => {
-                    titleHtml += `<li>${title.title_type_name} - ${title.title_name}</li>`;
-                });
-                titleHtml += "</ul>";
-            } else {
-                titleHtml += "<p>장착된 칭호 없음</p>";
+
+            const cardId = `char-${characterName}`;
+            if (document.getElementById(cardId)) {
+                alert("이미 등록된 캐릭터입니다.");
+                return;
             }
-            // 🔹 캐릭터 정보 출력
-            document.getElementById(`result-${cardId}`).innerHTML = `
-                <strong>닉네임:</strong> ${data.character_name}<br>
-                <strong>레벨:</strong> ${data.character_level}<br>
-                <strong>직업:</strong> ${data.character_class_group_name} (${data.character_class_name})<br>
-                <strong>서버:</strong> ${data.server_name}<br>
-                <strong>경험치:</strong> ${data.character_exp.toLocaleString()} EXP<br>
-                <strong>서버 응답 시간:</strong> ${formattedKST}<br>
-                ${titleHtml}
+
+            const characterCard = document.createElement("div");
+            characterCard.className = "character-card";
+            characterCard.id = cardId;
+            characterCard.innerHTML = `
+                <strong>${characterName}</strong>
+                <div class="option-group">
+                    <label><input type="radio" name="interval-${cardId}" value="10000"> 10초</label>
+                    <label><input type="radio" name="interval-${cardId}" value="30000"> 30초</label>
+                    <label><input type="radio" name="interval-${cardId}" value="60000"> 1분</label>
+                    <label><input type="radio" name="interval-${cardId}" value="300000"> 5분</label>
+                    <label><input type="radio" name="interval-${cardId}" value="600000"> 10분</label>
+                </div>
+                <button onclick="startTracking('${characterName}', '${cardId}')">추적하기</button>
+                <button onclick="stopTracking('${characterName}', '${cardId}')">중지</button>
+                <button onclick="removeCharacter('${cardId}')">제거</button>
+                <div class="result" id="result-${cardId}">결과 대기 중...</div>
             `;
+            document.getElementById("characterList").appendChild(characterCard);
+        }
+
+        function removeCharacter(cardId) {
+            stopTracking(null, cardId);
+            document.getElementById(cardId)?.remove();
+        }
+
+        function startTracking(characterName, cardId) {
+            stopTracking(characterName, cardId);
+            const selectedInterval = document.querySelector(`input[name="interval-${cardId}"]:checked`);
+            if (!selectedInterval) {
+                alert("조회 주기를 선택하세요.");
+                return;
+            }
+            const intervalTime = parseInt(selectedInterval.value, 10);
+            trackingIntervals[cardId] = setInterval(() => fetchCharacterData(characterName, cardId), intervalTime);
+            fetchCharacterData(characterName, cardId);
+            alert(`${characterName}의 정보를 ${intervalTime / 1000}초마다 조회합니다.`);
+        }
+
+        function stopTracking(characterName, cardId) {
+            if (trackingIntervals[cardId]) {
+                clearInterval(trackingIntervals[cardId]);
+                delete trackingIntervals[cardId];
+                if (characterName) alert(`${characterName}의 자동 조회를 중지했습니다.`);
+            }
+        }
+
+        function fetchCharacterData(characterName, cardId) {
+            document.getElementById(`result-${cardId}`).innerText = `🔄 ${characterName} 정보 갱신 중...`;
+            setTimeout(() => {
+                document.getElementById(`result-${cardId}`).innerHTML = `
+                    <strong>레벨:</strong> 99<br>
+                    <strong>서버:</strong> 연<br>
+                    <strong>경험치:</strong> 123,456,789 EXP
+                `;
+            }, 1000);
         }
     </script>
 </body>
