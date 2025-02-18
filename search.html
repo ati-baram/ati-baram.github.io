@@ -253,12 +253,12 @@
             `;
             document.getElementById("characterList").appendChild(characterCard);
         }
-
+        // 캐릭터 등록 해제
         function removeCharacter(cardId) {
             stopTracking(null, cardId);
             document.getElementById(cardId)?.remove();
         }
-
+        // 추적 함수
         function startTracking(characterName, cardId) {
             stopTracking(characterName, cardId);
             const selectedInterval = document.querySelector(`input[name="interval-${cardId}"]:checked`);
@@ -271,7 +271,7 @@
             fetchCharacterData(characterName, cardId);
             alert(`${characterName}의 정보를 ${intervalTime / 1000}초마다 조회합니다.`);
         }
-
+        // 추적 중지
         function stopTracking(characterName, cardId) {
             if (trackingIntervals[cardId]) {
                 clearInterval(trackingIntervals[cardId]);
@@ -280,15 +280,57 @@
             }
         }
 
-        function fetchCharacterData(characterName, cardId) {
-            document.getElementById(`result-${cardId}`).innerText = `🔄 ${characterName} 정보 갱신 중...`;
-            setTimeout(() => {
-                document.getElementById(`result-${cardId}`).innerHTML = `
-                    <strong>레벨:</strong> 99<br>
-                    <strong>서버:</strong> 연<br>
-                    <strong>경험치:</strong> 123,456,789 EXP
-                `;
-            }, 1000);
+        async function fetchCharacterData(characterName, cardId) {
+            const resultElement = document.getElementById(`result-${cardId}`);
+            resultElement.innerText = `🔄 ${characterName} 정보 갱신 중...`;
+
+            try {
+                // OCID 조회
+                const ocidRequests = servers.map(server =>
+                    fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
+                        method: "GET",
+                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                    }).then(async response => {
+                        if (!response.ok) return null;
+                        return response.json();
+                    }).catch(error => {
+                        console.error(`OCID 요청 실패 (${server}):`, error);
+                        return null;
+                    })
+                );
+
+                const ocidResults = await Promise.all(ocidRequests);
+                const validResults = ocidResults.filter(data => data && data.ocid);
+
+                if (validResults.length === 0) {
+                    resultElement.innerText = "❌ OCID 조회 실패: 캐릭터명을 확인하세요.";
+                    return;
+                }
+
+                // 가장 높은 레벨의 캐릭터 선택
+                const characterInfos = await Promise.all(validResults.map(async data => {
+                    const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
+                    return characterData ? { ...characterData, ocid: data.ocid, serverDate } : null;
+                }));
+
+                const validCharacters = characterInfos.filter(char => char);
+                if (validCharacters.length === 0) {
+                    resultElement.innerText = "❌ 캐릭터 정보 조회 실패";
+                    return;
+                }
+
+                validCharacters.sort((a, b) => a.character_level - b.character_level);
+                const highestLevelCharacter = validCharacters.pop();
+
+                // 칭호 정보 조회
+                const titleEquipment = await fetchTitleEquipment(highestLevelCharacter.ocid);
+
+                // 결과 표시
+                displayCharacterTrackingData(highestLevelCharacter, highestLevelCharacter.serverDate, titleEquipment, resultElement);
+            } catch (error) {
+                console.error("캐릭터 조회 오류:", error);
+                resultElement.innerText = "❌ 데이터 조회 중 오류 발생";
+            }
         }
     </script>
 </body>
