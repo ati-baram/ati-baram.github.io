@@ -80,25 +80,41 @@
 
 
         function displayCharacterData(data, serverDate) {
-            // 서버에서 받은 시간이 없으면 현재 시간 사용
-            const gmtTime = serverDate ? new Date(serverDate) : new Date();
+            let formattedKST;
 
-            // 한국 시간(KST)으로 변환
-            const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
+            if (serverDate) {
+                try {
+                    // 서버에서 받은 GMT 시간 변환
+                    const gmtTime = new Date(serverDate);
 
-            // 한국 시간 포맷 변경
-            const year = kstTime.getFullYear();
-            const month = String(kstTime.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
-            const day = String(kstTime.getDate()).padStart(2, '0'); // 일 (01~31)
-            const hours = kstTime.getHours();
-            const minutes = String(kstTime.getMinutes()).padStart(2, '0');
-            const seconds = String(kstTime.getSeconds()).padStart(2, '0');
-            
-            // 오전/오후 구분
-            const period = hours >= 12 ? "오후" : "오전";
-            const formattedHours = hours % 12 || 12; // 12시간 형식 (0시는 12로 변경)
+                    // 유효한 날짜인지 확인
+                    if (isNaN(gmtTime.getTime())) {
+                        throw new Error("Invalid Date");
+                    }
 
-            const formattedKST = `${year}/${month}/${day} ${period} ${formattedHours}:${minutes}:${seconds} (KST)`;
+                    // 한국 시간(KST)으로 변환
+                    const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
+
+                    // 한국 시간 포맷 변경
+                    const year = kstTime.getFullYear();
+                    const month = String(kstTime.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
+                    const day = String(kstTime.getDate()).padStart(2, '0'); // 일 (01~31)
+                    const hours = kstTime.getHours();
+                    const minutes = String(kstTime.getMinutes()).padStart(2, '0');
+                    const seconds = String(kstTime.getSeconds()).padStart(2, '0');
+
+                    // 오전/오후 구분
+                    const period = hours >= 12 ? "오후" : "오전";
+                    const formattedHours = hours % 12 || 12; // 12시간 형식 (0시는 12로 변경)
+
+                    formattedKST = `${year}/${month}/${day} ${period} ${formattedHours}:${minutes}:${seconds} (KST)`;
+                } catch (error) {
+                    console.error("서버 응답 시간 변환 오류:", error);
+                    formattedKST = "서버 응답 시간 오류";
+                }
+            } else {
+                formattedKST = "서버 응답 시간 없음";
+            }
 
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
@@ -115,6 +131,7 @@
                 <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
             `;
         }
+
     </script>
 </head>
 <body>
