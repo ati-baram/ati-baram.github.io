@@ -31,6 +31,8 @@
                 }
 
                 const data = await response.json();
+                const serverDate = response.headers.get("date"); // 서버에서 응답한 시간
+                displayCharacterData(data, serverDate);
                 console.log("OCID API 응답:", data); // 응답 데이터 확인
 
                 if (!data.ocid) {
