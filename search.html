@@ -6,7 +6,6 @@
     <title>캐릭터 조회</title>
     <script>
         const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
-        // const apiKey = "test_c0115d4000b9041e99c825b2f73ad1cd6af9479e0fbba2f6db93f87c1dd2ef51efe8d04e6d233bd35cf2fabdeb93fb0d"; // 아리샨
         const servers = ["연", "해명", "세류", "무휼"];
 
         async function fetchOCID() {
@@ -21,10 +20,7 @@
                 const ocidRequests = servers.map(server =>
                     fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
                         method: "GET",
-                        headers: {
-                            "accept": "application/json",
-                            "x-nxopen-api-key": apiKey
-                        }
+                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
                     }).then(response => response.ok ? response.json() : null)
                 );
 
@@ -38,15 +34,15 @@
 
                 // 가장 높은 레벨의 캐릭터 찾기
                 const characterInfos = await Promise.all(validResults.map(async data => {
-                    const characterData = await fetchCharacterInfo(data.ocid);
-                    return { ...characterData, ocid: data.ocid };
+                    const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
+                    return { ...characterData, ocid: data.ocid, serverDate };
                 }));
 
                 const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
 
                 if (highestLevelCharacter) {
                     const titleEquipment = await fetchTitleEquipment(highestLevelCharacter.ocid);
-                    displayCharacterData(highestLevelCharacter, titleEquipment);
+                    displayCharacterData(highestLevelCharacter, highestLevelCharacter.serverDate, titleEquipment);
                 }
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
@@ -58,20 +54,19 @@
             try {
                 const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/basic?ocid=${ocid}`, {
                     method: "GET",
-                    headers: {
-                        "accept": "application/json",
-                        "x-nxopen-api-key": apiKey
-                    }
+                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
                 });
 
                 if (!response.ok) {
                     throw new Error(`캐릭터 정보 조회 실패: ${response.status}`);
                 }
 
-                return await response.json();
+                const characterData = await response.json();
+                const serverDate = response.headers.get("date"); // 서버 응답 시간 가져오기
+                return { characterData, serverDate };
             } catch (error) {
                 console.error("캐릭터 정보 조회 오류:", error);
-                return null;
+                return { characterData: null, serverDate: null };
             }
         }
 
@@ -79,10 +74,7 @@
             try {
                 const response = await fetch(`https://open.api.nexon.com/baramy/v1/character/title-equipment?ocid=${ocid}`, {
                     method: "GET",
-                    headers: {
-                        "accept": "application/json",
-                        "x-nxopen-api-key": apiKey
-                    }
+                    headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
                 });
 
                 if (!response.ok) {
@@ -97,7 +89,7 @@
         }
 
         function displayCharacterData(data, serverDate, titleEquipment) {
-            let formattedKST;
+            let formattedKST = "서버 응답 시간 없음";
 
             if (serverDate) {
                 try {
@@ -105,34 +97,21 @@
                     if (isNaN(gmtTime.getTime())) throw new Error("Invalid Date");
 
                     const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
-                    const year = kstTime.getUTCFullYear();
-                    const month = String(kstTime.getUTCMonth() + 1).padStart(2, '0');
-                    const day = String(kstTime.getUTCDate()).padStart(2, '0');
-                    const hours = String(kstTime.getUTCHours()).padStart(2, '0');
-                    const minutes = String(kstTime.getUTCMinutes()).padStart(2, '0');
-                    const seconds = String(kstTime.getUTCSeconds()).padStart(2, '0');
-
-                    formattedKST = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} KST`;
+                    formattedKST = kstTime.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }) + " KST";
                 } catch (error) {
                     console.error("서버 응답 시간 변환 오류:", error);
-                    formattedKST = "서버 응답 시간 오류";
                 }
-            } else {
-                formattedKST = "서버 응답 시간 없음";
             }
 
             let titleHtml = "<h3>칭호</h3>";
-            
-            if (titleEquipment && titleEquipment.title_equipment.length > 0) {
-                const equippedTitles = titleEquipment.title_equipment
-                    .filter(title => title.title_equipment_type === "1") // 장착 칭호만 필터링
-                    .map(title => `<li>${title.title_type_name} - ${title.title_name}</li>`);
+            const equippedTitles = titleEquipment?.title_equipment?.filter(title => title.title_equipment_type === "1") || [];
 
-                if (equippedTitles.length > 0) {
-                    titleHtml += "<ul>" + equippedTitles.join('') + "</ul>";
-                } else {
-                    titleHtml += "<p>장착된 칭호 없음</p>";
-                }
+            if (equippedTitles.length > 0) {
+                titleHtml += "<ul>";
+                equippedTitles.forEach(title => {
+                    titleHtml += `<li>${title.title_type_name} - ${title.title_name}</li>`;
+                });
+                titleHtml += "</ul>";
             } else {
                 titleHtml += "<p>장착된 칭호 없음</p>";
             }
@@ -150,7 +129,6 @@
                 ${titleHtml}
             `;
         }
-
     </script>
 </head>
 <body>
