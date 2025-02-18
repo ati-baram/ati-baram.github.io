@@ -132,10 +132,10 @@
                 if (highestLevelCharacter) {
                     const titleEquipment = await fetchTitleEquipment(highestLevelCharacter.ocid);
                     displayCharacterData(highestLevelCharacter, highestLevelCharacter.serverDate, titleEquipment);
+                    
+                    // ✅ 입력란 비우기
+                    characterInput.value = "";
                 }
-
-                // ✅ 입력란 비우기
-                characterInput.value = "";
 
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
