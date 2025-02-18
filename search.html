@@ -102,7 +102,7 @@
             if (titleEquipment && titleEquipment.title_equipment.length > 0) {
                 const equippedTitles = titleEquipment.title_equipment
                     .filter(title => title.title_equipment_type === "1") // 장착 칭호만 필터링
-                    .map(title => `<li>[장착 칭호] ${title.title_type_name} - ${title.title_name}</li>`);
+                    .map(title => `<li>${title.title_type_name} - ${title.title_name}</li>`);
 
                 if (equippedTitles.length > 0) {
                     titleHtml += "<ul>" + equippedTitles.join('') + "</ul>";
