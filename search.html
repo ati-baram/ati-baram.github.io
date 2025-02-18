@@ -361,13 +361,10 @@
 
             resultElement.innerHTML = `
                 <h3>캐릭터 정보</h3>
-                <p><strong>닉네임 :</strong> ${data.character_name}</p>
                 <p><strong>서버 :</strong> ${data.server_name}</p>
                 <p><strong>레벨 :</strong> ${data.character_level}</p>
                 <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
-                <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
                 <p><strong>서버 응답 시간 :</strong> ${formattedKST}</p>
-                <hr>
                 ${titleHtml}
             `;
         }
