@@ -83,14 +83,23 @@
                 alert("캐릭터명을 입력하세요.");
                 return;
             }
-            document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
-            setTimeout(() => {
-                try {
+
+            const resultElement = document.getElementById("result");
+            resultElement.innerText = `🔍 ${characterName} 검색 중...`;
+
+            try {
+                // 서버별로 OCID 요청
                 const ocidRequests = servers.map(server =>
                     fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
                         method: "GET",
                         headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
-                    }).then(response => response.ok ? response.json() : null)
+                    }).then(async response => {
+                        if (!response.ok) return null;
+                        return response.json();
+                    }).catch(error => {
+                        console.error(`OCID 요청 실패 (${server}):`, error);
+                        return null;
+                    })
                 );
 
                 const ocidResults = await Promise.all(ocidRequests);
@@ -98,16 +107,27 @@
 
                 if (validResults.length === 0) {
                     alert("OCID를 찾을 수 없습니다. 캐릭터명을 확인하세요.");
+                    resultElement.innerText = "❌ 검색 실패: 캐릭터명을 확인하세요.";
                     return;
                 }
 
-                // 가장 높은 레벨의 캐릭터 찾기
+                // OCID별로 캐릭터 정보 조회
                 const characterInfos = await Promise.all(validResults.map(async data => {
                     const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
-                    return { ...characterData, ocid: data.ocid, serverDate };
+                    return characterData ? { ...characterData, ocid: data.ocid, serverDate } : null;
                 }));
 
-                const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
+                // 유효한 캐릭터만 필터링
+                const validCharacters = characterInfos.filter(char => char);
+                if (validCharacters.length === 0) {
+                    alert("캐릭터 정보를 불러올 수 없습니다.");
+                    resultElement.innerText = "❌ 검색 실패: 캐릭터 정보를 불러올 수 없습니다.";
+                    return;
+                }
+
+                // 가장 높은 레벨의 캐릭터 선택
+                validCharacters.sort((a, b) => a.character_level - b.character_level);
+                const highestLevelCharacter = validCharacters.pop();
 
                 if (highestLevelCharacter) {
                     const titleEquipment = await fetchTitleEquipment(highestLevelCharacter.ocid);
@@ -116,9 +136,10 @@
             } catch (error) {
                 console.error("OCID 조회 오류:", error);
                 alert("캐릭터 정보를 불러오는데 실패했습니다.");
+                resultElement.innerText = "❌ 검색 실패: 서버 오류 발생";
             }
-            }, 1000); // 실제 API 연결 시 이 부분을 수정
         }
+
 
         async function fetchCharacterInfo(ocid) {
             try {
