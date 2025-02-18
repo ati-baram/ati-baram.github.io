@@ -75,6 +75,9 @@
         }
 
         function displayCharacterData(data, serverDate) {
+           
+            const serverDate = response.headers.get("date"); // 서버에서 응답한 시간
+            console.log("서버에서 받은 Date 헤더:", serverDate);
             // 서버에서 받은 시간이 없으면 현재 시간 사용
             const gmtTime = serverDate ? new Date(serverDate) : new Date();
 
