@@ -74,13 +74,17 @@
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
                 <h3>캐릭터 정보</h3>
-                <p><strong>닉네임:</strong> ${data.character_name}</p>
-                <p><strong>서버:</strong> ${data.server_name}</p>
-                <p><strong>레벨:</strong> ${data.level}</p>
-                <p><strong>직업:</strong> ${data.job}</p>
-                <p><strong>길드:</strong> ${data.guild_name || "없음"}</p>
+                <p><strong>닉네임 :</strong> ${data.character_name}</p>
+                <p><strong>서버 :</strong> ${data.server_name}</p>
+                <p><strong>레벨 :</strong> ${data.character_level}</p>
+                <p><strong>경험치 :</strong> ${data.character_exp.toLocaleString()} EXP</p>
+                <p><strong>직업 :</strong> ${data.character_class_group_name} (${data.character_class_name})</p>
+                <p><strong>국가 :</strong> ${data.character_nation}</p>
+                <p><strong>성별 :</strong> ${data.character_gender}</p>
+                <p><strong>캐릭터 생성일 :</strong> ${new Date(data.character_date_create).toLocaleDateString()}</p>
             `;
         }
+
     </script>
 </head>
 <body>
@@ -89,10 +93,9 @@
     <select id="serverName">
         <option value="">서버 선택</option>
         <option value="연">연</option>
-        <option value="하자">하자</option>
-        <option value="유리">유리</option>
+        <option value="해명">해명</option>
         <option value="무휼">무휼</option>
-        <option value="주작">주작</option>
+        <option value="세류">세류</option>
     </select>
     <button onclick="fetchOCID()">조회</button>
     <div id="result"></div>
