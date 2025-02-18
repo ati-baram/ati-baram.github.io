@@ -71,6 +71,44 @@
         const servers = ["연", "해명", "세류", "무휼"];
         let trackingIntervals = {};
 
+        async function fetchOCID() {
+            const characterName = document.getElementById("characterName").value.trim();
+            if (!characterName) {
+                alert("캐릭터명을 입력하세요.");
+                return;
+            }
+
+            try {
+                document.getElementById("result").innerText = `🔍 ${characterName} 검색 중...`;
+
+                const ocidRequests = servers.map(server =>
+                    fetch(`https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(server)}`, {
+                        method: "GET",
+                        headers: { "accept": "application/json", "x-nxopen-api-key": apiKey }
+                    }).then(response => response.ok ? response.json() : null)
+                );
+
+                const ocidResults = await Promise.all(ocidRequests);
+                const validResults = ocidResults.filter(data => data && data.ocid);
+                if (validResults.length === 0) {
+                    document.getElementById("result").innerText = "캐릭터 정보를 찾을 수 없습니다.";
+                    return;
+                }
+
+                const characterInfos = await Promise.all(validResults.map(async data => {
+                    const { characterData, serverDate } = await fetchCharacterInfo(data.ocid);
+                    const titleEquipment = await fetchTitleEquipment(data.ocid);
+                    return { ...characterData, ocid: data.ocid, serverDate, titleEquipment };
+                }));
+
+                const highestLevelCharacter = characterInfos.reduce((max, char) => (char.character_level > max.character_level ? char : max), characterInfos[0]);
+                displayCharacterData(highestLevelCharacter, "result");
+            } catch (error) {
+                console.error("OCID 조회 오류:", error);
+                alert("캐릭터 정보를 불러오는데 실패했습니다.");
+            }
+        }
+
         function addCharacter() {
             const characterName = document.getElementById("trackingCharacterName").value.trim();
             if (!characterName) {
@@ -128,20 +166,6 @@
                 delete trackingIntervals[cardId];
                 if (characterName) alert(`${characterName}의 자동 조회를 중지했습니다.`);
             }
-        }
-
-        async function fetchCharacterData(characterName, cardId) {
-            document.getElementById(`result-${cardId}`).innerText = `🔄 ${characterName} 정보 갱신 중...`;
-
-            setTimeout(() => {
-                document.getElementById(`result-${cardId}`).innerHTML = `
-                    <strong>닉네임:</strong> ${characterName}<br>
-                    <strong>레벨:</strong> 99<br>
-                    <strong>직업:</strong> 전사 (검천)<br>
-                    <strong>서버:</strong> 연<br>
-                    <strong>경험치:</strong> 123,456,789 EXP
-                `;
-            }, 1000);
         }
     </script>
 </body>
