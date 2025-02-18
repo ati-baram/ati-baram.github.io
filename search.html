@@ -15,12 +15,13 @@
             }
 
             const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
-            const ocidUrl = `https://openapi.nexon.com/ko/game/baramy/ocid?id=7&character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(serverName)}`;
+            const ocidUrl = `https://open.api.nexon.com/baramy/v1/id?character_name=${encodeURIComponent(characterName)}&server_name=${encodeURIComponent(serverName)}`;
 
             try {
                 const response = await fetch(ocidUrl, {
                     method: "GET",
                     headers: {
+                        "accept": "application/json",
                         "x-nxopen-api-key": apiKey
                     }
                 });
@@ -30,7 +31,7 @@
                 }
 
                 const data = await response.json();
-                console.log("OCID API 응답:", data);  // API 응답 데이터 확인
+                console.log("OCID API 응답:", data); // 응답 데이터 확인
 
                 if (!data.ocid) {
                     alert("OCID를 찾을 수 없습니다. 캐릭터명과 서버명을 확인하세요.");
@@ -44,15 +45,15 @@
             }
         }
 
-
         async function fetchCharacterInfo(ocid) {
             const apiKey = "test_f1df2d99b1e14e205493879cae9b176db3420a00c4bfddb543475cd58d231840efe8d04e6d233bd35cf2fabdeb93fb0d";
-            const characterUrl = `https://openapi.nexon.com/ko/game/baramy/character/basic?id=7&ocid=${ocid}`;
+            const characterUrl = `https://open.api.nexon.com/baramy/v1/character/basic?ocid=${ocid}`;
 
             try {
                 const response = await fetch(characterUrl, {
                     method: "GET",
                     headers: {
+                        "accept": "application/json",
                         "x-nxopen-api-key": apiKey
                     }
                 });
@@ -88,9 +89,10 @@
     <select id="serverName">
         <option value="">서버 선택</option>
         <option value="연">연</option>
-        <option value="해명">해명</option>
+        <option value="하자">하자</option>
+        <option value="유리">유리</option>
         <option value="무휼">무휼</option>
-        <option value="세류">세류</option>
+        <option value="주작">주작</option>
     </select>
     <button onclick="fetchOCID()">조회</button>
     <div id="result"></div>
