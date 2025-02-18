@@ -84,7 +84,7 @@
 
             if (serverDate) {
                 try {
-                    // 서버에서 받은 GMT 시간 변환
+                    // 서버에서 받은 GMT 시간을 UTC 기준으로 변환 (로컬 변환 방지)
                     const gmtTime = new Date(serverDate);
 
                     // 유효한 날짜인지 확인
@@ -92,18 +92,18 @@
                         throw new Error("Invalid Date");
                     }
 
-                    // 한국 시간(KST)으로 변환
-                    const kstTime = new Date(gmtTime.getTime() + 9 * 60 * 60 * 1000); // GMT+9 (KST)
+                    // KST (한국 시간)으로 변환
+                    const kstTime = new Date(gmtTime.getTime() + (9 * 60 * 60 * 1000)); // GMT+9
 
-                    // 한국 시간 포맷 변경
-                    const year = kstTime.getFullYear();
-                    const month = String(kstTime.getMonth() + 1).padStart(2, '0'); // 월 (01~12)
-                    const day = String(kstTime.getDate()).padStart(2, '0'); // 일 (01~31)
-                    const hours = String(kstTime.getHours()).padStart(2, '0');
-                    const minutes = String(kstTime.getMinutes()).padStart(2, '0');
-                    const seconds = String(kstTime.getSeconds()).padStart(2, '0');
+                    // 한국 시간 포맷 변경 (YYYY-MM-DD HH:mm:ss)
+                    const year = kstTime.getUTCFullYear();
+                    const month = String(kstTime.getUTCMonth() + 1).padStart(2, '0'); // 월 (01~12)
+                    const day = String(kstTime.getUTCDate()).padStart(2, '0'); // 일 (01~31)
+                    const hours = String(kstTime.getUTCHours()).padStart(2, '0');
+                    const minutes = String(kstTime.getUTCMinutes()).padStart(2, '0');
+                    const seconds = String(kstTime.getUTCSeconds()).padStart(2, '0');
 
-                    formattedKST = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+                    formattedKST = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} KST`;
                 } catch (error) {
                     console.error("서버 응답 시간 변환 오류:", error);
                     formattedKST = "서버 응답 시간 오류";
@@ -111,7 +111,7 @@
             } else {
                 formattedKST = "서버 응답 시간 없음";
             }
-
+            console.log("변환된 KST 시간:", formattedKST);
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
                 <h3>캐릭터 정보</h3>
