@@ -1,6 +1,14 @@
 [build]
   publish = "./"
 
+# Netlify Identity 관련 경로는 리디렉션하지 않음
+[[redirects]]
+  from = "/.netlify/*"
+  to = "/.netlify/:splat"
+  status = 200
+  force = false
+
+# 나머지 전체 페이지는 admin만 접근 가능
 [[redirects]]
   from = "/*"
   to = "/login.html"
