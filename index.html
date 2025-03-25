@@ -182,5 +182,16 @@
     <script src="/asset/js/index.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
     crossorigin="anonymous"></script>
+
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      netlifyIdentity.on('init', user => {
+        if (!user) {
+          window.location.href = '/login.html'; // 로그인 안 했으면 로그인 페이지로
+        }
+      });
+      netlifyIdentity.init(); // 꼭 필요함!
+    </script>
+     
 </body>
 </html>
