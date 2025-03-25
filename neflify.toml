@@ -1,16 +1,43 @@
 [build]
   publish = "./"
 
-# Netlify Identity 관련 경로는 리디렉션하지 않음
+# Netlify 내부 시스템 경로는 그대로 유지
 [[redirects]]
   from = "/.netlify/*"
   to = "/.netlify/:splat"
   status = 200
   force = false
 
-# 나머지 전체 페이지는 admin만 접근 가능
+# login.html만 예외 처리 없이 접근 가능하게 유지
 [[redirects]]
-  from = "/*"
+  from = "/login.html"
+  to = "/login.html"
+  status = 200
+
+# 보호할 실제 페이지만 지정
+[[redirects]]
+  from = "/index.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/recommend.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/ranking.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/info.html"
   to = "/login.html"
   status = 200
   force = true
