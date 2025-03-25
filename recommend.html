@@ -126,5 +126,16 @@
   
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9206573130293174"
     crossorigin="anonymous"></script>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.location.href = '/login.html';
+      }
+    });
+    netlifyIdentity.init();
+  </script>
+
 </body>
 </html>
