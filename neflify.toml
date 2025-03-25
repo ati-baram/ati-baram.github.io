@@ -1,0 +1,9 @@
+[build]
+  publish = "./"
+
+[[redirects]]
+  from = "/*"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
