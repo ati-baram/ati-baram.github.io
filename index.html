@@ -186,14 +186,15 @@
     <!-- 보안 -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script>
-    netlifyIdentity.on("init", user => {
+      netlifyIdentity.on("init", user => {
         if (!user || !user.app_metadata.roles.includes("admin")) {
-        alert("접근 권한이 없습니다.");
-        window.location.href = "/login.html";
+          alert("접근 권한이 없습니다. 로그인 후 이용하세요.");
+          window.location.href = "/login.html";
         }
-    });
-    netlifyIdentity.init();
+      });
+      netlifyIdentity.init();
     </script>
+    
 
      
 </body>
