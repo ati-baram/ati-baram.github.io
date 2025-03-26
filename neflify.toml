@@ -1,2 +1,38 @@
 [build]
   publish = "./"
+
+# Netlify Identity 내부 경로 허용
+[[redirects]]
+  from = "/.netlify/*"
+  to = "/.netlify/:splat"
+  status = 200
+  force = false
+
+# 보호할 페이지들
+[[redirects]]
+  from = "/index.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/ranking.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/recommend.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/info.html"
+  to = "/login.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
